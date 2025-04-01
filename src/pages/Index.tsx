@@ -1,51 +1,24 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import Header from '@/components/Header';
-import HeroSection from '@/components/sections/HeroSection';
-import TemplatesSection from '@/components/sections/TemplatesSection';
-import FeaturesSection from '@/components/sections/FeaturesSection';
-import CTASection from '@/components/sections/CTASection';
-import { allTemplates, categories } from '@/data/templateData';
+import FormularioContato from '@/components/FormularioContato';
 
 const Index = () => {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const elements = document.querySelectorAll('.animate-on-scroll');
-    elements.forEach((el) => observer.observe(el));
-
-    return () => {
-      elements.forEach((el) => observer.unobserve(el));
-    };
-  }, []);
-
-  const scrollToTemplates = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const section = document.querySelector('#templates');
-    if (section) {
-      window.scrollTo({
-        top: section.getBoundingClientRect().top + window.scrollY - 60,
-        behavior: 'smooth'
-      });
-    }
-  };
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <HeroSection scrollToTemplates={scrollToTemplates} />
-      <TemplatesSection templates={allTemplates} categories={categories} />
-      <FeaturesSection />
-      <CTASection />
+      <main className="flex-1 container mx-auto py-10 px-4">
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-3xl font-bold text-center mb-8">
+            Cadastro de Cliente
+          </h1>
+          <p className="text-center text-gray-600 mb-10">
+            Preencha o formulário abaixo para gerar seu template personalizado.
+            Após o envio, você será redirecionado para uma página com seus dados.
+          </p>
+          <FormularioContato />
+        </div>
+      </main>
     </div>
   );
 };
