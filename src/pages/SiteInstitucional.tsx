@@ -1,9 +1,7 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Cliente } from "@/types/database.types";
-import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Phone, Mail, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -12,6 +10,7 @@ const SiteInstitucional = () => {
   const { id } = useParams<{ id: string }>();
   const [cliente, setCliente] = useState<Cliente | null>(null);
   const [loading, setLoading] = useState(true);
+  const [expirado, setExpirado] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -31,6 +30,13 @@ const SiteInstitucional = () => {
         }
 
         setCliente(data);
+        
+        if (data) {
+          const dataExpiracao = new Date(data.expiracao);
+          if (dataExpiracao < new Date()) {
+            setExpirado(true);
+          }
+        }
       } catch (error) {
         console.error("Erro ao buscar cliente:", error);
         toast({
@@ -54,6 +60,22 @@ const SiteInstitucional = () => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-xl">Carregando...</div>
+      </div>
+    );
+  }
+
+  if (expirado) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-6">
+        <div className="max-w-2xl w-full bg-red-50 border border-red-200 rounded-lg p-8 text-center">
+          <h1 className="text-2xl font-bold text-red-600 mb-4">Site Expirado</h1>
+          <p className="text-lg text-gray-700 mb-6">
+            Este site expirou. O período de validade era de 3 dias a partir da data de criação.
+          </p>
+          <Button onClick={handleVoltar} variant="outline" className="border-red-300 text-red-600 hover:bg-red-50">
+            Voltar para a página inicial
+          </Button>
+        </div>
       </div>
     );
   }

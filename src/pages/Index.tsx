@@ -2,6 +2,7 @@
 import React from 'react';
 import Header from '@/components/Header';
 import FormularioContato from '@/components/FormularioContato';
+import BuscaSitesPorEmail from '@/components/BuscaSitesPorEmail';
 
 const Index = () => {
   return (
@@ -17,6 +18,14 @@ const Index = () => {
             Após o envio, você será redirecionado para uma página com seus dados.
           </p>
           <FormularioContato />
+          
+          <div className="my-10 flex items-center">
+            <div className="flex-1 h-px bg-gray-200"></div>
+            <p className="mx-4 text-gray-500 font-medium">OU</p>
+            <div className="flex-1 h-px bg-gray-200"></div>
+          </div>
+          
+          <BuscaSitesPorEmail />
         </div>
       </main>
     </div>

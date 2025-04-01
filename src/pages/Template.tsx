@@ -1,15 +1,20 @@
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import { Cliente } from "@/types/database.types";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const Template = () => {
   const { id } = useParams<{ id: string }>();
   const [cliente, setCliente] = useState<Cliente | null>(null);
   const [loading, setLoading] = useState(true);
   const [expirado, setExpirado] = useState(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCliente = async () => {
@@ -37,13 +42,22 @@ const Template = () => {
         }
       } catch (error) {
         console.error("Erro ao buscar cliente:", error);
+        toast({
+          variant: "destructive",
+          title: "Erro",
+          description: "Não foi possível carregar os dados do cliente.",
+        });
       } finally {
         setLoading(false);
       }
     };
 
     fetchCliente();
-  }, [id]);
+  }, [id, toast]);
+
+  const handleVoltar = () => {
+    navigate("/");
+  };
 
   if (loading) {
     return (
@@ -58,9 +72,12 @@ const Template = () => {
       <div className="flex flex-col items-center justify-center min-h-screen p-6">
         <div className="max-w-2xl w-full bg-red-50 border border-red-200 rounded-lg p-8 text-center">
           <h1 className="text-2xl font-bold text-red-600 mb-4">Template Expirado</h1>
-          <p className="text-lg text-gray-700">
+          <p className="text-lg text-gray-700 mb-6">
             Este template expirou. O período de validade era de 3 dias a partir da data de criação.
           </p>
+          <Button onClick={handleVoltar} variant="outline" className="border-red-300 text-red-600 hover:bg-red-50">
+            Voltar para a página inicial
+          </Button>
         </div>
       </div>
     );
@@ -77,9 +94,15 @@ const Template = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6">
       <div className="max-w-2xl w-full bg-white border rounded-lg p-8">
-        <h1 id="nome_empresa" className="text-3xl font-bold text-center mb-6">
-          {cliente.nome_empresa}
-        </h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 id="nome_empresa" className="text-3xl font-bold">
+            {cliente.nome_empresa}
+          </h1>
+          <Button variant="outline" onClick={handleVoltar}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Voltar
+          </Button>
+        </div>
         
         <div className="space-y-4 my-8">
           <div className="border-b pb-2">
