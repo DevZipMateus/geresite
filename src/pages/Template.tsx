@@ -3,16 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
-
-interface Cliente {
-  id: number;
-  nome_empresa: string;
-  nome_responsavel: string;
-  email: string;
-  telefone: string;
-  data_criacao: string;
-  expiracao: string;
-}
+import { Cliente } from "@/types/database.types";
 
 const Template = () => {
   const { id } = useParams<{ id: string }>();

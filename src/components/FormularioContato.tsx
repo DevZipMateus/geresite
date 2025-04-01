@@ -57,7 +57,9 @@ const FormularioContato = () => {
       });
 
       // Redireciona para a página de template com o ID do cliente
-      navigate(`/template/${insertData[0].id}`);
+      if (insertData && insertData.length > 0) {
+        navigate(`/template/${insertData[0].id}`);
+      }
     } catch (error) {
       console.error("Erro ao enviar formulário:", error);
       toast({
