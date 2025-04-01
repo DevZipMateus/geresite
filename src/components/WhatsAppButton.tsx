@@ -26,7 +26,7 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({ phoneNumber }) => {
           className="w-full h-full object-contain"
         />
       </div>
-      <style jsx>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         .pulse-animation {
           animation: pulse 2s infinite;
         }
@@ -42,7 +42,7 @@ const WhatsAppButton: React.FC<WhatsAppButtonProps> = ({ phoneNumber }) => {
             box-shadow: 0 0 0 0 rgba(72, 187, 120, 0);
           }
         }
-      `}</style>
+      `}} />
     </button>
   );
 };
