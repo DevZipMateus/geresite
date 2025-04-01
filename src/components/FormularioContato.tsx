@@ -56,9 +56,9 @@ const FormularioContato = () => {
         description: "Seus dados foram salvos com sucesso!",
       });
 
-      // Redireciona para a página de template com o ID do cliente
+      // Atualizado: Redireciona para a página do site institucional com o ID do cliente
       if (insertData && insertData.length > 0) {
-        navigate(`/template/${insertData[0].id}`);
+        navigate(`/site-institucional/${insertData[0].id}`);
       }
     } catch (error) {
       console.error("Erro ao enviar formulário:", error);
