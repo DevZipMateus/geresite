@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { ArrowLeft, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -35,13 +36,13 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  const renderLogo = (sizingClass: string = "h-20 w-auto", brightnessClass: string = "") => {
+  const renderLogo = (sizingClass: string = "w-[200px] h-[50px]", brightnessClass: string = "") => {
     if (logoLoading) {
-      return <div className={`${sizingClass} rounded-full bg-primary/20 animate-pulse`}></div>;
+      return <div className={`${sizingClass} rounded-lg bg-primary/20 animate-pulse`}></div>;
     }
     if (logoUrl) {
       return <Avatar className={`${sizingClass} ${brightnessClass} border border-white/20`}>
-          <AvatarImage src={logoUrl} alt={`Logo ${cliente?.nome_empresa}`} className="object-contain p-2 " />
+          <AvatarImage src={logoUrl} alt={`Logo ${cliente?.nome_empresa}`} className="object-contain p-2" />
           <AvatarFallback className="bg-primary text-white font-bold text-2xl">
             {cliente?.nome_empresa.charAt(0)}
           </AvatarFallback>
@@ -62,7 +63,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
   return <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-2' : 'bg-transparent py-3'}`}>
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
-          {renderLogo(isScrolled ? "h-16 w-auto" : "h-20 w-auto", isScrolled ? 'brightness-100' : 'brightness-[1.15]')}
+          {renderLogo(isScrolled ? "w-[180px] h-[45px]" : "w-[200px] h-[50px]", isScrolled ? 'brightness-100' : 'brightness-[1.15]')}
           
           {!logoUrl && <h1 className={`text-xl md:text-2xl font-bold ${isScrolled ? 'text-primary' : 'text-gray-700'}`}>
               {cliente.nome_empresa}
@@ -89,7 +90,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
               <SheetContent side="right" className="pt-12">
                 <SheetHeader>
                   <div className="flex justify-center mb-6">
-                    {renderLogo("h-32 w-auto")}
+                    {renderLogo("w-[220px] h-[55px]")}
                   </div>
                 </SheetHeader>
                 <div className="mt-8 flex flex-col gap-6">

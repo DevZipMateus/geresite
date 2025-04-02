@@ -12,7 +12,7 @@ const InstitutionalFooter: React.FC<InstitutionalFooterProps> = ({
   cliente,
   logoUrl
 }) => {
-  const renderLogo = (sizingClass: string = "h-16 w-16") => {
+  const renderLogo = (sizingClass: string = "w-[200px] h-[50px]") => {
     if (logoUrl) {
       return (
         <div className="flex flex-col items-center">
@@ -20,7 +20,7 @@ const InstitutionalFooter: React.FC<InstitutionalFooterProps> = ({
             <AvatarImage 
               src={logoUrl} 
               alt={`Logo ${cliente.nome_empresa}`}
-              className="object-contain"
+              className="object-contain p-2"
             />
             <AvatarFallback className="bg-primary text-white text-xl font-bold">
               {cliente.nome_empresa.charAt(0)}

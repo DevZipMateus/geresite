@@ -225,11 +225,11 @@ const SiteInstitucional = () => {
         </p>
         
         <div className="flex justify-center mb-4">
-          <Avatar className="h-24 w-24 border-2 border-primary">
+          <Avatar className="w-[200px] h-[50px] border-2 border-primary">
             <AvatarImage 
               src={logoUrl || ''} 
               alt={`Logo ${cliente.nome_empresa}`}
-              className="object-contain"
+              className="object-contain p-2"
             />
             <AvatarFallback className="bg-primary text-white text-3xl font-bold">
               {cliente.nome_empresa.charAt(0)}
