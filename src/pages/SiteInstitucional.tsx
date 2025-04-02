@@ -4,13 +4,20 @@ import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Cliente } from "@/types/database.types";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Phone, Mail, User, MapPin, Building, Calendar, Clock } from "lucide-react";
+import { ArrowLeft, Phone, Mail, User, MapPin, Building, Calendar, Clock, Palette } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import ValidityCountdown from "@/components/ValityCountdown";
 import Map from "@/components/Map";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { format } from "date-fns";
 import Testimonials from "@/components/sections/Testimonials";
+import ColorPaletteSelector from "@/components/ColorPaletteSelector";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const SiteInstitucional = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,6 +27,8 @@ const SiteInstitucional = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [activeColorPalette, setActiveColorPalette] = useState("default");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,6 +61,19 @@ const SiteInstitucional = () => {
           if (dataExpiracao < new Date()) {
             setExpirado(true);
           }
+
+          // If the client has a logo, fetch it from storage
+          if (data.logo_url) {
+            try {
+              const { data: publicUrl } = supabase.storage
+                .from('logos')
+                .getPublicUrl(data.logo_url);
+              
+              setLogoUrl(publicUrl.publicUrl);
+            } catch (logoError) {
+              console.error("Erro ao buscar logo:", logoError);
+            }
+          }
         }
       } catch (error) {
         console.error("Erro ao buscar cliente:", error);
@@ -70,6 +92,27 @@ const SiteInstitucional = () => {
 
   const handleVoltar = () => {
     navigate("/");
+  };
+
+  const handleColorPaletteChange = (palette: string) => {
+    setActiveColorPalette(palette);
+    
+    // Remove any previous palette classes
+    document.documentElement.classList.remove(
+      "theme-default", 
+      "theme-blue", 
+      "theme-green", 
+      "theme-purple", 
+      "theme-orange"
+    );
+    
+    // Add the new palette class
+    document.documentElement.classList.add(`theme-${palette}`);
+    
+    toast({
+      title: "Tema alterado",
+      description: `O tema foi alterado para ${palette}.`,
+    });
   };
 
   if (loading) {
@@ -105,20 +148,68 @@ const SiteInstitucional = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className={`min-h-screen flex flex-col theme-${activeColorPalette}`}>
       {/* Header melhorado */}
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-3' : 'bg-primary text-white py-5'}`}>
         <div className="container mx-auto px-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className={`w-10 h-10 rounded-full ${isScrolled ? 'bg-primary text-white' : 'bg-white text-primary'} flex items-center justify-center font-bold text-xl`}>
-              {cliente.nome_empresa.charAt(0)}
-            </div>
+          <div className="flex items-center gap-3">
+            {logoUrl ? (
+              <img 
+                src={logoUrl} 
+                alt={`Logo ${cliente.nome_empresa}`} 
+                className={`h-10 w-auto object-contain ${isScrolled ? '' : 'brightness-[1.15]'}`}
+              />
+            ) : (
+              <div className={`w-10 h-10 rounded-full ${isScrolled ? 'bg-primary text-white' : 'bg-white text-primary'} flex items-center justify-center font-bold text-xl`}>
+                {cliente.nome_empresa.charAt(0)}
+              </div>
+            )}
             <h1 className={`text-xl md:text-2xl font-bold ${isScrolled ? 'text-primary' : 'text-white'}`}>
               {cliente.nome_empresa}
             </h1>
           </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
+            {/* Palette Selector Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant={isScrolled ? "outline" : "secondary"} 
+                  size="sm"
+                  className={isScrolled ? "border-primary text-primary hover:bg-primary/10" : "text-primary hover:bg-white/90"}
+                >
+                  <Palette className="h-4 w-4 mr-2" />
+                  <span className="hidden sm:inline">Tema</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => handleColorPaletteChange("default")}>
+                  <div className="flex items-center gap-2">
+                    <span className="w-4 h-4 rounded-full bg-[#1E88E5]"></span>
+                    <span>Padrão (Azul)</span>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleColorPaletteChange("green")}>
+                  <div className="flex items-center gap-2">
+                    <span className="w-4 h-4 rounded-full bg-[#43A047]"></span>
+                    <span>Verde</span>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleColorPaletteChange("purple")}>
+                  <div className="flex items-center gap-2">
+                    <span className="w-4 h-4 rounded-full bg-[#8E24AA]"></span>
+                    <span>Roxo</span>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleColorPaletteChange("orange")}>
+                  <div className="flex items-center gap-2">
+                    <span className="w-4 h-4 rounded-full bg-[#FB8C00]"></span>
+                    <span>Laranja</span>
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
             <div className={`hidden md:flex items-center gap-6 ${isScrolled ? 'text-gray-700' : 'text-white'}`}>
               <a href="#servicos" className="hover:text-primary/80 transition-colors">Serviços</a>
               <a href="#sobre" className="hover:text-primary/80 transition-colors">Sobre</a>
@@ -139,7 +230,7 @@ const SiteInstitucional = () => {
           </div>
         </div>
       </header>
-
+      
       {/* Contador de validade destacado */}
       <div className="fixed top-20 right-4 z-40 md:top-24 md:right-8">
         <ValidityCountdown expirationDate={cliente.expiracao} />

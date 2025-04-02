@@ -7,6 +7,7 @@
 
 @layer base {
   :root {
+    /* Default Theme (Blue) - 60% primary, 30% secondary, 10% accent */
     --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
 
@@ -46,6 +47,51 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  /* Green Theme - 60% green, 30% light green, 10% accent */
+  .theme-green {
+    --primary: 122 39% 49%;
+    --primary-foreground: 210 40% 98%;
+    
+    --secondary: 122 35% 95%;
+    --secondary-foreground: 122 50% 10%;
+    
+    --accent: 142 71% 45%;
+    --accent-foreground: 0 0% 100%;
+    
+    --border: 122 30% 90%;
+    --ring: 122 65% 60%;
+  }
+
+  /* Purple Theme - 60% purple, 30% light purple, 10% accent */
+  .theme-purple {
+    --primary: 280 59% 40%;
+    --primary-foreground: 210 40% 98%;
+    
+    --secondary: 280 25% 95%;
+    --secondary-foreground: 280 50% 10%;
+    
+    --accent: 300 100% 50%;
+    --accent-foreground: 0 0% 100%;
+    
+    --border: 280 30% 90%;
+    --ring: 280 65% 60%;
+  }
+
+  /* Orange Theme - 60% orange, 30% light orange, 10% accent */
+  .theme-orange {
+    --primary: 32 100% 49%;
+    --primary-foreground: 210 40% 98%;
+    
+    --secondary: 32 100% 96%;
+    --secondary-foreground: 32 50% 10%;
+    
+    --accent: 14 100% 57%;
+    --accent-foreground: 0 0% 100%;
+    
+    --border: 32 30% 90%;
+    --ring: 32 65% 60%;
+  }
 }
 
 @layer base {
@@ -67,6 +113,7 @@
   }
 }
 
+/* Rest of your existing CSS styles */
 .glass {
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
