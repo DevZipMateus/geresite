@@ -43,8 +43,8 @@ const Header = () => {
   return (
     <header 
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 md:px-14',
-        isScrolled ? 'glass py-2' : 'py-3'
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 md:px-14 bg-white shadow-sm',
+        isScrolled ? 'py-2' : 'py-3'
       )}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -92,7 +92,7 @@ const Header = () => {
       {/* Mobile Menu */}
       <div 
         className={cn(
-          "md:hidden absolute top-full left-0 right-0 glass shadow-md overflow-hidden transition-all duration-300 ease-in-out",
+          "md:hidden absolute top-full left-0 right-0 bg-white shadow-md overflow-hidden transition-all duration-300 ease-in-out",
           isMobileMenuOpen ? "max-h-[300px] py-6" : "max-h-0"
         )}
       >
