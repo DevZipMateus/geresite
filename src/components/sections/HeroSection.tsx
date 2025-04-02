@@ -1,8 +1,9 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
 import FadeIn from '@/components/animations/FadeIn';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface HeroSectionProps {
   scrollToTemplates: (e: React.MouseEvent) => void;
@@ -21,6 +22,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   scrollToTemplates
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -32,86 +34,61 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <section 
       id="home" 
-      className="pt-24 pb-16 md:pt-32 md:pb-24 relative overflow-hidden" 
-      style={{
-        background: 'linear-gradient(135deg, #f5f7fa 0%, #e4ecfb 100%)'
-      }}
+      className="pt-28 pb-12 md:pt-36 md:pb-20 bg-gradient-to-br from-neutral-900 to-neutral-800 relative overflow-hidden"
     >
-      <div className="absolute inset-0 overflow-hidden py-0">
-        <div className="absolute top-0 right-0 -translate-y-1/4 translate-x-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 translate-y-1/4 -translate-x-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+      {/* Background image with overlay */}
+      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center opacity-10"></div>
+      
+      {/* Decorative elements */}
+      <div className="absolute top-40 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-10 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl"></div>
+      
+      <div className="container mx-auto relative z-10 px-8 md:px-12">
+        <div className="max-w-3xl mx-auto text-center">
+          <h1 
+            className={`${isMobile ? 'text-3xl' : 'text-4xl md:text-5xl lg:text-6xl'} font-bold text-white leading-tight mb-6 animate-fade-in`} 
+            style={{ animationDelay: '0.1s' }}
+          >
+            Soluções contábeis inteligentes para empresas de todos os portes
+          </h1>
+          
+          <p 
+            className="text-lg text-primary-200 mb-10 animate-fade-in" 
+            style={{ animationDelay: '0.2s' }}
+          >
+            Entre em contato conosco e solicite um orçamento para começar a usar hoje mesmo nossa contabilidade digital e eficiente.
+          </p>
+          
+          <div 
+            className="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in" 
+            style={{ animationDelay: '0.3s' }}
+          >
+            <Button 
+              size="lg" 
+              className="rounded-md btn-hover-effect text-lg bg-gradient-to-r from-primary to-indigo-500 hover:from-indigo-500 hover:to-primary transition-all duration-300 px-8 py-6 flex items-center gap-2"
+              asChild
+            >
+              <a href="#templates">Escolher Template</a>
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="rounded-md text-white border-white hover:bg-white/20 hover:text-white flex items-center gap-2"
+              asChild
+            >
+              <a href="#templates">Nossos serviços</a>
+            </Button>
+          </div>
+        </div>
       </div>
       
-      <div className="max-w-7xl mx-auto relative z-10 px-8 md:px-12">
-        <div className="flex flex-col md:flex-row items-center gap-12">
-          <div className="flex-1">
-            <FadeIn direction="left">
-              <span className="inline-block px-4 py-1 rounded-full bg-primary/10 text-primary font-medium text-sm mb-6">
-                Lançamento de Templates Profissionais
-              </span>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6">
-                Crie Seu Site Institucional com Nossos Templates
-              </h1>
-              <p className="text-lg text-muted-foreground mb-8 max-w-xl">
-                Templates profissionais, personalizáveis e com design moderno para elevar o seu negócio. Implantação rápida e suporte especializado.
-              </p>
-              <div className="flex flex-wrap gap-6">
-                <Button size="lg" className="rounded-full btn-hover-effect text-lg bg-gradient-to-r from-primary to-indigo-500 hover:from-indigo-500 hover:to-primary transition-all duration-300 px-8 py-6" asChild>
-                  <a href="#templates">Escolher Template</a>
-                </Button>
-              </div>
-            </FadeIn>
-          </div>
-          
-          <div className="flex-1 mt-4 md:mt-0">
-            <FadeIn direction="right" delay={200}>
-              <div className="relative">
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 via-indigo-300/20 to-primary/10 rounded-xl blur-xl"></div>
-                
-                <div className="relative overflow-hidden rounded-xl border border-white shadow-2xl bg-white">
-                  {TEMPLATE_IMAGES.map((src, index) => (
-                    <img 
-                      key={index} 
-                      src={src} 
-                      alt={`Template Preview ${index + 1}`} 
-                      className={`w-full mx-auto z-10 transition-opacity duration-1000 absolute inset-0 ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'}`} 
-                      style={{
-                        objectFit: 'contain'
-                      }} 
-                    />
-                  ))}
-                  
-                  <img 
-                    src={TEMPLATE_IMAGES[currentImageIndex]} 
-                    alt="Template Preview" 
-                    className="invisible w-full mx-auto" 
-                    style={{
-                      objectFit: 'contain'
-                    }} 
-                  />
-                  
-                  <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2">
-                    {TEMPLATE_IMAGES.map((_, index) => (
-                      <button 
-                        key={index} 
-                        onClick={() => setCurrentImageIndex(index)} 
-                        className={`w-2 h-2 rounded-full transition-all ${index === currentImageIndex ? 'bg-primary w-4' : 'bg-gray-300 hover:bg-gray-400'}`}
-                        aria-label={`Go to slide ${index + 1}`}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </FadeIn>
-          </div>
-        </div>
-        
-        <div className="flex justify-center mt-10">
-          <a href="#templates" onClick={scrollToTemplates} className="animate-float flex flex-col items-center text-sm text-muted-foreground hover:text-primary transition-colors">
-            <span className="mb-2">Role para ver os templates</span>
-            <ChevronDown className="animate-bounce" />
-          </a>
-        </div>
+      {/* Wave decoration */}
+      <div className="absolute bottom-0 left-0 right-0">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" className="w-full h-auto">
+          <path fill="#ffffff" fillOpacity="1" d="M0,32L80,37.3C160,43,320,53,480,58.7C640,64,800,64,960,53.3C1120,43,1280,21,1360,10.7L1440,0L1440,100L1360,100C1280,100,1120,100,960,100C800,100,640,100,480,100C320,100,160,100,80,100L0,100Z">
+          </path>
+        </svg>
       </div>
     </section>
   );
