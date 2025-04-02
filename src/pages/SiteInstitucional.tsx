@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -78,7 +79,7 @@ const SiteInstitucional = () => {
                 console.log("Bucket 'logos' criado com sucesso");
               }
               
-              // Obter URL pública para o logo
+              // Obter URL pública diretamente para o logo (ajustado para usar o caminho correto)
               const { data: fileData } = supabase.storage
                 .from('logos')
                 .getPublicUrl(data.logo_url);
@@ -220,7 +221,7 @@ const SiteInstitucional = () => {
       
       {logoError && <LogoError error={logoError} logoUrl={cliente.logo_url} />}
       
-      {/* Área de Teste de Logo - Sempre visível para facilitar o diagnóstico */}
+      {/* Área de Teste de Logo - Adicionando mais informações para diagnóstico */}
       <div className="bg-gray-100 py-8 px-4 mt-20 text-center">
         <h2 className="text-xl font-semibold mb-4">Visualização do Logo</h2>
         <p className="mb-4 text-gray-600">
@@ -252,7 +253,10 @@ const SiteInstitucional = () => {
               <strong>Info:</strong> Logo URL registrado no banco de dados, mas não foi possível carregar a imagem.
             </p>
             <p className="text-xs text-gray-500 mt-2">
-              URL: {cliente.logo_url}
+              URL armazenado: {cliente.logo_url}
+            </p>
+            <p className="text-xs text-gray-500 mt-1">
+              URL público completo: {cliente.logo_url ? supabase.storage.from('logos').getPublicUrl(cliente.logo_url).data.publicUrl : 'N/A'}
             </p>
           </div>
         )}
