@@ -37,6 +37,8 @@ const SiteInstitucional = () => {
       try {
         if (!id) return;
 
+        console.log("Buscando cliente com ID:", id);
+        
         const { data, error } = await supabase
           .from("clientes")
           .select("*")
@@ -47,6 +49,7 @@ const SiteInstitucional = () => {
           throw error;
         }
 
+        console.log("Dados do cliente recebidos:", data);
         setCliente(data);
         
         if (data) {
@@ -54,41 +57,48 @@ const SiteInstitucional = () => {
           if (dataExpiracao < new Date()) {
             setExpirado(true);
           }
-
-          console.log("Cliente data:", data);
           
-          // Logo fetch logic
+          // Logo fetch logic - Verificando se temos um logo_url
           if (data.logo_url) {
+            console.log("Logo URL encontrado:", data.logo_url);
             setLogoLoading(true);
             setLogoError(null);
             
             try {
-              console.log("Trying to fetch logo:", data.logo_url);
-              
-              // Check if logos bucket exists, create if not
+              // Verificar se o bucket 'logos' existe
               const { data: bucketData, error: bucketError } = await supabase
                 .storage
                 .getBucket('logos');
                 
               if (bucketError) {
-                console.error("Bucket not found:", bucketError);
+                console.error("Bucket não encontrado, criando:", bucketError);
                 await supabase.storage.createBucket('logos', {
                   public: true
                 });
-                console.log("Created logos bucket");
+                console.log("Bucket 'logos' criado com sucesso");
               }
               
-              // Get public URL for the logo
+              // Obter URL pública para o logo
               const { data: fileData } = supabase.storage
                 .from('logos')
                 .getPublicUrl(data.logo_url);
               
               if (fileData && fileData.publicUrl) {
-                console.log("Logo public URL:", fileData.publicUrl);
+                console.log("URL pública do logo:", fileData.publicUrl);
                 
-                // Test image loading with a timeout
+                // Testar o carregamento da imagem com timeout
                 const img = new Image();
+                const timeoutId = setTimeout(() => {
+                  if (logoLoading) {
+                    console.error("Timeout ao carregar o logo");
+                    setLogoError("Tempo esgotado ao carregar o logo");
+                    setLogoLoading(false);
+                  }
+                }, 10000);
+                
                 img.onload = () => {
+                  clearTimeout(timeoutId);
+                  console.log("Logo carregado com sucesso");
                   setLogoUrl(fileData.publicUrl);
                   setLogoLoading(false);
                   toast({
@@ -96,48 +106,29 @@ const SiteInstitucional = () => {
                     description: "O logo da empresa foi carregado com sucesso.",
                   });
                 };
+                
                 img.onerror = () => {
-                  console.error("Error loading image from URL:", fileData.publicUrl);
+                  clearTimeout(timeoutId);
+                  console.error("Erro ao carregar a imagem da URL:", fileData.publicUrl);
                   setLogoError("Não foi possível carregar o logo (URL inválida)");
                   setLogoLoading(false);
                 };
-                
-                // Set a timeout to handle cases where the image might take too long
-                const timeoutId = setTimeout(() => {
-                  if (logoLoading) {
-                    setLogoError("Tempo esgotado ao carregar o logo");
-                    setLogoLoading(false);
-                  }
-                }, 10000);
                 
                 img.src = fileData.publicUrl;
-                
-                // Clear timeout when image loads or errors
-                img.onload = () => {
-                  clearTimeout(timeoutId);
-                  setLogoUrl(fileData.publicUrl);
-                  setLogoLoading(false);
-                };
-                
-                img.onerror = () => {
-                  clearTimeout(timeoutId);
-                  setLogoError("Não foi possível carregar o logo (URL inválida)");
-                  setLogoLoading(false);
-                };
               } else {
-                throw new Error("Failed to get public URL");
+                throw new Error("Falha ao obter URL pública");
               }
-            } catch (logoError) {
-              console.error("Error fetching logo:", logoError);
-              setLogoError("Não foi possível carregar o logo (erro interno)");
+            } catch (logoError: any) {
+              console.error("Erro ao buscar logo:", logoError);
+              setLogoError(`Não foi possível carregar o logo: ${logoError.message || 'erro interno'}`);
               setLogoLoading(false);
             }
           } else {
-            console.log("No logo URL found in client data");
+            console.log("Nenhum logo_url encontrado para o cliente");
             setLogoLoading(false);
           }
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Erro ao buscar cliente:", error);
         toast({
           variant: "destructive",
@@ -183,7 +174,7 @@ const SiteInstitucional = () => {
   };
 
   if (loading) {
-    return <LoadingState />;
+    return <LoadingState message="Carregando dados..." submessage="Aguarde enquanto carregamos as informações da empresa" />;
   }
 
   if (expirado) {
@@ -229,32 +220,43 @@ const SiteInstitucional = () => {
       
       {logoError && <LogoError error={logoError} logoUrl={cliente.logo_url} />}
       
-      {/* Logo Display Test Area */}
-      {!logoUrl && (
-        <div className="bg-gray-100 py-8 px-4 mt-20 text-center">
-          <h2 className="text-xl font-semibold mb-4">Teste de Logo</h2>
-          <p className="mb-4 text-gray-600">
-            {logoLoading 
-              ? "Carregando logo..." 
-              : logoError 
-              ? `Erro ao carregar logo: ${logoError}` 
-              : "Nenhum logo foi configurado para essa empresa."
-            }
-          </p>
-          <div className="flex justify-center">
-            <Avatar className="h-24 w-24 border-2 border-primary">
-              <AvatarImage 
-                src={logoUrl || ''} 
-                alt={`Logo ${cliente.nome_empresa}`}
-                className="object-contain"
-              />
-              <AvatarFallback className="bg-primary text-white text-3xl font-bold">
-                {cliente.nome_empresa.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
-          </div>
+      {/* Área de Teste de Logo - Sempre visível para facilitar o diagnóstico */}
+      <div className="bg-gray-100 py-8 px-4 mt-20 text-center">
+        <h2 className="text-xl font-semibold mb-4">Visualização do Logo</h2>
+        <p className="mb-4 text-gray-600">
+          {logoLoading 
+            ? "Carregando logo..." 
+            : logoError 
+            ? `Erro ao carregar logo: ${logoError}` 
+            : cliente.logo_url 
+            ? "Exibindo o logo da empresa"
+            : "Nenhum logo foi configurado para essa empresa."
+          }
+        </p>
+        <div className="flex justify-center">
+          <Avatar className="h-24 w-24 border-2 border-primary">
+            <AvatarImage 
+              src={logoUrl || ''} 
+              alt={`Logo ${cliente.nome_empresa}`}
+              className="object-contain"
+            />
+            <AvatarFallback className="bg-primary text-white text-3xl font-bold">
+              {cliente.nome_empresa.charAt(0)}
+            </AvatarFallback>
+          </Avatar>
         </div>
-      )}
+        
+        {cliente.logo_url && !logoUrl && (
+          <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md max-w-md mx-auto">
+            <p className="text-yellow-700 text-sm">
+              <strong>Info:</strong> Logo URL registrado no banco de dados, mas não foi possível carregar a imagem.
+            </p>
+            <p className="text-xs text-gray-500 mt-2">
+              URL: {cliente.logo_url}
+            </p>
+          </div>
+        )}
+      </div>
       
       {!isMobile && (
         <div className="fixed top-20 right-4 z-40 md:top-24 md:right-8">

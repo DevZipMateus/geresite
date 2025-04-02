@@ -15,6 +15,7 @@ export type Database = {
           email: string
           expiracao: string
           id: number
+          logo_url: string | null
           nome_empresa: string
           nome_responsavel: string
           telefone: string
@@ -24,6 +25,7 @@ export type Database = {
           email: string
           expiracao?: string
           id?: number
+          logo_url?: string | null
           nome_empresa: string
           nome_responsavel: string
           telefone: string
@@ -33,6 +35,7 @@ export type Database = {
           email?: string
           expiracao?: string
           id?: number
+          logo_url?: string | null
           nome_empresa?: string
           nome_responsavel?: string
           telefone?: string
