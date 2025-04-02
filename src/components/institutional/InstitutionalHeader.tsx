@@ -41,9 +41,9 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const renderLogo = (sizingClass: string = "h-10", brightnessClass: string = "") => {
+  const renderLogo = (sizingClass: string = "h-16 w-16", brightnessClass: string = "") => {
     if (logoLoading) {
-      return <div className={`${sizingClass} w-10 rounded-full bg-primary/20 animate-pulse`}></div>;
+      return <div className={`${sizingClass} rounded-full bg-primary/20 animate-pulse`}></div>;
     }
     
     if (logoUrl) {
@@ -52,9 +52,9 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
           <AvatarImage 
             src={logoUrl} 
             alt={`Logo ${cliente?.nome_empresa}`}
-            className="object-contain"
+            className="object-contain p-1"
           />
-          <AvatarFallback className="bg-primary text-white font-bold">
+          <AvatarFallback className="bg-primary text-white font-bold text-2xl">
             {cliente?.nome_empresa.charAt(0)}
           </AvatarFallback>
         </Avatar>
@@ -63,7 +63,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
     
     return (
       <Avatar className={`${sizingClass} ${brightnessClass}`}>
-        <AvatarFallback className="bg-primary text-white font-bold">
+        <AvatarFallback className="bg-primary text-white font-bold text-2xl">
           {cliente?.nome_empresa.charAt(0)}
         </AvatarFallback>
       </Avatar>
@@ -82,7 +82,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
           {renderLogo(
-            "h-12 w-12", 
+            isScrolled ? "h-14 w-14" : "h-16 w-16", 
             isScrolled ? 'brightness-100' : 'brightness-[1.15]'
           )}
           
@@ -125,7 +125,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
               <SheetContent side="right" className="pt-12">
                 <SheetHeader>
                   <div className="flex justify-center mb-6">
-                    {renderLogo("h-14 w-14")}
+                    {renderLogo("h-24 w-24")}
                   </div>
                 </SheetHeader>
                 <div className="mt-8 flex flex-col gap-6">
