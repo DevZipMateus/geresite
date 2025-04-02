@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { ArrowLeft, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -48,7 +47,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
     
     if (logoUrl) {
       return (
-        <Avatar className={`${sizingClass} ${brightnessClass}`}>
+        <Avatar className={`${sizingClass} ${brightnessClass} border border-white/20`}>
           <AvatarImage 
             src={logoUrl} 
             alt={`Logo ${cliente?.nome_empresa}`}
@@ -82,7 +81,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
           {renderLogo(
-            "h-10 w-10", 
+            "h-12 w-12", 
             isScrolled ? 'brightness-100' : 'brightness-[1.15]'
           )}
           

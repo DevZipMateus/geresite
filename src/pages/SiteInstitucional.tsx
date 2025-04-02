@@ -57,6 +57,7 @@ const SiteInstitucional = () => {
 
           console.log("Cliente data:", data);
           
+          // Logo fetch logic
           if (data.logo_url) {
             setLogoLoading(true);
             setLogoError(null);
@@ -64,6 +65,7 @@ const SiteInstitucional = () => {
             try {
               console.log("Trying to fetch logo:", data.logo_url);
               
+              // Check if logos bucket exists, create if not
               const { data: bucketData, error: bucketError } = await supabase
                 .storage
                 .getBucket('logos');
@@ -76,6 +78,7 @@ const SiteInstitucional = () => {
                 console.log("Created logos bucket");
               }
               
+              // Get public URL for the logo
               const { data: fileData } = supabase.storage
                 .from('logos')
                 .getPublicUrl(data.logo_url);
@@ -83,26 +86,54 @@ const SiteInstitucional = () => {
               if (fileData && fileData.publicUrl) {
                 console.log("Logo public URL:", fileData.publicUrl);
                 
+                // Test image loading with a timeout
                 const img = new Image();
                 img.onload = () => {
                   setLogoUrl(fileData.publicUrl);
                   setLogoLoading(false);
+                  toast({
+                    title: "Logo carregado",
+                    description: "O logo da empresa foi carregado com sucesso.",
+                  });
                 };
                 img.onerror = () => {
                   console.error("Error loading image from URL:", fileData.publicUrl);
-                  setLogoError("Não foi possível carregar o logo");
+                  setLogoError("Não foi possível carregar o logo (URL inválida)");
                   setLogoLoading(false);
                 };
+                
+                // Set a timeout to handle cases where the image might take too long
+                const timeoutId = setTimeout(() => {
+                  if (logoLoading) {
+                    setLogoError("Tempo esgotado ao carregar o logo");
+                    setLogoLoading(false);
+                  }
+                }, 10000);
+                
                 img.src = fileData.publicUrl;
+                
+                // Clear timeout when image loads or errors
+                img.onload = () => {
+                  clearTimeout(timeoutId);
+                  setLogoUrl(fileData.publicUrl);
+                  setLogoLoading(false);
+                };
+                
+                img.onerror = () => {
+                  clearTimeout(timeoutId);
+                  setLogoError("Não foi possível carregar o logo (URL inválida)");
+                  setLogoLoading(false);
+                };
               } else {
                 throw new Error("Failed to get public URL");
               }
             } catch (logoError) {
               console.error("Error fetching logo:", logoError);
-              setLogoError("Não foi possível carregar o logo");
+              setLogoError("Não foi possível carregar o logo (erro interno)");
               setLogoLoading(false);
             }
           } else {
+            console.log("No logo URL found in client data");
             setLogoLoading(false);
           }
         }
@@ -167,6 +198,24 @@ const SiteInstitucional = () => {
     );
   }
 
+  // Add a debug section for development
+  const DevLogoDebug = () => (
+    <div className="fixed bottom-4 right-4 z-50 bg-black/80 text-white p-4 rounded max-w-xs text-xs">
+      <h3 className="font-bold mb-2">Debug Info:</h3>
+      <p>Logo URL: {cliente.logo_url || 'Não definido'}</p>
+      <p>Logo carregado: {logoUrl ? 'Sim' : 'Não'}</p>
+      <p>Estado: {logoLoading ? 'Carregando...' : logoError ? 'Erro' : logoUrl ? 'Carregado' : 'Não disponível'}</p>
+      {logoUrl && (
+        <div className="mt-2">
+          <p className="mb-1">Preview:</p>
+          <div className="bg-white p-2 rounded">
+            <img src={logoUrl} alt="Logo preview" className="h-10 w-auto mx-auto" />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className={`min-h-screen flex flex-col theme-${activeColorPalette} overflow-x-hidden`}>
       <InstitutionalHeader 
@@ -181,11 +230,41 @@ const SiteInstitucional = () => {
       
       {logoError && <LogoError error={logoError} logoUrl={cliente.logo_url} />}
       
+      {/* Logo Display Test Area */}
+      {!logoUrl && (
+        <div className="bg-gray-100 py-8 px-4 mt-20 text-center">
+          <h2 className="text-xl font-semibold mb-4">Teste de Logo</h2>
+          <p className="mb-4 text-gray-600">
+            {logoLoading 
+              ? "Carregando logo..." 
+              : logoError 
+              ? `Erro ao carregar logo: ${logoError}` 
+              : "Nenhum logo foi configurado para essa empresa."
+            }
+          </p>
+          <div className="flex justify-center">
+            <Avatar className="h-24 w-24 border-2 border-primary">
+              <AvatarImage 
+                src={logoUrl || ''} 
+                alt={`Logo ${cliente.nome_empresa}`}
+                className="object-contain"
+              />
+              <AvatarFallback className="bg-primary text-white text-3xl font-bold">
+                {cliente.nome_empresa.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+          </div>
+        </div>
+      )}
+      
       {!isMobile && (
         <div className="fixed top-20 right-4 z-40 md:top-24 md:right-8">
           <ValidityCountdown expirationDate={cliente.expiracao} />
         </div>
       )}
+      
+      {/* Development only - debug panel */}
+      {import.meta.env.DEV && <DevLogoDebug />}
 
       <WhatsAppButton phoneNumber={cliente.telefone} />
 
