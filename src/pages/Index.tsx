@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -7,36 +6,18 @@ import BuscaSitesPorEmail from '@/components/BuscaSitesPorEmail';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import WhatsAppButton from '@/components/WhatsAppButton';
-
 const Index = () => {
   // Scroll to top on page load
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  return (
-    <div className="min-h-screen flex flex-col">
+  return <div className="min-h-screen flex flex-col">
       <Header />
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <section id="home" className="pt-24 pb-12 md:py-32">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                Monte seu Site Institucional
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Crie rapidamente um site profissional para sua empresa, sem complicações.
-              </p>
-              <a 
-                href="#criar-site" 
-                className="inline-block bg-primary text-white px-8 py-3 rounded-full font-medium hover:bg-primary/90 transition-colors"
-              >
-                Comece Agora
-              </a>
-            </div>
-          </div>
+        <section id="home" className="pt-24 pb-12 md:py-[12px]">
+          
         </section>
         
         {/* Form Section */}
@@ -75,8 +56,6 @@ const Index = () => {
       
       <Footer />
       <WhatsAppButton phoneNumber="5599999999999" />
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
