@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Cliente } from "@/types/database.types";
@@ -14,7 +15,6 @@ import ContactSection from "@/components/institutional/ContactSection";
 import InstitutionalFooter from "@/components/institutional/InstitutionalFooter";
 import ExpiredNotice from "@/components/institutional/ExpiredNotice";
 import LoadingState from "@/components/institutional/LoadingState";
-import LogoError from "@/components/institutional/LogoError";
 import { getClienteById } from "@/services/clienteService";
 
 const SiteInstitucional = () => {
@@ -26,7 +26,6 @@ const SiteInstitucional = () => {
   const navigate = useNavigate();
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [logoLoading, setLogoLoading] = useState(false);
-  const [logoError, setLogoError] = useState<string | null>(null);
   const [activeColorPalette, setActiveColorPalette] = useState("default");
   const isMobile = useIsMobile();
 
@@ -71,7 +70,7 @@ const SiteInstitucional = () => {
             
             img.onerror = () => {
               console.error("Erro ao carregar a imagem da URL:", fetchedLogoUrl);
-              setLogoError("Não foi possível carregar o logo (URL inválida)");
+              // No more error message, just set loading to false
               setLogoLoading(false);
             };
             
@@ -153,8 +152,6 @@ const SiteInstitucional = () => {
         handleColorPaletteChange={handleColorPaletteChange}
         scrollToSection={scrollToSection}
       />
-      
-      {logoError && <LogoError error={logoError} logoUrl={cliente.logo_url} />}
       
       <WhatsAppButton phoneNumber={cliente.telefone} />
 
