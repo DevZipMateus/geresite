@@ -2,7 +2,8 @@
 import { supabase } from "@/integrations/supabase/client";
 import { Cliente } from "@/types/database.types";
 
-interface ClienteFormData {
+// Updated interface to match the data structure coming from the form
+export interface ClienteFormData {
   nome_empresa: string;
   nome_responsavel: string;
   email: string;

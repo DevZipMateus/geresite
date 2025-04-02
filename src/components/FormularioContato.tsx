@@ -43,7 +43,16 @@ const FormularioContato = () => {
       // Log submission for debugging
       console.log("Submitting form with data:", JSON.stringify(data, null, 2));
       
-      const { cliente, error } = await createCliente(data);
+      // Ensure all required fields are present
+      const clienteData = {
+        nome_empresa: data.nome_empresa,
+        nome_responsavel: data.nome_responsavel,
+        email: data.email,
+        telefone: data.telefone,
+        logo: data.logo
+      };
+      
+      const { cliente, error } = await createCliente(clienteData);
 
       if (error) {
         console.error("Erro ao criar cliente:", error);
