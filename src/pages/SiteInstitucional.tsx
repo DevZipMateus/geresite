@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Cliente } from "@/types/database.types";
 import { useToast } from "@/hooks/use-toast";
-import ValidityCountdown from "@/components/ValityCountdown";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import HeroSection from "@/components/sections/HeroSection";
 import Testimonials from "@/components/sections/Testimonials";
@@ -209,13 +208,6 @@ const SiteInstitucional = () => {
       />
       
       {logoError && <LogoError error={logoError} logoUrl={cliente.logo_url} />}
-      
-      {/* Remove ValidityCountdown from the web version while keeping it in mobile */}
-      {isMobile && (
-        <div className="fixed top-20 right-4 z-40 md:top-24 md:right-8">
-          <ValidityCountdown expirationDate={cliente.expiracao} />
-        </div>
-      )}
       
       <WhatsAppButton phoneNumber={cliente.telefone} />
 

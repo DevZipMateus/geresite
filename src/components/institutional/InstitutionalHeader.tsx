@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Cliente } from "@/types/database.types";
 import ColorPaletteSelector from "@/components/ColorPaletteSelector";
+import ValidityCountdown from "@/components/ValityCountdown";
 
 interface InstitutionalHeaderProps {
   cliente: Cliente;
@@ -39,17 +40,19 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const renderLogo = (sizingClass: string = "w-[250px] h-[70px]") => {
+  const renderLogo = (sizingClass: string = "w-[250px] h-[70px]", forMobileMenu: boolean = false) => {
     if (logoLoading) {
       return <div className={`${sizingClass} rounded-lg bg-primary/20 animate-pulse`}></div>;
     }
     if (logoUrl) {
+      // For mobile menu, don't apply size constraints to maintain original dimensions
+      const containerClass = forMobileMenu ? "flex items-center" : `${sizingClass} flex items-center`;
       return (
-        <div className={`${sizingClass} flex items-center`}>
+        <div className={containerClass}>
           <img 
             src={logoUrl} 
             alt={`Logo ${cliente?.nome_empresa}`} 
-            className="object-contain h-full w-full" 
+            className={forMobileMenu ? "object-contain" : "object-contain h-full w-full"} 
           />
         </div>
       );
@@ -98,7 +101,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
               <SheetContent side="right" className="pt-12">
                 <SheetHeader>
                   <div className="flex justify-center mb-6">
-                    {renderLogo("w-[250px] h-[70px]")}
+                    {renderLogo(undefined, true)}
                   </div>
                 </SheetHeader>
                 <div className="mt-8 flex flex-col gap-6">
@@ -128,7 +131,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
                     <div className="space-y-4">
                       <ColorPaletteSelector value={activeColorPalette} onChange={handleColorPaletteChange} className="w-full" />
                       
-                      {/* Removed ValidityCountdown component */}
+                      <ValidityCountdown expirationDate={cliente.expiracao} />
                     </div>
                   </div>
                   
