@@ -1,11 +1,11 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Phone } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface HeroSectionProps {
-  scrollToTemplates: (e: React.MouseEvent) => void;
+  scrollToTemplates: (e: React.MouseEvent, sectionId?: string) => void;
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({
@@ -53,7 +53,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           <Button 
             size="lg" 
             className="rounded-md bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 flex items-center gap-2 font-medium"
-            onClick={scrollToTemplates}
+            onClick={(e) => scrollToTemplates(e, 'contato')}
           >
             <Phone className="h-5 w-5" />
             Solicitar Orçamento
@@ -63,7 +63,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             variant="outline" 
             size="lg" 
             className="rounded-md border-secondary text-secondary-foreground hover:bg-secondary/20 hover:text-secondary-foreground"
-            onClick={scrollToTemplates}
+            onClick={(e) => scrollToTemplates(e, 'servicos')}
           >
             Nossos serviços
           </Button>

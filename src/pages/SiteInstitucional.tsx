@@ -186,6 +186,13 @@ const SiteInstitucional = () => {
     }
   };
 
+  const scrollToTemplates = (e: React.MouseEvent, sectionId?: string) => {
+    e.preventDefault();
+    if (sectionId) {
+      scrollToSection(sectionId);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
