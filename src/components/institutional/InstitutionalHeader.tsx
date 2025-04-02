@@ -39,7 +39,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
       return <div className={`${sizingClass} rounded-lg bg-primary/20 animate-pulse`}></div>;
     }
     if (logoUrl) {
-      return <Avatar className="">
+      return <Avatar className={`${sizingClass} border border-white/20`}>
           <AvatarImage src={logoUrl} alt={`Logo ${cliente?.nome_empresa}`} className="object-contain p-0" />
           <AvatarFallback className="bg-primary text-white font-bold text-2xl">
             {cliente?.nome_empresa.charAt(0)}
