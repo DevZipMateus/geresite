@@ -41,7 +41,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
     }
     if (logoUrl) {
       return <Avatar className={`${sizingClass} ${brightnessClass} border border-white/20`}>
-          <AvatarImage src={logoUrl} alt={`Logo ${cliente?.nome_empresa}`} className="object-contain p-2 px 24" />
+          <AvatarImage src={logoUrl} alt={`Logo ${cliente?.nome_empresa}`} className="object-contain p-2" />
           <AvatarFallback className="bg-primary text-white font-bold text-2xl">
             {cliente?.nome_empresa.charAt(0)}
           </AvatarFallback>
