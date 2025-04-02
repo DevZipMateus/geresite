@@ -41,7 +41,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const renderLogo = (sizingClass: string = "h-16 w-16", brightnessClass: string = "") => {
+  const renderLogo = (sizingClass: string = "h-20 w-auto", brightnessClass: string = "") => {
     if (logoLoading) {
       return <div className={`${sizingClass} rounded-full bg-primary/20 animate-pulse`}></div>;
     }
@@ -52,7 +52,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
           <AvatarImage 
             src={logoUrl} 
             alt={`Logo ${cliente?.nome_empresa}`}
-            className="object-contain p-1"
+            className="object-contain p-2"
           />
           <AvatarFallback className="bg-primary text-white font-bold text-2xl">
             {cliente?.nome_empresa.charAt(0)}
@@ -78,11 +78,11 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
   };
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-3' : 'bg-transparent py-5'}`}>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-2' : 'bg-transparent py-3'}`}>
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
           {renderLogo(
-            isScrolled ? "h-14 w-14" : "h-16 w-16", 
+            isScrolled ? "h-16 w-auto" : "h-20 w-auto", 
             isScrolled ? 'brightness-100' : 'brightness-[1.15]'
           )}
           
@@ -125,7 +125,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
               <SheetContent side="right" className="pt-12">
                 <SheetHeader>
                   <div className="flex justify-center mb-6">
-                    {renderLogo("h-24 w-24")}
+                    {renderLogo("h-32 w-auto")}
                   </div>
                 </SheetHeader>
                 <div className="mt-8 flex flex-col gap-6">
