@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Check, ArrowRight } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const AboutUs = () => {
@@ -86,14 +86,7 @@ const AboutUs = () => {
               </div>
             </div>
             
-            <a 
-              href="#contato" 
-              className="bg-black hover:bg-neutral-800 text-amber-400 px-4 sm:px-6 py-2 sm:py-3 rounded-md transition-all flex items-center justify-center gap-2 font-medium inline-flex animate-fade-in" 
-              style={{ animationDelay: '0.7s' }}
-            >
-              <span>Conheça Nossos Diferenciais</span>
-              <ArrowRight size={isMobile ? 16 : 18} />
-            </a>
+            {/* Removed the "Conheça Nossos Diferenciais" button */}
           </div>
         </div>
       </div>
