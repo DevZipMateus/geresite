@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -56,14 +57,14 @@ const SiteInstitucional = () => {
             setExpirado(true);
           }
           
-          // Logo fetch logic - using standardized format "id/logo.png"
+          // Logo fetch logic
           if (data.logo_url) {
             console.log("Logo URL encontrado:", data.logo_url);
             setLogoLoading(true);
             setLogoError(null);
             
             try {
-              // Try to get the public URL for the logo
+              // Get the public URL for the logo
               const { data: fileData } = supabase.storage
                 .from('logos')
                 .getPublicUrl(data.logo_url);

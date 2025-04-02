@@ -89,6 +89,7 @@ const FormularioContato = () => {
           nome_responsavel: data.nome_responsavel,
           email: data.email,
           telefone: data.telefone,
+          // Não definimos logo_url aqui, será atualizado após o upload
         }])
         .select();
 
@@ -99,76 +100,75 @@ const FormularioContato = () => {
 
       console.log("Cliente inserted:", insertData);
 
-      // Se há um arquivo de logo e temos um ID de cliente
-      if (data.logo && data.logo.length > 0 && insertData && insertData.length > 0) {
+      // Se temos um ID de cliente
+      if (insertData && insertData.length > 0) {
         const clienteId = insertData[0].id;
-        const file = data.logo[0];
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${clienteId}/logo.${fileExt}`;
+        let logoUrl = null;
         
-        console.log("Uploading logo:", fileName);
-        
-        // Criar o bucket logos se ele não existir
-        const { data: bucketData, error: bucketError } = await supabase
-          .storage
-          .getBucket('logos');
+        // Se há um arquivo de logo
+        if (data.logo && data.logo.length > 0) {
+          const file = data.logo[0];
+          const fileExt = file.name.split('.').pop();
+          // Definindo nome do arquivo no formato "id/logo.extensão"
+          const fileName = `${clienteId}/logo.${fileExt}`;
+          logoUrl = `${clienteId}/logo.${fileExt}`; // Definir logo_url no formato correto
           
-        if (bucketError && bucketError.message.includes('not found')) {
-          // Bucket não existe, vamos criar
-          await supabase.storage.createBucket('logos', {
-            public: true
-          });
-          console.log("Created logos bucket");
-        }
-
-        // Upload do arquivo para o storage
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('logos')
-          .upload(fileName, file, {
-            cacheControl: '3600',
-            upsert: true
-          });
-        
-        if (uploadError) {
-          console.error("Erro ao fazer upload do logo:", uploadError);
-          toast({
-            variant: "destructive",
-            title: "Aviso",
-            description: "Seus dados foram salvos, mas houve um problema ao enviar o logo.",
-          });
-        } else {
-          console.log("Logo uploaded successfully:", uploadData);
+          console.log("Uploading logo with path:", fileName);
+          console.log("Logo URL to be saved:", logoUrl);
           
-          // Get public URL
-          const { data: publicUrlData } = supabase.storage
-            .from('logos')
-            .getPublicUrl(fileName);
+          // Criar o bucket logos se ele não existir
+          const { data: bucketData, error: bucketError } = await supabase
+            .storage
+            .getBucket('logos');
             
-          console.log("Public URL for logo:", publicUrlData);
+          if (bucketError && bucketError.message.includes('not found')) {
+            // Bucket não existe, vamos criar
+            await supabase.storage.createBucket('logos', {
+              public: true
+            });
+            console.log("Created logos bucket");
+          }
+
+          // Upload do arquivo para o storage
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('logos')
+            .upload(fileName, file, {
+              cacheControl: '3600',
+              upsert: true
+            });
           
-          // Atualizamos o registro do cliente com o caminho do logo
-          const { data: updateData, error: updateError } = await supabase
-            .from("clientes")
-            .update({ logo_url: fileName })
-            .eq('id', clienteId)
-            .select();
-          
-          if (updateError) {
-            console.error("Erro ao atualizar caminho do logo:", updateError);
+          if (uploadError) {
+            console.error("Erro ao fazer upload do logo:", uploadError);
+            toast({
+              variant: "destructive",
+              title: "Aviso",
+              description: "Seus dados foram salvos, mas houve um problema ao enviar o logo.",
+            });
           } else {
-            console.log("Cliente updated with logo_url:", updateData);
+            console.log("Logo uploaded successfully:", uploadData);
           }
         }
-      }
+        
+        // Sempre atualizamos o registro do cliente com o caminho do logo, mesmo que seja null
+        const { data: updateData, error: updateError } = await supabase
+          .from("clientes")
+          .update({ logo_url: logoUrl })
+          .eq('id', clienteId)
+          .select();
+        
+        if (updateError) {
+          console.error("Erro ao atualizar caminho do logo:", updateError);
+        } else {
+          console.log("Cliente updated with logo_url:", updateData);
+        }
 
-      toast({
-        title: "Sucesso!",
-        description: "Seus dados foram salvos com sucesso!",
-      });
+        toast({
+          title: "Sucesso!",
+          description: "Seus dados foram salvos com sucesso!",
+        });
 
-      // Redireciona para a página do site institucional com o ID do cliente
-      if (insertData && insertData.length > 0) {
-        navigate(`/site-institucional/${insertData[0].id}`);
+        // Redireciona para a página do site institucional com o ID do cliente
+        navigate(`/site-institucional/${clienteId}`);
       }
     } catch (error) {
       console.error("Erro ao enviar formulário:", error);
