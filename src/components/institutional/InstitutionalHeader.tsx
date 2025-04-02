@@ -7,7 +7,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Cliente } from "@/types/database.types";
 import ColorPaletteSelector from "@/components/ColorPaletteSelector";
-import ValidityCountdown from "@/components/ValityCountdown";
 
 interface InstitutionalHeaderProps {
   cliente: Cliente;
@@ -126,9 +125,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
                     <div className="space-y-4">
                       <ColorPaletteSelector value={activeColorPalette} onChange={handleColorPaletteChange} className="w-full" />
                       
-                      <div className="pt-4">
-                        <ValidityCountdown expirationDate={cliente.expiracao} />
-                      </div>
+                      {/* Removed ValidityCountdown component */}
                     </div>
                   </div>
                   

@@ -210,7 +210,8 @@ const SiteInstitucional = () => {
       
       {logoError && <LogoError error={logoError} logoUrl={cliente.logo_url} />}
       
-      {!isMobile && (
+      {/* Remove ValidityCountdown from the web version while keeping it in mobile */}
+      {isMobile && (
         <div className="fixed top-20 right-4 z-40 md:top-24 md:right-8">
           <ValidityCountdown expirationDate={cliente.expiracao} />
         </div>
