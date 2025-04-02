@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { Cliente } from "@/types/database.types";
 import { useToast } from "@/hooks/use-toast";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -17,6 +16,7 @@ import InstitutionalFooter from "@/components/institutional/InstitutionalFooter"
 import ExpiredNotice from "@/components/institutional/ExpiredNotice";
 import LoadingState from "@/components/institutional/LoadingState";
 import LogoError from "@/components/institutional/LogoError";
+import { getClienteById } from "@/services/clienteService";
 
 const SiteInstitucional = () => {
   const { id } = useParams<{ id: string }>();
@@ -37,68 +37,46 @@ const SiteInstitucional = () => {
         if (!id) return;
 
         console.log("Buscando cliente com ID:", id);
+        setLogoLoading(true);
         
-        const { data, error } = await supabase
-          .from("clientes")
-          .select("*")
-          .eq("id", id)
-          .single();
+        const { cliente, error, logoUrl: fetchedLogoUrl } = await getClienteById(id);
 
         if (error) {
           throw error;
         }
 
-        console.log("Dados do cliente recebidos:", data);
-        setCliente(data);
+        console.log("Dados do cliente recebidos:", cliente);
+        setCliente(cliente);
         
-        if (data) {
-          const dataExpiracao = new Date(data.expiracao);
+        if (cliente) {
+          const dataExpiracao = new Date(cliente.expiracao);
           if (dataExpiracao < new Date()) {
             setExpirado(true);
           }
           
-          // Logo fetch logic
-          if (data.logo_url) {
-            console.log("Logo URL encontrado:", data.logo_url);
-            setLogoLoading(true);
-            setLogoError(null);
+          // Logo handling
+          if (fetchedLogoUrl) {
+            console.log("URL pública do logo:", fetchedLogoUrl);
             
-            try {
-              // Get the public URL for the logo
-              const { data: fileData } = supabase.storage
-                .from('logos')
-                .getPublicUrl(data.logo_url);
-              
-              if (fileData && fileData.publicUrl) {
-                console.log("URL pública do logo:", fileData.publicUrl);
-                
-                // Test loading the image
-                const img = new Image();
-                img.onload = () => {
-                  console.log("Logo carregado com sucesso");
-                  setLogoUrl(fileData.publicUrl);
-                  setLogoLoading(false);
-                  toast({
-                    title: "Logo carregado",
-                    description: "O logo da empresa foi carregado com sucesso.",
-                  });
-                };
-                
-                img.onerror = () => {
-                  console.error("Erro ao carregar a imagem da URL:", fileData.publicUrl);
-                  setLogoError("Não foi possível carregar o logo (URL inválida)");
-                  setLogoLoading(false);
-                };
-                
-                img.src = fileData.publicUrl;
-              } else {
-                throw new Error("Falha ao obter URL pública");
-              }
-            } catch (logoError: any) {
-              console.error("Erro ao buscar logo:", logoError);
-              setLogoError(`Não foi possível carregar o logo: ${logoError.message || 'erro interno'}`);
+            // Test loading the image
+            const img = new Image();
+            img.onload = () => {
+              console.log("Logo carregado com sucesso");
+              setLogoUrl(fetchedLogoUrl);
               setLogoLoading(false);
-            }
+              toast({
+                title: "Logo carregado",
+                description: "O logo da empresa foi carregado com sucesso.",
+              });
+            };
+            
+            img.onerror = () => {
+              console.error("Erro ao carregar a imagem da URL:", fetchedLogoUrl);
+              setLogoError("Não foi possível carregar o logo (URL inválida)");
+              setLogoLoading(false);
+            };
+            
+            img.src = fetchedLogoUrl;
           } else {
             console.log("Nenhum logo_url encontrado para o cliente");
             setLogoLoading(false);
