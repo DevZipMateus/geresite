@@ -37,7 +37,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({
       className="pt-28 pb-12 md:pt-36 md:pb-20 bg-gradient-to-br from-neutral-900 to-neutral-800 relative overflow-hidden"
     >
       {/* Background image with overlay */}
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center opacity-10"></div>
+      <div 
+        className="absolute inset-0 bg-[url('/imagens/contador-background.jpg')] bg-cover bg-center opacity-10"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`
+        }}
+      ></div>
       
       {/* Decorative elements */}
       <div className="absolute top-40 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl"></div>
