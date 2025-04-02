@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { ArrowLeft, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,7 +6,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Cliente } from "@/types/database.types";
 import ColorPaletteSelector from "@/components/ColorPaletteSelector";
-
 interface InstitutionalHeaderProps {
   cliente: Cliente;
   logoUrl: string | null;
@@ -17,7 +15,6 @@ interface InstitutionalHeaderProps {
   handleColorPaletteChange: (palette: string) => void;
   scrollToSection: (sectionId: string) => void;
 }
-
 const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
   cliente,
   logoUrl,
@@ -30,7 +27,6 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isMobile = useIsMobile();
-
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -38,14 +34,13 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
   const renderLogo = (sizingClass: string = "w-[200px] h-[50px]") => {
     if (logoLoading) {
       return <div className={`${sizingClass} rounded-lg bg-primary/20 animate-pulse`}></div>;
     }
     if (logoUrl) {
       return <Avatar className={`${sizingClass} border border-white/20`}>
-          <AvatarImage src={logoUrl} alt={`Logo ${cliente?.nome_empresa}`} className="object-contain p-2" />
+          <AvatarImage src={logoUrl} alt={`Logo ${cliente?.nome_empresa}`} className="object-contain p-0" />
           <AvatarFallback className="bg-primary text-white font-bold text-2xl">
             {cliente?.nome_empresa.charAt(0)}
           </AvatarFallback>
@@ -57,14 +52,12 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
         </AvatarFallback>
       </Avatar>;
   };
-
   const scrollToTemplates = (e: React.MouseEvent, sectionId?: string) => {
     e.preventDefault();
     if (sectionId) {
       scrollToSection(sectionId);
     }
   };
-
   return <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white shadow-sm ${isScrolled ? 'py-2' : 'py-3'}`}>
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
@@ -147,5 +140,4 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
       </div>
     </header>;
 };
-
 export default InstitutionalHeader;
