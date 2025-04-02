@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -78,6 +77,9 @@ const FormularioContato = () => {
     try {
       setIsSubmitting(true);
       
+      // Log submission for debugging
+      console.log("Submitting form with data:", JSON.stringify(data, null, 2));
+      
       // Primeiro, inserimos os dados do cliente
       const { data: insertData, error } = await supabase
         .from("clientes")
@@ -93,6 +95,8 @@ const FormularioContato = () => {
         throw error;
       }
 
+      console.log("Cliente inserted:", insertData);
+
       // Se há um arquivo de logo e temos um ID de cliente
       if (data.logo && data.logo.length > 0 && insertData && insertData.length > 0) {
         const clienteId = insertData[0].id;
@@ -100,8 +104,10 @@ const FormularioContato = () => {
         const fileExt = file.name.split('.').pop();
         const fileName = `${clienteId}/logo.${fileExt}`;
         
+        console.log("Uploading logo:", fileName);
+        
         // Upload do arquivo para o storage
-        const { error: uploadError } = await supabase.storage
+        const { data: uploadData, error: uploadError } = await supabase.storage
           .from('logos')
           .upload(fileName, file, {
             cacheControl: '3600',
@@ -110,16 +116,25 @@ const FormularioContato = () => {
         
         if (uploadError) {
           console.error("Erro ao fazer upload do logo:", uploadError);
-          // Continua com a navegação mesmo se o upload falhar
+          toast({
+            variant: "destructive",
+            title: "Aviso",
+            description: "Seus dados foram salvos, mas houve um problema ao enviar o logo.",
+          });
         } else {
+          console.log("Logo uploaded successfully:", uploadData);
+          
           // Atualizamos o registro do cliente com o caminho do logo
-          const { error: updateError } = await supabase
+          const { data: updateData, error: updateError } = await supabase
             .from("clientes")
             .update({ logo_url: fileName })
-            .eq('id', clienteId);
+            .eq('id', clienteId)
+            .select();
           
           if (updateError) {
             console.error("Erro ao atualizar caminho do logo:", updateError);
+          } else {
+            console.log("Cliente updated with logo_url:", updateData);
           }
         }
       }

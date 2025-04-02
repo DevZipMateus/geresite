@@ -63,40 +63,54 @@ const SiteInstitucional = () => {
             setExpirado(true);
           }
 
-          // If the client has a logo, fetch it from storage
+          console.log("Cliente data:", data);
+          
           if (data.logo_url) {
             setLogoLoading(true);
             setLogoError(null);
             
             try {
               console.log("Trying to fetch logo:", data.logo_url);
-              // Try as direct path first
-              const { data: publicUrl } = supabase.storage
+              
+              const { data: fileData } = supabase.storage
                 .from('logos')
                 .getPublicUrl(data.logo_url);
               
-              console.log("Logo public URL:", publicUrl.publicUrl);
-              
-              // Verify the image exists with a fetch request
-              const response = await fetch(publicUrl.publicUrl, { method: 'HEAD' });
-              
-              if (response.ok) {
-                setLogoUrl(publicUrl.publicUrl);
-              } else {
-                // If direct path fails, try with client ID path
-                console.log("Direct path failed, trying with ID path");
-                const idPath = `${id}/logo.png`;
-                const { data: idPublicUrl } = supabase.storage
-                  .from('logos')
-                  .getPublicUrl(idPath);
+              if (fileData && fileData.publicUrl) {
+                console.log("Logo public URL:", fileData.publicUrl);
                 
-                console.log("Alternative logo URL:", idPublicUrl.publicUrl);
-                setLogoUrl(idPublicUrl.publicUrl);
+                const imageResponse = await fetch(fileData.publicUrl, { method: 'HEAD' });
+                
+                if (imageResponse.ok) {
+                  setLogoUrl(fileData.publicUrl);
+                } else {
+                  throw new Error("Image not found at URL");
+                }
+              } else {
+                throw new Error("Failed to get public URL");
               }
             } catch (logoError) {
-              console.error("Erro ao buscar logo:", logoError);
-              setLogoError("Não foi possível carregar o logo");
-              setLogoUrl(null);
+              console.error("Error fetching logo:", logoError);
+              
+              try {
+                const altPath = `${id}/logo.png`;
+                console.log("Trying alternative path:", altPath);
+                
+                const { data: altData } = supabase.storage
+                  .from('logos')
+                  .getPublicUrl(altPath);
+                
+                if (altData && altData.publicUrl) {
+                  console.log("Alternative logo URL works:", altData.publicUrl);
+                  setLogoUrl(altData.publicUrl);
+                } else {
+                  throw new Error("Alternative image not found");
+                }
+              } catch (altError) {
+                console.error("Error with alternative logo path:", altError);
+                setLogoError("Não foi possível carregar o logo");
+                setLogoUrl(null);
+              }
             } finally {
               setLogoLoading(false);
             }
@@ -124,7 +138,6 @@ const SiteInstitucional = () => {
   const handleColorPaletteChange = (palette: string) => {
     setActiveColorPalette(palette);
     
-    // Remove any previous palette classes
     document.documentElement.classList.remove(
       "theme-default", 
       "theme-green", 
@@ -132,7 +145,6 @@ const SiteInstitucional = () => {
       "theme-orange"
     );
     
-    // Add the new palette class
     document.documentElement.classList.add(`theme-${palette}`);
     
     toast({
@@ -173,6 +185,10 @@ const SiteInstitucional = () => {
     );
   }
 
+  if (logoError) {
+    console.log("Logo error:", logoError);
+  }
+
   return (
     <div className={`min-h-screen flex flex-col theme-${activeColorPalette}`}>
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-3' : 'bg-primary text-white py-5'}`}>
@@ -185,9 +201,10 @@ const SiteInstitucional = () => {
                 src={logoUrl} 
                 alt={`Logo ${cliente.nome_empresa}`} 
                 className={`h-10 object-contain ${isScrolled ? 'brightness-100' : 'brightness-[1.15]'}`}
-                onError={() => {
-                  console.error("Logo failed to load, falling back to initial");
+                onError={(e) => {
+                  console.error("Logo failed to load at render time");
                   setLogoUrl(null);
+                  setLogoError(`Failed to load image at render time: ${Date.now()}`);
                 }}
               />
             ) : (
@@ -231,6 +248,13 @@ const SiteInstitucional = () => {
           </div>
         </div>
       </header>
+      
+      {logoError && (
+        <div className="fixed top-24 left-4 z-50 bg-red-100 p-2 text-xs border border-red-300 rounded">
+          <p>Logo Error: {logoError}</p>
+          {cliente.logo_url && <p>Logo URL in DB: {cliente.logo_url}</p>}
+        </div>
+      )}
       
       <div className="fixed top-20 right-4 z-40 md:top-24 md:right-8">
         <ValidityCountdown expirationDate={cliente.expiracao} />
