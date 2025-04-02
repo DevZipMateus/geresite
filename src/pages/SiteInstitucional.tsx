@@ -215,7 +215,7 @@ const SiteInstitucional = () => {
   }
 
   return (
-    <div className={`min-h-screen flex flex-col theme-${activeColorPalette}`}>
+    <div className={`min-h-screen flex flex-col theme-${activeColorPalette} overflow-x-hidden`}>
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-3' : 'bg-transparent text-white py-5'}`}>
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -273,7 +273,6 @@ const SiteInstitucional = () => {
 
       <WhatsAppButton phoneNumber={cliente.telefone} />
 
-      {/* Hero Section */}
       <HeroSection scrollToTemplates={scrollToTemplates} />
 
       <section id="servicos" className="py-16 bg-gray-50">
@@ -303,7 +302,6 @@ const SiteInstitucional = () => {
         </div>
       </section>
 
-      {/* About Us section - replaced with the AboutUs component */}
       <AboutUs />
 
       <section id="depoimentos" className="py-16 bg-gray-50">
