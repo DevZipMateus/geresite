@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -65,13 +64,16 @@ const SiteInstitucional = () => {
           // If the client has a logo, fetch it from storage
           if (data.logo_url) {
             try {
+              // Get the public URL for the logo
               const { data: publicUrl } = supabase.storage
                 .from('logos')
                 .getPublicUrl(data.logo_url);
               
+              console.log("Logo URL:", publicUrl.publicUrl);
               setLogoUrl(publicUrl.publicUrl);
             } catch (logoError) {
               console.error("Erro ao buscar logo:", logoError);
+              setLogoUrl(null);
             }
           }
         }
@@ -100,7 +102,6 @@ const SiteInstitucional = () => {
     // Remove any previous palette classes
     document.documentElement.classList.remove(
       "theme-default", 
-      "theme-blue", 
       "theme-green", 
       "theme-purple", 
       "theme-orange"
