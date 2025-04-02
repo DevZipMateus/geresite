@@ -10,6 +10,7 @@ import ValidityCountdown from "@/components/ValityCountdown";
 import Map from "@/components/Map";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { format } from "date-fns";
+import Testimonials from "@/components/sections/Testimonials";
 
 const SiteInstitucional = () => {
   const { id } = useParams<{ id: string }>();
@@ -121,6 +122,7 @@ const SiteInstitucional = () => {
             <div className={`hidden md:flex items-center gap-6 ${isScrolled ? 'text-gray-700' : 'text-white'}`}>
               <a href="#servicos" className="hover:text-primary/80 transition-colors">Serviços</a>
               <a href="#sobre" className="hover:text-primary/80 transition-colors">Sobre</a>
+              <a href="#depoimentos" className="hover:text-primary/80 transition-colors">Depoimentos</a>
               <a href="#localizacao" className="hover:text-primary/80 transition-colors">Localização</a>
               <a href="#contato" className="hover:text-primary/80 transition-colors">Contato</a>
             </div>
@@ -252,6 +254,11 @@ const SiteInstitucional = () => {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Depoimentos */}
+      <section id="depoimentos" className="py-16 bg-gray-50">
+        <Testimonials />
       </section>
 
       {/* Nova seção de Localização com Mapa */}
