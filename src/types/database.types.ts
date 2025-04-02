@@ -1,5 +1,4 @@
 
-
 export interface Cliente {
   id: number;
   nome_empresa: string;
@@ -8,6 +7,7 @@ export interface Cliente {
   telefone: string;
   data_criacao: string;
   expiracao: string;
+  logo_url?: string;
 }
 
 export interface Database {
