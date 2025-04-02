@@ -42,7 +42,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
         </h1>
         
         <p 
-          className="text-lg text-secondary-foreground mb-10 max-w-3xl mx-auto"
+          className="text-lg font-medium text-white mb-10 max-w-3xl mx-auto"
         >
           Entre em contato conosco e solicite um orçamento para começar a usar hoje mesmo nossos serviços personalizados.
         </p>
