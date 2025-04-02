@@ -285,34 +285,6 @@ const SiteInstitucional = () => {
                 </div>
               </div>
             </div>
-            <div className="md:w-1/2 mt-8 md:mt-0">
-              <div className="bg-white rounded-lg p-6 shadow-lg">
-                <h2 className="text-primary text-2xl font-bold mb-4">Informações da Empresa</h2>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <Building className="h-5 w-5 text-primary mt-1" />
-                    <div>
-                      <h3 className="font-medium text-gray-900">Empresa</h3>
-                      <p className="text-gray-700">{cliente.nome_empresa}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <User className="h-5 w-5 text-primary mt-1" />
-                    <div>
-                      <h3 className="font-medium text-gray-900">Responsável</h3>
-                      <p className="text-gray-700">{cliente.nome_responsavel}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <Calendar className="h-5 w-5 text-primary mt-1" />
-                    <div>
-                      <h3 className="font-medium text-gray-900">Data de Registro</h3>
-                      <p className="text-gray-700">{format(new Date(cliente.data_criacao), 'dd/MM/yyyy')}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
