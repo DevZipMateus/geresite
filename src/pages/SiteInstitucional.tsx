@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Cliente } from "@/types/database.types";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Phone, Mail, User, MapPin, Building, Calendar, Clock, Palette } from "lucide-react";
+import { ArrowLeft, Phone, Mail, User, MapPin, Building, Calendar, Clock, Palette, Menu, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import ValidityCountdown from "@/components/ValityCountdown";
 import Map from "@/components/Map";
@@ -12,6 +12,8 @@ import ColorPaletteSelector from "@/components/ColorPaletteSelector";
 import HeroSection from "@/components/sections/HeroSection";
 import Testimonials from "@/components/sections/Testimonials";
 import AboutUs from "@/components/sections/AboutUs";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const SiteInstitucional = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,6 +27,8 @@ const SiteInstitucional = () => {
   const [logoLoading, setLogoLoading] = useState(false);
   const [logoError, setLogoError] = useState<string | null>(null);
   const [activeColorPalette, setActiveColorPalette] = useState("default");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -174,11 +178,11 @@ const SiteInstitucional = () => {
     );
   };
 
-  const scrollToTemplates = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const servicesSection = document.getElementById('servicos');
-    if (servicesSection) {
-      servicesSection.scrollIntoView({ behavior: 'smooth' });
+  const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+      setIsMobileMenuOpen(false);
     }
   };
 
@@ -232,12 +236,14 @@ const SiteInstitucional = () => {
           </div>
           
           <div className="flex items-center gap-2 md:gap-4">
-            <ColorPaletteSelector 
-              value={activeColorPalette}
-              onChange={handleColorPaletteChange}
-              size={isScrolled ? 'default' : 'sm'}
-              className={isScrolled ? '' : 'bg-white/10 backdrop-blur-sm rounded-md px-2 py-1'}
-            />
+            {!isMobile && (
+              <ColorPaletteSelector 
+                value={activeColorPalette}
+                onChange={handleColorPaletteChange}
+                size={isScrolled ? 'default' : 'sm'}
+                className={isScrolled ? '' : 'bg-white/10 backdrop-blur-sm rounded-md px-2 py-1'}
+              />
+            )}
             
             <div className={`hidden md:flex items-center gap-6 ${isScrolled ? 'text-gray-700' : 'text-white'}`}>
               <a href="#servicos" className="hover:text-primary/80 transition-colors">Serviços</a>
@@ -247,10 +253,73 @@ const SiteInstitucional = () => {
               <a href="#contato" className="hover:text-primary/80 transition-colors">Contato</a>
             </div>
             
+            {isMobile && (
+              <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className={isScrolled ? "text-primary" : "text-white"}
+                  >
+                    <Menu className="h-6 w-6" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="pt-12">
+                  <SheetHeader>
+                    <SheetTitle className="text-primary text-xl">{cliente.nome_empresa}</SheetTitle>
+                  </SheetHeader>
+                  <div className="mt-6 flex flex-col gap-6">
+                    <div className="flex flex-col gap-4">
+                      <h3 className="text-sm font-medium text-muted-foreground">Navegação</h3>
+                      <div className="flex flex-col space-y-3">
+                        <button onClick={() => scrollToSection('servicos')} className="flex items-center gap-2 text-left">
+                          <span className="text-primary">Serviços</span>
+                        </button>
+                        <button onClick={() => scrollToSection('sobre')} className="flex items-center gap-2 text-left">
+                          <span className="text-primary">Sobre</span>
+                        </button>
+                        <button onClick={() => scrollToSection('depoimentos')} className="flex items-center gap-2 text-left">
+                          <span className="text-primary">Depoimentos</span>
+                        </button>
+                        <button onClick={() => scrollToSection('localizacao')} className="flex items-center gap-2 text-left">
+                          <span className="text-primary">Localização</span>
+                        </button>
+                        <button onClick={() => scrollToSection('contato')} className="flex items-center gap-2 text-left">
+                          <span className="text-primary">Contato</span>
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div className="border-t pt-4">
+                      <h3 className="text-sm font-medium text-muted-foreground mb-4">Configurações</h3>
+                      <div className="space-y-4">
+                        <ColorPaletteSelector 
+                          value={activeColorPalette}
+                          onChange={handleColorPaletteChange}
+                          className="w-full"
+                        />
+                        
+                        <div className="pt-4">
+                          <ValidityCountdown expirationDate={cliente.expiracao} />
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-auto pt-4 border-t">
+                      <Button onClick={handleVoltar} variant="outline" className="w-full">
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Voltar para a página inicial
+                      </Button>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            )}
+            
             <Button 
               variant={isScrolled ? "outline" : "secondary"} 
               onClick={handleVoltar}
-              className={isScrolled ? "border-primary text-primary hover:bg-primary/10" : "text-primary hover:bg-white/90"}
+              className={`${isScrolled ? "border-primary text-primary hover:bg-primary/10" : "text-primary hover:bg-white/90"} hidden md:flex`}
               size="sm"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
@@ -267,9 +336,11 @@ const SiteInstitucional = () => {
         </div>
       )}
       
-      <div className="fixed top-20 right-4 z-40 md:top-24 md:right-8">
-        <ValidityCountdown expirationDate={cliente.expiracao} />
-      </div>
+      {!isMobile && (
+        <div className="fixed top-20 right-4 z-40 md:top-24 md:right-8">
+          <ValidityCountdown expirationDate={cliente.expiracao} />
+        </div>
+      )}
 
       <WhatsAppButton phoneNumber={cliente.telefone} />
 
