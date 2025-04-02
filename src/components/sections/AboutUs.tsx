@@ -3,7 +3,6 @@ import React from 'react';
 import FadeIn from '@/components/animations/FadeIn';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import { Check, ArrowRight } from 'lucide-react';
 
 const AboutUs = () => {
@@ -22,12 +21,6 @@ const AboutUs = () => {
     }
   ];
 
-  const stats = [
-    { value: '10+', label: 'Anos de Experiência' },
-    { value: '500+', label: 'Clientes Satisfeitos' },
-    { value: '50+', label: 'Especialistas' }
-  ];
-
   return (
     <section id="about" className="py-20 px-8 md:px-12 bg-white">
       <div className="max-w-7xl mx-auto">
@@ -37,30 +30,34 @@ const AboutUs = () => {
             <FadeIn direction="left">
               <div className="relative rounded-xl overflow-hidden">
                 <img 
-                  src="public/lovable-uploads/2683821f-caff-4681-a157-21ded44b2411.png" 
+                  src="/lovable-uploads/2683821f-caff-4681-a157-21ded44b2411.png" 
                   alt="Profissionais trabalhando" 
-                  className="w-full h-auto rounded-xl object-cover"
+                  className="w-full h-[500px] object-cover rounded-xl"
                   onError={(e) => {
                     e.currentTarget.src = "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1936&q=80";
                   }}
                 />
                 
                 {/* Stats card overlay */}
-                <Card className="absolute bottom-4 right-4 shadow-lg w-3/4 bg-white/95 backdrop-blur-sm">
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between mb-3 text-sm text-gray-600">
-                      <div className="flex items-center gap-1">
-                        <div className="h-3 w-3 rounded-full bg-primary"></div>
-                        <span>Desde 2010</span>
+                <Card className="absolute -bottom-6 -right-6 shadow-lg w-64 md:w-72 bg-white">
+                  <CardContent className="p-6">
+                    <div className="flex flex-col space-y-4">
+                      <div className="flex justify-between">
+                        <div>
+                          <p className="text-sm text-gray-500">Clientes</p>
+                          <p className="text-2xl font-bold text-primary">500+</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-500">Anos</p>
+                          <p className="text-2xl font-bold text-primary">13+</p>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <div className="h-3 w-3 rounded-full bg-amber-400"></div>
-                        <span>+500 clientes</span>
+                      <div className="w-full h-px bg-gray-200"></div>
+                      <div>
+                        <p className="text-sm text-gray-500">Especialistas</p>
+                        <p className="text-2xl font-bold text-primary">50+</p>
                       </div>
                     </div>
-                    
-                    <h3 className="text-3xl font-bold text-gray-900">13</h3>
-                    <p className="text-sm text-gray-600">Anos de experiência em contabilidade</p>
                   </CardContent>
                 </Card>
               </div>
@@ -68,7 +65,7 @@ const AboutUs = () => {
           </div>
           
           {/* Right column - Content */}
-          <div className="lg:w-1/2">
+          <div className="lg:w-1/2 pt-12 lg:pt-0">
             <FadeIn direction="right">
               <span className="text-sm font-medium text-primary uppercase tracking-wider">Sobre Nós</span>
               
@@ -101,7 +98,7 @@ const AboutUs = () => {
               
               <Button className="rounded-md group" asChild>
                 <a href="#services">
-                  Conheça Nossos Diferenciais
+                  Conheça Nossos Serviços
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </a>
               </Button>
