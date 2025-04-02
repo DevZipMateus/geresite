@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Cliente } from '@/types/database.types';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Facebook, Instagram, Mail, Phone, MapPin } from 'lucide-react';
 
 interface InstitutionalFooterProps {
@@ -16,25 +15,23 @@ const InstitutionalFooter: React.FC<InstitutionalFooterProps> = ({
   const renderLogo = (sizingClass: string = "w-[200px] h-[50px]") => {
     if (logoUrl) {
       return (
-        <Avatar className={`${sizingClass} brightness-[1.15] border-2 border-white/20 mb-2`}>
-          <AvatarImage 
+        <div className={`${sizingClass} flex items-center`}>
+          <img 
             src={logoUrl} 
-            alt={`Logo ${cliente.nome_empresa}`}
-            className="object-contain p-2"
+            alt={`Logo ${cliente.nome_empresa}`} 
+            className="object-contain h-full w-full" 
           />
-          <AvatarFallback className="bg-primary text-white text-xl font-bold">
-            {cliente.nome_empresa.charAt(0)}
-          </AvatarFallback>
-        </Avatar>
+        </div>
       );
     }
     
+    // If no logo available, display the styled company name
     return (
-      <Avatar className={`${sizingClass} brightness-[1.15]`}>
-        <AvatarFallback className="bg-primary text-white text-xl font-bold">
-          {cliente.nome_empresa.charAt(0)}
-        </AvatarFallback>
-      </Avatar>
+      <div className={sizingClass}>
+        <h2 className="text-2xl font-bold text-white">
+          {cliente.nome_empresa}
+        </h2>
+      </div>
     );
   };
 
@@ -45,7 +42,6 @@ const InstitutionalFooter: React.FC<InstitutionalFooterProps> = ({
           {/* Company Info */}
           <div className="flex flex-col items-center md:items-start">
             {renderLogo()}
-            <h2 className="text-2xl font-bold mt-4">{cliente.nome_empresa}</h2>
             <p className="text-white/80 mt-2 text-center md:text-left">
               Soluções profissionais para seu negócio
             </p>
