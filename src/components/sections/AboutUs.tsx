@@ -30,7 +30,7 @@ const AboutUs = () => {
             <FadeIn direction="left">
               <div className="relative rounded-xl overflow-hidden">
                 <img 
-                  src="/lovable-uploads/2683821f-caff-4681-a157-21ded44b2411.png" 
+                  src="/lovable-uploads/cf704a85-d1eb-4953-a197-b1451e0c25d9.png" 
                   alt="Profissionais trabalhando" 
                   className="w-full h-[500px] object-cover rounded-xl"
                   onError={(e) => {
@@ -41,21 +41,20 @@ const AboutUs = () => {
                 {/* Stats card overlay */}
                 <Card className="absolute -bottom-6 -right-6 shadow-lg w-64 md:w-72 bg-white">
                   <CardContent className="p-6">
-                    <div className="flex flex-col space-y-4">
-                      <div className="flex justify-between">
-                        <div>
-                          <p className="text-sm text-gray-500">Clientes</p>
-                          <p className="text-2xl font-bold text-primary">500+</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500">Anos</p>
-                          <p className="text-2xl font-bold text-primary">13+</p>
-                        </div>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <div className="h-2 w-2 rounded-full bg-black"></div>
+                        <span>Desde 2010</span>
                       </div>
-                      <div className="w-full h-px bg-gray-200"></div>
-                      <div>
-                        <p className="text-sm text-gray-500">Especialistas</p>
-                        <p className="text-2xl font-bold text-primary">50+</p>
+                      
+                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <div className="h-2 w-2 rounded-full bg-yellow-500"></div>
+                        <span>+500 clientes</span>
+                      </div>
+                      
+                      <div className="mt-2">
+                        <p className="text-4xl font-bold text-gray-900">13</p>
+                        <p className="text-sm text-gray-500">Anos de experiência em contabilidade</p>
                       </div>
                     </div>
                   </CardContent>
@@ -96,9 +95,9 @@ const AboutUs = () => {
                 ))}
               </div>
               
-              <Button className="rounded-md group" asChild>
+              <Button className="rounded-md group bg-black text-white hover:bg-black/90" asChild>
                 <a href="#services">
-                  Conheça Nossos Serviços
+                  Conheça Nossos Diferenciais
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </a>
               </Button>
