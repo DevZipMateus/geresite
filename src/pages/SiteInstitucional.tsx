@@ -17,7 +17,6 @@ import InstitutionalFooter from "@/components/institutional/InstitutionalFooter"
 import ExpiredNotice from "@/components/institutional/ExpiredNotice";
 import LoadingState from "@/components/institutional/LoadingState";
 import LogoError from "@/components/institutional/LogoError";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const SiteInstitucional = () => {
   const { id } = useParams<{ id: string }>();
@@ -210,62 +209,6 @@ const SiteInstitucional = () => {
       />
       
       {logoError && <LogoError error={logoError} logoUrl={cliente.logo_url} />}
-      
-      <div className="bg-gray-100 py-8 px-4 mt-20 text-center">
-        <h2 className="text-xl font-semibold mb-4">Visualização do Logo</h2>
-        <p className="mb-4 text-gray-600">
-          {logoLoading 
-            ? "Carregando logo..." 
-            : logoError 
-            ? `Erro ao carregar logo: ${logoError}` 
-            : cliente.logo_url 
-            ? "Exibindo o logo da empresa"
-            : "Nenhum logo foi configurado para essa empresa."
-          }
-        </p>
-        
-        <div className="flex justify-center mb-4">
-          <Avatar className="w-[200px] h-[50px] border-2 border-primary">
-            <AvatarImage 
-              src={logoUrl || ''} 
-              alt={`Logo ${cliente.nome_empresa}`}
-              className="object-contain p-2"
-            />
-            <AvatarFallback className="bg-primary text-white text-3xl font-bold">
-              {cliente.nome_empresa.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
-        </div>
-        
-        <div className="mt-2 p-4 bg-yellow-50 border border-yellow-200 rounded-md max-w-md mx-auto text-left">
-          <h3 className="font-semibold text-yellow-700 mb-2">Informações de Diagnóstico:</h3>
-          <p className="text-sm text-gray-700 mb-1">
-            <span className="font-medium">ID do cliente:</span> {id}
-          </p>
-          <p className="text-sm text-gray-700 mb-1">
-            <span className="font-medium">Logo URL no banco:</span> {cliente.logo_url || 'Não definido'}
-          </p>
-          <p className="text-sm text-gray-700 mb-1">
-            <span className="font-medium">URL carregada:</span> {logoUrl || 'Nenhuma'}
-          </p>
-          <p className="text-sm text-gray-700 mb-1">
-            <span className="font-medium">Estado:</span> {
-              logoLoading ? 'Carregando...' : 
-              logoError ? 'Erro' : 
-              logoUrl ? 'Carregado com sucesso' : 
-              'Não disponível'
-            }
-          </p>
-          {id === "7" && (
-            <p className="text-sm text-green-700 mt-2 font-medium">
-              URL especial para ID 7: <br />
-              <span className="break-all text-xs bg-green-100 p-1 block mt-1 rounded">
-                https://svenmlcxebqafsxlayez.supabase.co/storage/v1/object/public/logos/7/logo.png
-              </span>
-            </p>
-          )}
-        </div>
-      </div>
       
       {!isMobile && (
         <div className="fixed top-20 right-4 z-40 md:top-24 md:right-8">
