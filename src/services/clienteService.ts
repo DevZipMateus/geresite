@@ -78,20 +78,30 @@ export const createCliente = async (data: ClienteFormData): Promise<{ cliente: C
         }
       }
       
-      // Sempre atualizamos o registro do cliente com o caminho do logo, mesmo que seja null
-      const { data: updateData, error: updateError } = await supabase
-        .from("clientes")
-        .update({ logo_url: logoUrl })
-        .eq('id', clienteId)
-        .select();
-      
-      if (updateError) {
-        console.error("Erro ao atualizar caminho do logo:", updateError);
-        return { cliente: insertData[0], error: updateError };
-      } else {
-        console.log("Cliente updated with logo_url:", updateData);
-        return { cliente: updateData[0], error: null };
+      // Corrigido: Verifica se logoUrl não é null antes de atualizar
+      if (logoUrl) {
+        // Usar o método update corretamente e verificar a resposta
+        const { data: updateData, error: updateError } = await supabase
+          .from("clientes")
+          .update({ logo_url: logoUrl })
+          .eq('id', clienteId)
+          .select();
+        
+        if (updateError) {
+          console.error("Erro ao atualizar caminho do logo:", updateError);
+          return { cliente: insertData[0], error: updateError };
+        } else {
+          console.log("Cliente updated with logo_url:", updateData);
+          
+          // Retornar o cliente atualizado se a atualização foi bem-sucedida
+          if (updateData && updateData.length > 0) {
+            return { cliente: updateData[0], error: null };
+          }
+        }
       }
+      
+      // Se não houver logo ou a atualização não retornar dados, retorna o cliente original
+      return { cliente: insertData[0], error: null };
     }
     
     return { cliente: null, error: new Error("Falha ao criar cliente") };
