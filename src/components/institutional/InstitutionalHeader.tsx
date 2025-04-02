@@ -57,11 +57,15 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
         </div>
       );
     }
-    return <Avatar className={`${sizingClass}`}>
-        <AvatarFallback className="bg-primary text-white font-bold text-2xl">
-          {cliente?.nome_empresa.charAt(0)}
-        </AvatarFallback>
-      </Avatar>;
+    
+    // When no logo is available, display the styled company name instead of an avatar
+    return (
+      <div className={forMobileMenu ? "" : sizingClass}>
+        <h1 className="text-2xl md:text-3xl font-bold text-primary">
+          {cliente?.nome_empresa}
+        </h1>
+      </div>
+    );
   };
 
   const scrollToTemplates = (e: React.MouseEvent, sectionId?: string) => {
@@ -75,10 +79,6 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
           {renderLogo(isScrolled ? "w-[220px] h-[60px]" : "w-[250px] h-[70px]")}
-          
-          {!logoUrl && <h1 className="text-xl md:text-2xl font-bold text-primary">
-              {cliente.nome_empresa}
-            </h1>}
         </div>
         
         <div className="flex items-center gap-2 md:gap-4">

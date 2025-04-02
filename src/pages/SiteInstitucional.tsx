@@ -56,23 +56,26 @@ const SiteInstitucional = () => {
             setExpirado(true);
           }
           
-          // Logo fetch logic
+          // Logo fetch logic - using standardized format "id/logo.png"
           if (data.logo_url) {
             console.log("Logo URL encontrado:", data.logo_url);
             setLogoLoading(true);
             setLogoError(null);
             
             try {
-              // Caso especial para o ID 7 (usando URL direto do bucket)
-              if (id === "7") {
-                const directUrl = "https://svenmlcxebqafsxlayez.supabase.co/storage/v1/object/public/logos/7/logo.png";
-                console.log("Usando URL direto para ID 7:", directUrl);
+              // Try to get the public URL for the logo
+              const { data: fileData } = supabase.storage
+                .from('logos')
+                .getPublicUrl(data.logo_url);
+              
+              if (fileData && fileData.publicUrl) {
+                console.log("URL pública do logo:", fileData.publicUrl);
                 
-                // Testar o carregamento da imagem
+                // Test loading the image
                 const img = new Image();
                 img.onload = () => {
-                  console.log("Logo carregado com sucesso (URL direto)");
-                  setLogoUrl(directUrl);
+                  console.log("Logo carregado com sucesso");
+                  setLogoUrl(fileData.publicUrl);
                   setLogoLoading(false);
                   toast({
                     title: "Logo carregado",
@@ -81,48 +84,14 @@ const SiteInstitucional = () => {
                 };
                 
                 img.onerror = () => {
-                  console.error("Erro ao carregar a imagem da URL direta:", directUrl);
-                  setLogoError("Não foi possível carregar o logo (URL direta inválida)");
+                  console.error("Erro ao carregar a imagem da URL:", fileData.publicUrl);
+                  setLogoError("Não foi possível carregar o logo (URL inválida)");
                   setLogoLoading(false);
                 };
                 
-                img.src = directUrl;
+                img.src = fileData.publicUrl;
               } else {
-                // Para outros IDs, usar o padrão de storage do Supabase
-                if (data.logo_url) {
-                  // Construir a URL pública para a imagem
-                  const { data: fileData } = supabase.storage
-                    .from('logos')
-                    .getPublicUrl(data.logo_url);
-                  
-                  if (fileData && fileData.publicUrl) {
-                    console.log("URL pública do logo:", fileData.publicUrl);
-                    
-                    // Testar o carregamento da imagem
-                    const img = new Image();
-                    img.onload = () => {
-                      console.log("Logo carregado com sucesso");
-                      setLogoUrl(fileData.publicUrl);
-                      setLogoLoading(false);
-                      toast({
-                        title: "Logo carregado",
-                        description: "O logo da empresa foi carregado com sucesso.",
-                      });
-                    };
-                    
-                    img.onerror = () => {
-                      console.error("Erro ao carregar a imagem da URL:", fileData.publicUrl);
-                      setLogoError("Não foi possível carregar o logo (URL inválida)");
-                      setLogoLoading(false);
-                    };
-                    
-                    img.src = fileData.publicUrl;
-                  } else {
-                    throw new Error("Falha ao obter URL pública");
-                  }
-                } else {
-                  setLogoLoading(false);
-                }
+                throw new Error("Falha ao obter URL pública");
               }
             } catch (logoError: any) {
               console.error("Erro ao buscar logo:", logoError);
