@@ -253,11 +253,11 @@ const SiteInstitucional = () => {
             )}
             
             <div className={`hidden md:flex items-center gap-6 ${isScrolled ? 'text-gray-700' : 'text-white'}`}>
-              <a href="#servicos" className="hover:text-primary/80 transition-colors">Serviços</a>
-              <a href="#sobre" className="hover:text-primary/80 transition-colors">Sobre</a>
-              <a href="#depoimentos" className="hover:text-primary/80 transition-colors">Depoimentos</a>
-              <a href="#localizacao" className="hover:text-primary/80 transition-colors">Localização</a>
-              <a href="#contato" className="hover:text-primary/80 transition-colors">Contato</a>
+              <a href="#servicos" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToSection('servicos')}>Serviços</a>
+              <a href="#sobre" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToSection('sobre')}>Sobre</a>
+              <a href="#depoimentos" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToSection('depoimentos')}>Depoimentos</a>
+              <a href="#localizacao" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToSection('localizacao')}>Localização</a>
+              <a href="#contato" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToSection('contato')}>Contato</a>
             </div>
             
             {isMobile && (
@@ -273,28 +273,28 @@ const SiteInstitucional = () => {
                 </SheetTrigger>
                 <SheetContent side="right" className="pt-12">
                   <SheetHeader>
-                    <div className="flex justify-center mb-2">
-                      {renderLogo("h-12 w-auto")}
+                    <div className="flex justify-center mb-6">
+                      {renderLogo("h-14 w-auto")}
                     </div>
                   </SheetHeader>
-                  <div className="mt-6 flex flex-col gap-6">
+                  <div className="mt-8 flex flex-col gap-6">
                     <div className="flex flex-col gap-4">
                       <h3 className="text-sm font-medium text-muted-foreground">Navegação</h3>
-                      <div className="flex flex-col space-y-3">
-                        <button onClick={() => scrollToSection('servicos')} className="flex items-center gap-2 text-left">
-                          <span className="text-primary">Serviços</span>
+                      <div className="flex flex-col space-y-4">
+                        <button onClick={() => scrollToSection('servicos')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
+                          <span>Serviços</span>
                         </button>
-                        <button onClick={() => scrollToSection('sobre')} className="flex items-center gap-2 text-left">
-                          <span className="text-primary">Sobre</span>
+                        <button onClick={() => scrollToSection('sobre')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
+                          <span>Sobre</span>
                         </button>
-                        <button onClick={() => scrollToSection('depoimentos')} className="flex items-center gap-2 text-left">
-                          <span className="text-primary">Depoimentos</span>
+                        <button onClick={() => scrollToSection('depoimentos')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
+                          <span>Depoimentos</span>
                         </button>
-                        <button onClick={() => scrollToSection('localizacao')} className="flex items-center gap-2 text-left">
-                          <span className="text-primary">Localização</span>
+                        <button onClick={() => scrollToSection('localizacao')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
+                          <span>Localização</span>
                         </button>
-                        <button onClick={() => scrollToSection('contato')} className="flex items-center gap-2 text-left">
-                          <span className="text-primary">Contato</span>
+                        <button onClick={() => scrollToSection('contato')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
+                          <span>Contato</span>
                         </button>
                       </div>
                     </div>

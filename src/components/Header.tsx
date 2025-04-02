@@ -43,7 +43,7 @@ const Header = () => {
   return (
     <header 
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-8 md:px-14',
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 md:px-14',
         isScrolled ? 'glass py-3 shadow-md' : 'py-4'
       )}
     >
@@ -53,7 +53,7 @@ const Header = () => {
         </a>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-10">
+        <nav className="hidden md:flex items-center space-x-8">
           {navItems.map((item) => (
             <a
               key={item.label}
@@ -68,7 +68,7 @@ const Header = () => {
           <Button 
             size="default" 
             variant="default" 
-            className="btn-hover-effect rounded-full font-medium px-6 ml-4"
+            className="btn-hover-effect rounded-full font-medium px-6"
             asChild
           >
             <a href="#criar-site" onClick={(e) => scrollToSection(e, '#criar-site')}>Criar Novo Site</a>
@@ -96,7 +96,7 @@ const Header = () => {
           isMobileMenuOpen ? "max-h-[300px] py-6" : "max-h-0"
         )}
       >
-        <nav className="flex flex-col space-y-6 px-8">
+        <nav className="flex flex-col space-y-4 px-8">
           {navItems.map((item) => (
             <a
               key={item.label}
@@ -112,7 +112,6 @@ const Header = () => {
             variant="default" 
             className="btn-hover-effect rounded-full font-medium w-full mt-2"
             asChild
-            onClick={() => setIsMobileMenuOpen(false)}
           >
             <a href="#criar-site" onClick={(e) => scrollToSection(e, '#criar-site')}>Criar Novo Site</a>
           </Button>
