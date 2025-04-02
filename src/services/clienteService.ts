@@ -42,7 +42,9 @@ export const createCliente = async (data: ClienteFormData): Promise<{ cliente: C
         const fileExt = file.name.split('.').pop();
         // Definindo nome do arquivo no formato "id/logo.extensão"
         const fileName = `${clienteId}/logo.${fileExt}`;
-        logoUrl = fileName; // Definir logo_url para encontrar o arquivo depois
+        
+        // Construir a URL pública completa para o storage
+        logoUrl = `https://svenmlcxebqafsxlayez.supabase.co/storage/v1/object/public/logos/${fileName}`;
         
         console.log("Uploading logo with path:", fileName);
         console.log("Logo URL to be saved:", logoUrl);
@@ -111,17 +113,8 @@ export const getClienteById = async (id: string): Promise<{ cliente: Cliente | n
       return { cliente: null, error, logoUrl: null };
     }
     
-    let logoUrl = null;
-    
-    if (data && data.logo_url) {
-      const { data: fileData } = supabase.storage
-        .from('logos')
-        .getPublicUrl(data.logo_url);
-        
-      if (fileData && fileData.publicUrl) {
-        logoUrl = fileData.publicUrl;
-      }
-    }
+    // O logoUrl agora é o próprio valor de logo_url, já que estamos salvando a URL completa
+    const logoUrl = data.logo_url;
     
     return { cliente: data, error: null, logoUrl };
   } catch (error) {

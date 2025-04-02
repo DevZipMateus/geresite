@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Cliente } from "@/types/database.types";
@@ -56,7 +55,7 @@ const SiteInstitucional = () => {
           
           // Logo handling
           if (fetchedLogoUrl) {
-            console.log("URL pública do logo:", fetchedLogoUrl);
+            console.log("URL do logo:", fetchedLogoUrl);
             
             // Test loading the image
             const img = new Image();
