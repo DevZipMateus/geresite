@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,6 +11,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ColorPaletteSelector from "@/components/ColorPaletteSelector";
 import HeroSection from "@/components/sections/HeroSection";
 import Testimonials from "@/components/sections/Testimonials";
+import AboutUs from "@/components/sections/AboutUs";
 
 const SiteInstitucional = () => {
   const { id } = useParams<{ id: string }>();
@@ -303,38 +303,8 @@ const SiteInstitucional = () => {
         </div>
       </section>
 
-      <section id="sobre" className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center gap-12">
-            <div className="md:w-1/2">
-              <h2 className="text-3xl font-bold mb-6">Sobre Nós</h2>
-              <p className="text-gray-600 mb-4">
-                A {cliente.nome_empresa} é uma empresa comprometida com a excelência e inovação. 
-                Nosso objetivo é oferecer soluções eficientes e personalizadas para cada cliente.
-              </p>
-              <p className="text-gray-600 mb-4">
-                Fundada com a missão de transformar o mercado, temos orgulho de nossa equipe 
-                altamente qualificada e dedicada a superar expectativas.
-              </p>
-              <div className="flex items-center mt-6">
-                <User className="h-5 w-5 text-primary mr-2" />
-                <span className="text-gray-700 font-medium">{cliente.nome_responsavel}</span>
-              </div>
-            </div>
-            <div className="md:w-1/2 bg-gradient-to-br from-gray-100 to-gray-200 h-80 rounded-lg flex items-center justify-center shadow-inner">
-              {logoUrl ? (
-                <img 
-                  src={logoUrl} 
-                  alt={`Logo ${cliente.nome_empresa}`} 
-                  className="max-h-48 max-w-full object-contain p-8"
-                />
-              ) : (
-                <div className="text-8xl text-primary/20 font-bold">{cliente.nome_empresa.charAt(0)}</div>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* About Us section - replaced with the AboutUs component */}
+      <AboutUs />
 
       <section id="depoimentos" className="py-16 bg-gray-50">
         <Testimonials />
