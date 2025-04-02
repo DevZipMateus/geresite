@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -71,25 +70,19 @@ const SiteInstitucional = () => {
                 const directUrl = "https://svenmlcxebqafsxlayez.supabase.co/storage/v1/object/public/logos/7/logo.png";
                 console.log("Usando URL direto para ID 7:", directUrl);
                 
-                // Testar o carregamento da imagem com timeout
+                // Testar o carregamento da imagem
                 const img = new Image();
-                const timeoutId = setTimeout(() => {
-                  if (logoLoading) {
-                    console.error("Timeout ao carregar o logo");
-                    setLogoError("Tempo esgotado ao carregar o logo");
-                    setLogoLoading(false);
-                  }
-                }, 10000);
-                
                 img.onload = () => {
-                  clearTimeout(timeoutId);
                   console.log("Logo carregado com sucesso (URL direto)");
                   setLogoUrl(directUrl);
                   setLogoLoading(false);
+                  toast({
+                    title: "Logo carregado",
+                    description: "O logo da empresa foi carregado com sucesso.",
+                  });
                 };
                 
                 img.onerror = () => {
-                  clearTimeout(timeoutId);
                   console.error("Erro ao carregar a imagem da URL direta:", directUrl);
                   setLogoError("Não foi possível carregar o logo (URL direta inválida)");
                   setLogoLoading(false);
@@ -97,58 +90,40 @@ const SiteInstitucional = () => {
                 
                 img.src = directUrl;
               } else {
-                // Verificar se o bucket 'logos' existe
-                const { data: bucketData, error: bucketError } = await supabase
-                  .storage
-                  .getBucket('logos');
+                // Para outros IDs, usar o padrão de storage do Supabase
+                if (data.logo_url) {
+                  // Construir a URL pública para a imagem
+                  const { data: fileData } = supabase.storage
+                    .from('logos')
+                    .getPublicUrl(data.logo_url);
                   
-                if (bucketError) {
-                  console.error("Bucket não encontrado, criando:", bucketError);
-                  await supabase.storage.createBucket('logos', {
-                    public: true
-                  });
-                  console.log("Bucket 'logos' criado com sucesso");
-                }
-                
-                // Obter URL pública diretamente para o logo
-                const { data: fileData } = supabase.storage
-                  .from('logos')
-                  .getPublicUrl(data.logo_url);
-                
-                if (fileData && fileData.publicUrl) {
-                  console.log("URL pública do logo:", fileData.publicUrl);
-                  
-                  // Testar o carregamento da imagem com timeout
-                  const img = new Image();
-                  const timeoutId = setTimeout(() => {
-                    if (logoLoading) {
-                      console.error("Timeout ao carregar o logo");
-                      setLogoError("Tempo esgotado ao carregar o logo");
+                  if (fileData && fileData.publicUrl) {
+                    console.log("URL pública do logo:", fileData.publicUrl);
+                    
+                    // Testar o carregamento da imagem
+                    const img = new Image();
+                    img.onload = () => {
+                      console.log("Logo carregado com sucesso");
+                      setLogoUrl(fileData.publicUrl);
                       setLogoLoading(false);
-                    }
-                  }, 10000);
-                  
-                  img.onload = () => {
-                    clearTimeout(timeoutId);
-                    console.log("Logo carregado com sucesso");
-                    setLogoUrl(fileData.publicUrl);
-                    setLogoLoading(false);
-                    toast({
-                      title: "Logo carregado",
-                      description: "O logo da empresa foi carregado com sucesso.",
-                    });
-                  };
-                  
-                  img.onerror = () => {
-                    clearTimeout(timeoutId);
-                    console.error("Erro ao carregar a imagem da URL:", fileData.publicUrl);
-                    setLogoError("Não foi possível carregar o logo (URL inválida)");
-                    setLogoLoading(false);
-                  };
-                  
-                  img.src = fileData.publicUrl;
+                      toast({
+                        title: "Logo carregado",
+                        description: "O logo da empresa foi carregado com sucesso.",
+                      });
+                    };
+                    
+                    img.onerror = () => {
+                      console.error("Erro ao carregar a imagem da URL:", fileData.publicUrl);
+                      setLogoError("Não foi possível carregar o logo (URL inválida)");
+                      setLogoLoading(false);
+                    };
+                    
+                    img.src = fileData.publicUrl;
+                  } else {
+                    throw new Error("Falha ao obter URL pública");
+                  }
                 } else {
-                  throw new Error("Falha ao obter URL pública");
+                  setLogoLoading(false);
                 }
               }
             } catch (logoError: any) {
@@ -222,23 +197,6 @@ const SiteInstitucional = () => {
     );
   }
 
-  const DevLogoDebug = () => (
-    <div className="fixed bottom-4 right-4 z-50 bg-black/80 text-white p-4 rounded max-w-xs text-xs">
-      <h3 className="font-bold mb-2">Debug Info:</h3>
-      <p>Logo URL: {cliente.logo_url || 'Não definido'}</p>
-      <p>Logo carregado: {logoUrl ? 'Sim' : 'Não'}</p>
-      <p>Estado: {logoLoading ? 'Carregando...' : logoError ? 'Erro' : logoUrl ? 'Carregado' : 'Não disponível'}</p>
-      {logoUrl && (
-        <div className="mt-2">
-          <p className="mb-1">Preview:</p>
-          <div className="bg-white p-2 rounded">
-            <img src={logoUrl} alt="Logo preview" className="h-10 w-auto mx-auto" />
-          </div>
-        </div>
-      )}
-    </div>
-  );
-
   return (
     <div className={`min-h-screen flex flex-col theme-${activeColorPalette} overflow-x-hidden`}>
       <InstitutionalHeader 
@@ -253,7 +211,6 @@ const SiteInstitucional = () => {
       
       {logoError && <LogoError error={logoError} logoUrl={cliente.logo_url} />}
       
-      {/* Área de Teste de Logo - Adicionando mais informações para diagnóstico */}
       <div className="bg-gray-100 py-8 px-4 mt-20 text-center">
         <h2 className="text-xl font-semibold mb-4">Visualização do Logo</h2>
         <p className="mb-4 text-gray-600">
@@ -266,7 +223,8 @@ const SiteInstitucional = () => {
             : "Nenhum logo foi configurado para essa empresa."
           }
         </p>
-        <div className="flex justify-center">
+        
+        <div className="flex justify-center mb-4">
           <Avatar className="h-24 w-24 border-2 border-primary">
             <AvatarImage 
               src={logoUrl || ''} 
@@ -279,24 +237,34 @@ const SiteInstitucional = () => {
           </Avatar>
         </div>
         
-        {cliente.logo_url && !logoUrl && (
-          <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md max-w-md mx-auto">
-            <p className="text-yellow-700 text-sm">
-              <strong>Info:</strong> Logo URL registrado no banco de dados, mas não foi possível carregar a imagem.
+        <div className="mt-2 p-4 bg-yellow-50 border border-yellow-200 rounded-md max-w-md mx-auto text-left">
+          <h3 className="font-semibold text-yellow-700 mb-2">Informações de Diagnóstico:</h3>
+          <p className="text-sm text-gray-700 mb-1">
+            <span className="font-medium">ID do cliente:</span> {id}
+          </p>
+          <p className="text-sm text-gray-700 mb-1">
+            <span className="font-medium">Logo URL no banco:</span> {cliente.logo_url || 'Não definido'}
+          </p>
+          <p className="text-sm text-gray-700 mb-1">
+            <span className="font-medium">URL carregada:</span> {logoUrl || 'Nenhuma'}
+          </p>
+          <p className="text-sm text-gray-700 mb-1">
+            <span className="font-medium">Estado:</span> {
+              logoLoading ? 'Carregando...' : 
+              logoError ? 'Erro' : 
+              logoUrl ? 'Carregado com sucesso' : 
+              'Não disponível'
+            }
+          </p>
+          {id === "7" && (
+            <p className="text-sm text-green-700 mt-2 font-medium">
+              URL especial para ID 7: <br />
+              <span className="break-all text-xs bg-green-100 p-1 block mt-1 rounded">
+                https://svenmlcxebqafsxlayez.supabase.co/storage/v1/object/public/logos/7/logo.png
+              </span>
             </p>
-            <p className="text-xs text-gray-500 mt-2">
-              URL armazenado: {cliente.logo_url}
-            </p>
-            <p className="text-xs text-gray-500 mt-1">
-              URL público completo: {cliente.logo_url ? supabase.storage.from('logos').getPublicUrl(cliente.logo_url).data.publicUrl : 'N/A'}
-            </p>
-            {id === "7" && (
-              <p className="text-xs text-green-600 mt-1 font-semibold">
-                URL direto: https://svenmlcxebqafsxlayez.supabase.co/storage/v1/object/public/logos/7/logo.png
-              </p>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </div>
       
       {!isMobile && (
@@ -305,9 +273,6 @@ const SiteInstitucional = () => {
         </div>
       )}
       
-      {/* Development only - debug panel */}
-      {import.meta.env.DEV && <DevLogoDebug />}
-
       <WhatsAppButton phoneNumber={cliente.telefone} />
 
       <HeroSection scrollToTemplates={(e, sectionId) => {

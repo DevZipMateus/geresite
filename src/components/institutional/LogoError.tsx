@@ -16,7 +16,7 @@ const LogoError: React.FC<LogoErrorProps> = ({ error, logoUrl }) => {
           <p className="font-semibold text-red-700">Logo Error: {error}</p>
           {logoUrl && <p className="text-sm mt-1 break-all">Logo URL in DB: {logoUrl}</p>}
           <p className="text-sm mt-2 text-gray-700">
-            Check that the logo was uploaded correctly during registration and that the URL was saved in the database.
+            Se este erro persistir, verifique se o logo foi carregado corretamente e se o URL está salvo no banco de dados.
           </p>
         </div>
       </div>
