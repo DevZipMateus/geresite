@@ -27,6 +27,8 @@ const SiteInstitucional = () => {
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [logoLoading, setLogoLoading] = useState(false);
+  const [logoError, setLogoError] = useState<string | null>(null);
   const [activeColorPalette, setActiveColorPalette] = useState("default");
 
   useEffect(() => {
@@ -63,17 +65,40 @@ const SiteInstitucional = () => {
 
           // If the client has a logo, fetch it from storage
           if (data.logo_url) {
+            setLogoLoading(true);
+            setLogoError(null);
+            
             try {
-              // Get the public URL for the logo
+              console.log("Trying to fetch logo:", data.logo_url);
+              // Try as direct path first
               const { data: publicUrl } = supabase.storage
                 .from('logos')
                 .getPublicUrl(data.logo_url);
               
-              console.log("Logo URL:", publicUrl.publicUrl);
-              setLogoUrl(publicUrl.publicUrl);
+              console.log("Logo public URL:", publicUrl.publicUrl);
+              
+              // Verify the image exists with a fetch request
+              const response = await fetch(publicUrl.publicUrl, { method: 'HEAD' });
+              
+              if (response.ok) {
+                setLogoUrl(publicUrl.publicUrl);
+              } else {
+                // If direct path fails, try with client ID path
+                console.log("Direct path failed, trying with ID path");
+                const idPath = `${id}/logo.png`;
+                const { data: idPublicUrl } = supabase.storage
+                  .from('logos')
+                  .getPublicUrl(idPath);
+                
+                console.log("Alternative logo URL:", idPublicUrl.publicUrl);
+                setLogoUrl(idPublicUrl.publicUrl);
+              }
             } catch (logoError) {
               console.error("Erro ao buscar logo:", logoError);
+              setLogoError("Não foi possível carregar o logo");
               setLogoUrl(null);
+            } finally {
+              setLogoLoading(false);
             }
           }
         }
@@ -150,66 +175,41 @@ const SiteInstitucional = () => {
 
   return (
     <div className={`min-h-screen flex flex-col theme-${activeColorPalette}`}>
-      {/* Header melhorado */}
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-3' : 'bg-primary text-white py-5'}`}>
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            {logoUrl ? (
+            {logoLoading ? (
+              <div className="h-10 w-10 rounded-full bg-primary/20 animate-pulse"></div>
+            ) : logoUrl ? (
               <img 
                 src={logoUrl} 
                 alt={`Logo ${cliente.nome_empresa}`} 
-                className={`h-10 w-auto object-contain ${isScrolled ? '' : 'brightness-[1.15]'}`}
+                className={`h-10 object-contain ${isScrolled ? 'brightness-100' : 'brightness-[1.15]'}`}
+                onError={() => {
+                  console.error("Logo failed to load, falling back to initial");
+                  setLogoUrl(null);
+                }}
               />
             ) : (
               <div className={`w-10 h-10 rounded-full ${isScrolled ? 'bg-primary text-white' : 'bg-white text-primary'} flex items-center justify-center font-bold text-xl`}>
                 {cliente.nome_empresa.charAt(0)}
               </div>
             )}
-            <h1 className={`text-xl md:text-2xl font-bold ${isScrolled ? 'text-primary' : 'text-white'}`}>
-              {cliente.nome_empresa}
-            </h1>
+            
+            {!logoUrl && (
+              <h1 className={`text-xl md:text-2xl font-bold ${isScrolled ? 'text-primary' : 'text-white'}`}>
+                {cliente.nome_empresa}
+              </h1>
+            )}
           </div>
           
           <div className="flex items-center gap-2 md:gap-4">
-            {/* Palette Selector Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant={isScrolled ? "outline" : "secondary"} 
-                  size="sm"
-                  className={isScrolled ? "border-primary text-primary hover:bg-primary/10" : "text-primary hover:bg-white/90"}
-                >
-                  <Palette className="h-4 w-4 mr-2" />
-                  <span className="hidden sm:inline">Tema</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => handleColorPaletteChange("default")}>
-                  <div className="flex items-center gap-2">
-                    <span className="w-4 h-4 rounded-full bg-[#1E88E5]"></span>
-                    <span>Padrão (Azul)</span>
-                  </div>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleColorPaletteChange("green")}>
-                  <div className="flex items-center gap-2">
-                    <span className="w-4 h-4 rounded-full bg-[#43A047]"></span>
-                    <span>Verde</span>
-                  </div>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleColorPaletteChange("purple")}>
-                  <div className="flex items-center gap-2">
-                    <span className="w-4 h-4 rounded-full bg-[#8E24AA]"></span>
-                    <span>Roxo</span>
-                  </div>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleColorPaletteChange("orange")}>
-                  <div className="flex items-center gap-2">
-                    <span className="w-4 h-4 rounded-full bg-[#FB8C00]"></span>
-                    <span>Laranja</span>
-                  </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <ColorPaletteSelector 
+              value={activeColorPalette}
+              onChange={handleColorPaletteChange}
+              size={isScrolled ? 'default' : 'sm'}
+              className={isScrolled ? '' : 'bg-white/10 backdrop-blur-sm rounded-md px-2 py-1'}
+            />
             
             <div className={`hidden md:flex items-center gap-6 ${isScrolled ? 'text-gray-700' : 'text-white'}`}>
               <a href="#servicos" className="hover:text-primary/80 transition-colors">Serviços</a>
@@ -232,15 +232,12 @@ const SiteInstitucional = () => {
         </div>
       </header>
       
-      {/* Contador de validade destacado */}
       <div className="fixed top-20 right-4 z-40 md:top-24 md:right-8">
         <ValidityCountdown expirationDate={cliente.expiracao} />
       </div>
 
-      {/* WhatsApp Button */}
       <WhatsAppButton phoneNumber={cliente.telefone} />
 
-      {/* Hero Section com informações melhoradas */}
       <section className="bg-gradient-to-b from-primary to-primary/80 text-white pt-32 pb-20">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center gap-8">
@@ -294,7 +291,6 @@ const SiteInstitucional = () => {
         </div>
       </section>
 
-      {/* Serviços */}
       <section id="servicos" className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Nossos Serviços</h2>
@@ -322,7 +318,6 @@ const SiteInstitucional = () => {
         </div>
       </section>
 
-      {/* Sobre */}
       <section id="sobre" className="py-16">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center gap-12">
@@ -342,18 +337,24 @@ const SiteInstitucional = () => {
               </div>
             </div>
             <div className="md:w-1/2 bg-gradient-to-br from-gray-100 to-gray-200 h-80 rounded-lg flex items-center justify-center shadow-inner">
-              <div className="text-8xl text-primary/20 font-bold">{cliente.nome_empresa.charAt(0)}</div>
+              {logoUrl ? (
+                <img 
+                  src={logoUrl} 
+                  alt={`Logo ${cliente.nome_empresa}`} 
+                  className="max-h-48 max-w-full object-contain p-8"
+                />
+              ) : (
+                <div className="text-8xl text-primary/20 font-bold">{cliente.nome_empresa.charAt(0)}</div>
+              )}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Depoimentos */}
       <section id="depoimentos" className="py-16 bg-gray-50">
         <Testimonials />
       </section>
 
-      {/* Nova seção de Localização com Mapa */}
       <section id="localizacao" className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Nossa Localização</h2>
@@ -400,7 +401,6 @@ const SiteInstitucional = () => {
         </div>
       </section>
 
-      {/* Contato */}
       <section id="contato" className="py-16">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">Entre em Contato</h2>
@@ -420,13 +420,22 @@ const SiteInstitucional = () => {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="bg-primary text-white py-8">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div>
+            <div className="flex items-center gap-3">
+              {logoUrl ? (
+                <img 
+                  src={logoUrl} 
+                  alt={`Logo ${cliente.nome_empresa}`} 
+                  className="h-8 object-contain brightness-[1.15]"
+                />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-white text-primary flex items-center justify-center font-bold text-sm">
+                  {cliente.nome_empresa.charAt(0)}
+                </div>
+              )}
               <h2 className="text-xl font-bold">{cliente.nome_empresa}</h2>
-              <p className="text-white/70 mt-2">Soluções para o seu negócio</p>
             </div>
             <div className="mt-4 md:mt-0">
               <p className="text-white/70">

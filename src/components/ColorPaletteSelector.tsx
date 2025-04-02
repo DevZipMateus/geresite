@@ -18,6 +18,8 @@ interface ColorPaletteOption {
 interface ColorPaletteSelectorProps {
   onChange: (value: string) => void;
   value: string;
+  size?: 'sm' | 'default';
+  className?: string;
 }
 
 const colorOptions: ColorPaletteOption[] = [
@@ -27,12 +29,17 @@ const colorOptions: ColorPaletteOption[] = [
   { value: 'orange', label: 'Laranja', color: '#FB8C00' },
 ];
 
-const ColorPaletteSelector: React.FC<ColorPaletteSelectorProps> = ({ onChange, value }) => {
+const ColorPaletteSelector: React.FC<ColorPaletteSelectorProps> = ({ 
+  onChange, 
+  value, 
+  size = 'default',
+  className = '' 
+}) => {
   return (
-    <div className="flex items-center gap-2">
-      <Palette className="h-5 w-5 text-muted-foreground" />
+    <div className={`flex items-center gap-2 ${className}`}>
+      <Palette className={`${size === 'sm' ? 'h-4 w-4' : 'h-5 w-5'} text-muted-foreground`} />
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="w-36 md:w-44">
+        <SelectTrigger className={`${size === 'sm' ? 'h-8 text-xs' : ''} w-36 md:w-44`}>
           <SelectValue placeholder="Selecione um tema" />
         </SelectTrigger>
         <SelectContent>
