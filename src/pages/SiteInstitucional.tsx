@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,6 +17,7 @@ import InstitutionalFooter from "@/components/institutional/InstitutionalFooter"
 import ExpiredNotice from "@/components/institutional/ExpiredNotice";
 import LoadingState from "@/components/institutional/LoadingState";
 import LogoError from "@/components/institutional/LogoError";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const SiteInstitucional = () => {
   const { id } = useParams<{ id: string }>();
@@ -198,7 +198,6 @@ const SiteInstitucional = () => {
     );
   }
 
-  // Add a debug section for development
   const DevLogoDebug = () => (
     <div className="fixed bottom-4 right-4 z-50 bg-black/80 text-white p-4 rounded max-w-xs text-xs">
       <h3 className="font-bold mb-2">Debug Info:</h3>
