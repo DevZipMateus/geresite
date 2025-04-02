@@ -11,12 +11,6 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import { format } from "date-fns";
 import Testimonials from "@/components/sections/Testimonials";
 import ColorPaletteSelector from "@/components/ColorPaletteSelector";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 const SiteInstitucional = () => {
   const { id } = useParams<{ id: string }>();
@@ -72,6 +66,18 @@ const SiteInstitucional = () => {
             try {
               console.log("Trying to fetch logo:", data.logo_url);
               
+              const { data: bucketData, error: bucketError } = await supabase
+                .storage
+                .getBucket('logos');
+                
+              if (bucketError) {
+                console.error("Bucket not found:", bucketError);
+                await supabase.storage.createBucket('logos', {
+                  public: true
+                });
+                console.log("Created logos bucket");
+              }
+              
               const { data: fileData } = supabase.storage
                 .from('logos')
                 .getPublicUrl(data.logo_url);
@@ -79,41 +85,27 @@ const SiteInstitucional = () => {
               if (fileData && fileData.publicUrl) {
                 console.log("Logo public URL:", fileData.publicUrl);
                 
-                const imageResponse = await fetch(fileData.publicUrl, { method: 'HEAD' });
-                
-                if (imageResponse.ok) {
+                const img = new Image();
+                img.onload = () => {
                   setLogoUrl(fileData.publicUrl);
-                } else {
-                  throw new Error("Image not found at URL");
-                }
+                  setLogoLoading(false);
+                };
+                img.onerror = () => {
+                  console.error("Error loading image from URL:", fileData.publicUrl);
+                  setLogoError("Não foi possível carregar o logo");
+                  setLogoLoading(false);
+                };
+                img.src = fileData.publicUrl;
               } else {
                 throw new Error("Failed to get public URL");
               }
             } catch (logoError) {
               console.error("Error fetching logo:", logoError);
-              
-              try {
-                const altPath = `${id}/logo.png`;
-                console.log("Trying alternative path:", altPath);
-                
-                const { data: altData } = supabase.storage
-                  .from('logos')
-                  .getPublicUrl(altPath);
-                
-                if (altData && altData.publicUrl) {
-                  console.log("Alternative logo URL works:", altData.publicUrl);
-                  setLogoUrl(altData.publicUrl);
-                } else {
-                  throw new Error("Alternative image not found");
-                }
-              } catch (altError) {
-                console.error("Error with alternative logo path:", altError);
-                setLogoError("Não foi possível carregar o logo");
-                setLogoUrl(null);
-              }
-            } finally {
+              setLogoError("Não foi possível carregar o logo");
               setLogoLoading(false);
             }
+          } else {
+            setLogoLoading(false);
           }
         }
       } catch (error) {
@@ -123,6 +115,7 @@ const SiteInstitucional = () => {
           title: "Erro",
           description: "Não foi possível carregar os dados da empresa.",
         });
+        setLogoLoading(false);
       } finally {
         setLoading(false);
       }
@@ -151,6 +144,33 @@ const SiteInstitucional = () => {
       title: "Tema alterado",
       description: `O tema foi alterado para ${palette}.`,
     });
+  };
+
+  const renderLogo = (sizingClass: string = "h-10", brightnessClass: string = "") => {
+    if (logoLoading) {
+      return <div className={`${sizingClass} w-10 rounded-full bg-primary/20 animate-pulse`}></div>;
+    }
+    
+    if (logoUrl) {
+      return (
+        <img 
+          src={logoUrl} 
+          alt={`Logo ${cliente.nome_empresa}`}
+          className={`${sizingClass} object-contain ${brightnessClass}`}
+          onError={(e) => {
+            console.error("Logo failed to load at render time");
+            setLogoUrl(null);
+            setLogoError(`Failed to load image at render time: ${Date.now()}`);
+          }}
+        />
+      );
+    }
+    
+    return (
+      <div className={`w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xl`}>
+        {cliente.nome_empresa.charAt(0)}
+      </div>
+    );
   };
 
   if (loading) {
@@ -185,32 +205,14 @@ const SiteInstitucional = () => {
     );
   }
 
-  if (logoError) {
-    console.log("Logo error:", logoError);
-  }
-
   return (
     <div className={`min-h-screen flex flex-col theme-${activeColorPalette}`}>
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-3' : 'bg-primary text-white py-5'}`}>
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            {logoLoading ? (
-              <div className="h-10 w-10 rounded-full bg-primary/20 animate-pulse"></div>
-            ) : logoUrl ? (
-              <img 
-                src={logoUrl} 
-                alt={`Logo ${cliente.nome_empresa}`} 
-                className={`h-10 object-contain ${isScrolled ? 'brightness-100' : 'brightness-[1.15]'}`}
-                onError={(e) => {
-                  console.error("Logo failed to load at render time");
-                  setLogoUrl(null);
-                  setLogoError(`Failed to load image at render time: ${Date.now()}`);
-                }}
-              />
-            ) : (
-              <div className={`w-10 h-10 rounded-full ${isScrolled ? 'bg-primary text-white' : 'bg-white text-primary'} flex items-center justify-center font-bold text-xl`}>
-                {cliente.nome_empresa.charAt(0)}
-              </div>
+            {renderLogo(
+              "h-10", 
+              isScrolled ? 'brightness-100' : 'brightness-[1.15]'
             )}
             
             {!logoUrl && (
@@ -448,17 +450,7 @@ const SiteInstitucional = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-3">
-              {logoUrl ? (
-                <img 
-                  src={logoUrl} 
-                  alt={`Logo ${cliente.nome_empresa}`} 
-                  className="h-8 object-contain brightness-[1.15]"
-                />
-              ) : (
-                <div className="w-8 h-8 rounded-full bg-white text-primary flex items-center justify-center font-bold text-sm">
-                  {cliente.nome_empresa.charAt(0)}
-                </div>
-              )}
+              {renderLogo("h-8", "brightness-[1.15]")}
               <h2 className="text-xl font-bold">{cliente.nome_empresa}</h2>
             </div>
             <div className="mt-4 md:mt-0">

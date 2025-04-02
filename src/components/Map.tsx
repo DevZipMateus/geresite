@@ -1,94 +1,8 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
 
 const Map = () => {
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
   const [mapError, setMapError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!mapContainer.current) return;
-
-    // Use a valid Mapbox public token
-    mapboxgl.accessToken = 'pk.eyJ1IjoibG92YWJsZS1kZXYiLCJhIjoiY2xzNHRnZnh6MGZ0YzJrcGR5ZDUxYnJ5dyJ9.qNKv1QrUIruJiDQKLD9bWg';
-    
-    try {
-      // Coordenadas para R. do Acampamento, 380 - Centro, Santa Maria - RS
-      const lng = -53.8073;
-      const lat = -29.6874;
-
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/streets-v12',
-        zoom: 16,
-        center: [lng, lat],
-        pitch: 40, // Inclinação para dar profundidade
-        bearing: 20, // Rotação leve do mapa
-      });
-
-      // Event listener for map errors
-      map.current.on('error', (e) => {
-        console.error('Mapbox error:', e);
-        setMapError('Erro ao carregar o mapa');
-      });
-
-      // Adiciona controles de navegação
-      map.current.addControl(
-        new mapboxgl.NavigationControl(),
-        'top-right'
-      );
-
-      // Efeito 3D nos edifícios quando o estilo carregar
-      map.current.on('style.load', () => {
-        map.current?.addLayer({
-          'id': '3d-buildings',
-          'source': 'composite',
-          'source-layer': 'building',
-          'filter': ['==', 'extrude', 'true'],
-          'type': 'fill-extrusion',
-          'minzoom': 15,
-          'paint': {
-            'fill-extrusion-color': '#aaa',
-            'fill-extrusion-height': [
-              'interpolate', ['linear'], ['zoom'],
-              15, 0,
-              15.05, ['get', 'height']
-            ],
-            'fill-extrusion-base': [
-              'interpolate', ['linear'], ['zoom'],
-              15, 0,
-              15.05, ['get', 'min_height']
-            ],
-            'fill-extrusion-opacity': 0.6
-          }
-        });
-      });
-
-      // Adiciona um marcador personalizado no endereço específico
-      const popup = new mapboxgl.Popup({ offset: 25 })
-        .setHTML('<strong>R. do Acampamento, 380</strong><br>Centro, Santa Maria - RS');
-
-      const marker = new mapboxgl.Marker({
-        color: '#3670e4',
-        scale: 1.2,
-      })
-        .setLngLat([lng, lat])
-        .setPopup(popup)
-        .addTo(map.current);
-
-      // Mostra o popup no carregamento inicial
-      marker.togglePopup();
-    } catch (error) {
-      console.error('Error initializing map:', error);
-      setMapError('Erro ao inicializar o mapa');
-    }
-
-    return () => {
-      map.current?.remove();
-    };
-  }, []);
 
   return (
     <div className="w-full h-[400px] rounded-lg overflow-hidden shadow-lg border border-gray-200 relative">
@@ -97,7 +11,20 @@ const Map = () => {
           <p className="text-red-500">{mapError}</p>
         </div>
       )}
-      <div ref={mapContainer} className="w-full h-full" />
+      
+      <div className="w-full h-full">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3461.9201000434053!2d-53.80986202366688!3d-29.68720757550846!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9503cb7c6d756337%3A0x65ad6572e550e552!2sR.%20do%20Acampamento%2C%20380%20-%20Centro%2C%20Santa%20Maria%20-%20RS%2C%2097050-001!5e0!3m2!1spt-BR!2sbr!4v1651252345678!5m2!1spt-BR!2sbr" 
+          width="100%" 
+          height="100%" 
+          style={{ border: 0 }} 
+          allowFullScreen 
+          loading="lazy" 
+          referrerPolicy="no-referrer-when-downgrade"
+          onError={() => setMapError('Erro ao carregar o mapa')}
+          className="w-full h-full"
+        />
+      </div>
     </div>
   );
 };

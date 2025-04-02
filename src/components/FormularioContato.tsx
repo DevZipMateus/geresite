@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -92,6 +93,7 @@ const FormularioContato = () => {
         .select();
 
       if (error) {
+        console.error("Erro ao inserir cliente:", error);
         throw error;
       }
 
@@ -106,6 +108,19 @@ const FormularioContato = () => {
         
         console.log("Uploading logo:", fileName);
         
+        // Criar o bucket logos se ele não existir
+        const { data: bucketData, error: bucketError } = await supabase
+          .storage
+          .getBucket('logos');
+          
+        if (bucketError && bucketError.message.includes('not found')) {
+          // Bucket não existe, vamos criar
+          await supabase.storage.createBucket('logos', {
+            public: true
+          });
+          console.log("Created logos bucket");
+        }
+
         // Upload do arquivo para o storage
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from('logos')
@@ -123,6 +138,13 @@ const FormularioContato = () => {
           });
         } else {
           console.log("Logo uploaded successfully:", uploadData);
+          
+          // Get public URL
+          const { data: publicUrlData } = supabase.storage
+            .from('logos')
+            .getPublicUrl(fileName);
+            
+          console.log("Public URL for logo:", publicUrlData);
           
           // Atualizamos o registro do cliente com o caminho do logo
           const { data: updateData, error: updateError } = await supabase
