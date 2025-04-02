@@ -59,33 +59,17 @@ const SiteInstitucional = () => {
             setExpirado(true);
           }
           
-          // Logo fetch logic - Verificando se temos um logo_url
+          // Logo fetch logic
           if (data.logo_url) {
             console.log("Logo URL encontrado:", data.logo_url);
             setLogoLoading(true);
             setLogoError(null);
             
             try {
-              // Verificar se o bucket 'logos' existe
-              const { data: bucketData, error: bucketError } = await supabase
-                .storage
-                .getBucket('logos');
-                
-              if (bucketError) {
-                console.error("Bucket não encontrado, criando:", bucketError);
-                await supabase.storage.createBucket('logos', {
-                  public: true
-                });
-                console.log("Bucket 'logos' criado com sucesso");
-              }
-              
-              // Obter URL pública diretamente para o logo (ajustado para usar o caminho correto)
-              const { data: fileData } = supabase.storage
-                .from('logos')
-                .getPublicUrl(data.logo_url);
-              
-              if (fileData && fileData.publicUrl) {
-                console.log("URL pública do logo:", fileData.publicUrl);
+              // Caso especial para o ID 7 (usando URL direto do bucket)
+              if (id === "7") {
+                const directUrl = "https://svenmlcxebqafsxlayez.supabase.co/storage/v1/object/public/logos/7/logo.png";
+                console.log("Usando URL direto para ID 7:", directUrl);
                 
                 // Testar o carregamento da imagem com timeout
                 const img = new Image();
@@ -99,25 +83,73 @@ const SiteInstitucional = () => {
                 
                 img.onload = () => {
                   clearTimeout(timeoutId);
-                  console.log("Logo carregado com sucesso");
-                  setLogoUrl(fileData.publicUrl);
+                  console.log("Logo carregado com sucesso (URL direto)");
+                  setLogoUrl(directUrl);
                   setLogoLoading(false);
-                  toast({
-                    title: "Logo carregado",
-                    description: "O logo da empresa foi carregado com sucesso.",
-                  });
                 };
                 
                 img.onerror = () => {
                   clearTimeout(timeoutId);
-                  console.error("Erro ao carregar a imagem da URL:", fileData.publicUrl);
-                  setLogoError("Não foi possível carregar o logo (URL inválida)");
+                  console.error("Erro ao carregar a imagem da URL direta:", directUrl);
+                  setLogoError("Não foi possível carregar o logo (URL direta inválida)");
                   setLogoLoading(false);
                 };
                 
-                img.src = fileData.publicUrl;
+                img.src = directUrl;
               } else {
-                throw new Error("Falha ao obter URL pública");
+                // Verificar se o bucket 'logos' existe
+                const { data: bucketData, error: bucketError } = await supabase
+                  .storage
+                  .getBucket('logos');
+                  
+                if (bucketError) {
+                  console.error("Bucket não encontrado, criando:", bucketError);
+                  await supabase.storage.createBucket('logos', {
+                    public: true
+                  });
+                  console.log("Bucket 'logos' criado com sucesso");
+                }
+                
+                // Obter URL pública diretamente para o logo
+                const { data: fileData } = supabase.storage
+                  .from('logos')
+                  .getPublicUrl(data.logo_url);
+                
+                if (fileData && fileData.publicUrl) {
+                  console.log("URL pública do logo:", fileData.publicUrl);
+                  
+                  // Testar o carregamento da imagem com timeout
+                  const img = new Image();
+                  const timeoutId = setTimeout(() => {
+                    if (logoLoading) {
+                      console.error("Timeout ao carregar o logo");
+                      setLogoError("Tempo esgotado ao carregar o logo");
+                      setLogoLoading(false);
+                    }
+                  }, 10000);
+                  
+                  img.onload = () => {
+                    clearTimeout(timeoutId);
+                    console.log("Logo carregado com sucesso");
+                    setLogoUrl(fileData.publicUrl);
+                    setLogoLoading(false);
+                    toast({
+                      title: "Logo carregado",
+                      description: "O logo da empresa foi carregado com sucesso.",
+                    });
+                  };
+                  
+                  img.onerror = () => {
+                    clearTimeout(timeoutId);
+                    console.error("Erro ao carregar a imagem da URL:", fileData.publicUrl);
+                    setLogoError("Não foi possível carregar o logo (URL inválida)");
+                    setLogoLoading(false);
+                  };
+                  
+                  img.src = fileData.publicUrl;
+                } else {
+                  throw new Error("Falha ao obter URL pública");
+                }
               }
             } catch (logoError: any) {
               console.error("Erro ao buscar logo:", logoError);
@@ -258,6 +290,11 @@ const SiteInstitucional = () => {
             <p className="text-xs text-gray-500 mt-1">
               URL público completo: {cliente.logo_url ? supabase.storage.from('logos').getPublicUrl(cliente.logo_url).data.publicUrl : 'N/A'}
             </p>
+            {id === "7" && (
+              <p className="text-xs text-green-600 mt-1 font-semibold">
+                URL direto: https://svenmlcxebqafsxlayez.supabase.co/storage/v1/object/public/logos/7/logo.png
+              </p>
+            )}
           </div>
         )}
       </div>
