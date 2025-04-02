@@ -11,7 +11,8 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: 'Home', href: '#home' },
-  { label: 'Templates', href: '#templates' }
+  { label: 'Criar Site', href: '#criar-site' },
+  { label: 'Contato', href: '#contato' }
 ];
 
 const Header = () => {
@@ -70,7 +71,7 @@ const Header = () => {
             className="btn-hover-effect rounded-full font-medium px-6 ml-4"
             asChild
           >
-            <a href="#templates">Ver Templates</a>
+            <a href="#criar-site" onClick={(e) => scrollToSection(e, '#criar-site')}>Criar Novo Site</a>
           </Button>
         </nav>
 
@@ -113,7 +114,7 @@ const Header = () => {
             asChild
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            <a href="#templates">Ver Templates</a>
+            <a href="#criar-site" onClick={(e) => scrollToSection(e, '#criar-site')}>Criar Novo Site</a>
           </Button>
         </nav>
       </div>

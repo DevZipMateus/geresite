@@ -11,10 +11,10 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <div>
             <h3 className="text-2xl font-bold mb-4 text-primary tracking-tight">
-              Template<span className="text-foreground">Hub</span>
+              Monte<span className="text-foreground">Site</span>
             </h3>
             <p className="text-muted-foreground mb-4 max-w-xs">
-              Oferecemos templates profissionais para o seu negócio brilhar online.
+              Crie seu site institucional profissional de forma rápida e simples.
             </p>
             <div className="flex space-x-4">
               <a 
@@ -48,16 +48,16 @@ const Footer = () => {
                 <a href="#home" className="text-muted-foreground hover:text-primary transition-colors">Home</a>
               </li>
               <li>
-                <a href="#templates" className="text-muted-foreground hover:text-primary transition-colors">Templates</a>
+                <a href="#criar-site" className="text-muted-foreground hover:text-primary transition-colors">Criar Site</a>
               </li>
               <li>
-                <a href="#depoimentos" className="text-muted-foreground hover:text-primary transition-colors">Depoimentos</a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">Sobre nós</a>
+                <a href="#contato" className="text-muted-foreground hover:text-primary transition-colors">Contato</a>
               </li>
               <li>
                 <a href="#" className="text-muted-foreground hover:text-primary transition-colors">Política de Privacidade</a>
+              </li>
+              <li>
+                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">Termos de Uso</a>
               </li>
             </ul>
           </div>
@@ -67,15 +67,15 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-center text-muted-foreground">
                 <Mail size={16} className="mr-2 text-primary" />
-                <span>contato@templatehub.com</span>
+                <span>contato@montesite.com</span>
               </li>
               <li className="flex items-center text-muted-foreground">
                 <Phone size={16} className="mr-2 text-primary" />
-                <span>(11) 99999-9999</span>
+                <span>(99) 99999-9999</span>
               </li>
               <li className="flex items-start text-muted-foreground">
                 <MapPin size={16} className="mr-2 mt-1 text-primary" />
-                <span>Av. Paulista, 1000 - São Paulo, SP</span>
+                <span>Av. Principal, 1000 - São Paulo, SP</span>
               </li>
             </ul>
           </div>
@@ -83,7 +83,7 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4 text-foreground">Newsletter</h4>
             <p className="text-muted-foreground mb-4">
-              Inscreva-se para receber novidades e promoções exclusivas.
+              Inscreva-se para receber novidades e dicas para seu site.
             </p>
             <div className="flex flex-col gap-2">
               <input 
@@ -101,7 +101,7 @@ const Footer = () => {
         <Separator className="mb-8" />
         
         <div className="text-center text-muted-foreground text-sm">
-          <p>&copy; {new Date().getFullYear()} TemplateHub. Todos os direitos reservados.</p>
+          <p>&copy; {new Date().getFullYear()} MonteSite. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>
