@@ -34,6 +34,9 @@ export const createCliente = async (data: ClienteFormData): Promise<{ cliente: C
     // Se temos um ID de cliente
     if (insertData && insertData.length > 0) {
       const clienteId = insertData[0].id;
+      
+      // Logo handling - always create a URL whether file is uploaded or not
+      const baseLogoUrl = `https://svenmlcxebqafsxlayez.supabase.co/storage/v1/object/public/logos/${clienteId}/logo`;
       let logoUrl = null;
       
       // Se há um arquivo de logo
@@ -43,8 +46,8 @@ export const createCliente = async (data: ClienteFormData): Promise<{ cliente: C
         // Definindo nome do arquivo no formato "id/logo.extensão"
         const fileName = `${clienteId}/logo.${fileExt}`;
         
-        // Construir a URL pública completa para o storage
-        logoUrl = `https://svenmlcxebqafsxlayez.supabase.co/storage/v1/object/public/logos/${fileName}`;
+        // Construir a URL pública completa
+        logoUrl = `${baseLogoUrl}.${fileExt}`;
         
         console.log("Uploading logo with path:", fileName);
         console.log("Logo URL to be saved:", logoUrl);
@@ -72,35 +75,36 @@ export const createCliente = async (data: ClienteFormData): Promise<{ cliente: C
         
         if (uploadError) {
           console.error("Erro ao fazer upload do logo:", uploadError);
-          return { cliente: insertData[0], error: uploadError };
+          // Continue with the process even if logo upload fails
         } else {
           console.log("Logo uploaded successfully:", uploadData);
         }
+      } else {
+        // Mesmo quando não há logo, definimos uma URL padrão com .png como extensão
+        logoUrl = `${baseLogoUrl}.png`;
+        console.log("No logo provided, using default URL pattern:", logoUrl);
       }
       
-      // Corrigido: Verifica se logoUrl não é null antes de atualizar
-      if (logoUrl) {
-        // Usar o método update corretamente e verificar a resposta
-        const { data: updateData, error: updateError } = await supabase
-          .from("clientes")
-          .update({ logo_url: logoUrl })
-          .eq('id', clienteId)
-          .select();
+      // Sempre atualizar o logo_url, mesmo se não houver upload
+      const { data: updateData, error: updateError } = await supabase
+        .from("clientes")
+        .update({ logo_url: logoUrl })
+        .eq('id', clienteId)
+        .select();
+      
+      if (updateError) {
+        console.error("Erro ao atualizar caminho do logo:", updateError);
+        return { cliente: insertData[0], error: updateError };
+      } else {
+        console.log("Cliente updated with logo_url:", updateData);
         
-        if (updateError) {
-          console.error("Erro ao atualizar caminho do logo:", updateError);
-          return { cliente: insertData[0], error: updateError };
-        } else {
-          console.log("Cliente updated with logo_url:", updateData);
-          
-          // Retornar o cliente atualizado se a atualização foi bem-sucedida
-          if (updateData && updateData.length > 0) {
-            return { cliente: updateData[0], error: null };
-          }
+        // Retornar o cliente atualizado se a atualização foi bem-sucedida
+        if (updateData && updateData.length > 0) {
+          return { cliente: updateData[0], error: null };
         }
       }
       
-      // Se não houver logo ou a atualização não retornar dados, retorna o cliente original
+      // Fallback: Se a atualização não retornar dados, retorna o cliente original
       return { cliente: insertData[0], error: null };
     }
     
@@ -123,8 +127,11 @@ export const getClienteById = async (id: string): Promise<{ cliente: Cliente | n
       return { cliente: null, error, logoUrl: null };
     }
     
-    // O logoUrl agora é o próprio valor de logo_url, já que estamos salvando a URL completa
-    const logoUrl = data.logo_url;
+    // Se o logo_url não estiver definido, construímos uma URL com base no ID
+    let logoUrl = data.logo_url;
+    if (!logoUrl) {
+      logoUrl = `https://svenmlcxebqafsxlayez.supabase.co/storage/v1/object/public/logos/${data.id}/logo.png`;
+    }
     
     return { cliente: data, error: null, logoUrl };
   } catch (error) {
