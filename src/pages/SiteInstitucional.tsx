@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -8,9 +9,9 @@ import { useToast } from "@/hooks/use-toast";
 import ValidityCountdown from "@/components/ValityCountdown";
 import Map from "@/components/Map";
 import WhatsAppButton from "@/components/WhatsAppButton";
-import { format } from "date-fns";
-import Testimonials from "@/components/sections/Testimonials";
 import ColorPaletteSelector from "@/components/ColorPaletteSelector";
+import HeroSection from "@/components/sections/HeroSection";
+import Testimonials from "@/components/sections/Testimonials";
 
 const SiteInstitucional = () => {
   const { id } = useParams<{ id: string }>();
@@ -155,7 +156,7 @@ const SiteInstitucional = () => {
       return (
         <img 
           src={logoUrl} 
-          alt={`Logo ${cliente.nome_empresa}`}
+          alt={`Logo ${cliente?.nome_empresa}`}
           className={`${sizingClass} object-contain ${brightnessClass}`}
           onError={(e) => {
             console.error("Logo failed to load at render time");
@@ -168,9 +169,17 @@ const SiteInstitucional = () => {
     
     return (
       <div className={`w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xl`}>
-        {cliente.nome_empresa.charAt(0)}
+        {cliente?.nome_empresa.charAt(0)}
       </div>
     );
+  };
+
+  const scrollToTemplates = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const servicesSection = document.getElementById('servicos');
+    if (servicesSection) {
+      servicesSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   if (loading) {
@@ -207,7 +216,7 @@ const SiteInstitucional = () => {
 
   return (
     <div className={`min-h-screen flex flex-col theme-${activeColorPalette}`}>
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-3' : 'bg-primary text-white py-5'}`}>
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-3' : 'bg-transparent text-white py-5'}`}>
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             {renderLogo(
@@ -264,30 +273,8 @@ const SiteInstitucional = () => {
 
       <WhatsAppButton phoneNumber={cliente.telefone} />
 
-      <section className="bg-gradient-to-b from-primary to-primary/80 text-white pt-32 pb-20">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="md:w-1/2 text-center md:text-left">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                Bem-vindo à {cliente.nome_empresa}
-              </h1>
-              <p className="text-xl mb-8 text-white/90">
-                Somos especialistas em soluções para o seu negócio. Nossa equipe está pronta para atender todas as suas necessidades.
-              </p>
-              <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                <div className="inline-flex items-center gap-2 bg-white text-primary px-6 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors">
-                  <Phone className="h-5 w-5" />
-                  {cliente.telefone}
-                </div>
-                <div className="inline-flex items-center gap-2 bg-white/20 text-white backdrop-blur-sm px-6 py-3 rounded-full font-medium hover:bg-white/30 transition-colors">
-                  <Mail className="h-5 w-5" />
-                  {cliente.email}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero Section */}
+      <HeroSection scrollToTemplates={scrollToTemplates} />
 
       <section id="servicos" className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
