@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { ArrowLeft, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -77,7 +78,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
   };
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-3' : 'bg-transparent text-white py-5'}`}>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-3' : 'bg-transparent py-5'}`}>
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
           {renderLogo(
@@ -86,7 +87,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
           )}
           
           {!logoUrl && (
-            <h1 className={`text-xl md:text-2xl font-bold ${isScrolled ? 'text-primary' : 'text-white'}`}>
+            <h1 className={`text-xl md:text-2xl font-bold ${isScrolled ? 'text-primary' : 'text-gray-700'}`}>
               {cliente.nome_empresa}
             </h1>
           )}
@@ -98,11 +99,11 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
               value={activeColorPalette}
               onChange={handleColorPaletteChange}
               size={isScrolled ? 'default' : 'sm'}
-              className={isScrolled ? '' : 'bg-white/10 backdrop-blur-sm rounded-md px-2 py-1'}
+              className={isScrolled ? '' : 'bg-white/80 backdrop-blur-sm rounded-md px-2 py-1'}
             />
           )}
           
-          <div className={`hidden md:flex items-center gap-6 ${isScrolled ? 'text-gray-700' : 'text-white'}`}>
+          <div className={`hidden md:flex items-center gap-6 ${isScrolled ? 'text-gray-700' : 'text-gray-700'}`}>
             <a href="#servicos" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToTemplates(e, 'servicos')}>Serviços</a>
             <a href="#sobre" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToTemplates(e, 'sobre')}>Sobre</a>
             <a href="#depoimentos" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToTemplates(e, 'depoimentos')}>Depoimentos</a>
@@ -116,7 +117,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className={isScrolled ? "text-primary" : "text-white"}
+                  className={isScrolled ? "text-primary" : "text-gray-700"}
                 >
                   <Menu className="h-6 w-6" />
                 </Button>
