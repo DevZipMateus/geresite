@@ -273,7 +273,9 @@ const SiteInstitucional = () => {
                 </SheetTrigger>
                 <SheetContent side="right" className="pt-12">
                   <SheetHeader>
-                    <SheetTitle className="text-primary text-xl">{cliente.nome_empresa}</SheetTitle>
+                    <div className="flex justify-center mb-2">
+                      {renderLogo("h-12 w-auto")}
+                    </div>
                   </SheetHeader>
                   <div className="mt-6 flex flex-col gap-6">
                     <div className="flex flex-col gap-4">
