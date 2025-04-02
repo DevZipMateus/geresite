@@ -14,6 +14,7 @@ import Testimonials from "@/components/sections/Testimonials";
 import AboutUs from "@/components/sections/AboutUs";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const SiteInstitucional = () => {
   const { id } = useParams<{ id: string }>();
@@ -158,23 +159,30 @@ const SiteInstitucional = () => {
     
     if (logoUrl) {
       return (
-        <img 
-          src={logoUrl} 
-          alt={`Logo ${cliente?.nome_empresa}`}
-          className={`${sizingClass} object-contain ${brightnessClass}`}
-          onError={(e) => {
-            console.error("Logo failed to load at render time");
-            setLogoUrl(null);
-            setLogoError(`Failed to load image at render time: ${Date.now()}`);
-          }}
-        />
+        <Avatar className={`${sizingClass} ${brightnessClass}`}>
+          <AvatarImage 
+            src={logoUrl} 
+            alt={`Logo ${cliente?.nome_empresa}`}
+            className="object-contain"
+            onError={() => {
+              console.error("Logo failed to load at render time");
+              setLogoUrl(null);
+              setLogoError(`Failed to load image at render time: ${Date.now()}`);
+            }}
+          />
+          <AvatarFallback className="bg-primary text-white font-bold">
+            {cliente?.nome_empresa.charAt(0)}
+          </AvatarFallback>
+        </Avatar>
       );
     }
     
     return (
-      <div className={`w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xl`}>
-        {cliente?.nome_empresa.charAt(0)}
-      </div>
+      <Avatar className={`${sizingClass} ${brightnessClass}`}>
+        <AvatarFallback className="bg-primary text-white font-bold">
+          {cliente?.nome_empresa.charAt(0)}
+        </AvatarFallback>
+      </Avatar>
     );
   };
 
@@ -231,7 +239,7 @@ const SiteInstitucional = () => {
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             {renderLogo(
-              "h-10", 
+              "h-10 w-10", 
               isScrolled ? 'brightness-100' : 'brightness-[1.15]'
             )}
             
@@ -253,11 +261,11 @@ const SiteInstitucional = () => {
             )}
             
             <div className={`hidden md:flex items-center gap-6 ${isScrolled ? 'text-gray-700' : 'text-white'}`}>
-              <a href="#servicos" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToSection('servicos')}>Serviços</a>
-              <a href="#sobre" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToSection('sobre')}>Sobre</a>
-              <a href="#depoimentos" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToSection('depoimentos')}>Depoimentos</a>
-              <a href="#localizacao" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToSection('localizacao')}>Localização</a>
-              <a href="#contato" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToSection('contato')}>Contato</a>
+              <a href="#servicos" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToTemplates(e, 'servicos')}>Serviços</a>
+              <a href="#sobre" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToTemplates(e, 'sobre')}>Sobre</a>
+              <a href="#depoimentos" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToTemplates(e, 'depoimentos')}>Depoimentos</a>
+              <a href="#localizacao" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToTemplates(e, 'localizacao')}>Localização</a>
+              <a href="#contato" className="hover:text-primary/80 transition-colors" onClick={(e) => scrollToTemplates(e, 'contato')}>Contato</a>
             </div>
             
             {isMobile && (
@@ -274,7 +282,7 @@ const SiteInstitucional = () => {
                 <SheetContent side="right" className="pt-12">
                   <SheetHeader>
                     <div className="flex justify-center mb-6">
-                      {renderLogo("h-14 w-auto")}
+                      {renderLogo("h-14 w-14")}
                     </div>
                   </SheetHeader>
                   <div className="mt-8 flex flex-col gap-6">
@@ -457,7 +465,7 @@ const SiteInstitucional = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-3">
-              {renderLogo("h-8", "brightness-[1.15]")}
+              {renderLogo("h-8 w-8", "brightness-[1.15]")}
               <h2 className="text-xl font-bold">{cliente.nome_empresa}</h2>
             </div>
             <div className="mt-4 md:mt-0">
