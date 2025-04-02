@@ -38,13 +38,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({
         <h1 
           className={`${isMobile ? 'text-3xl' : 'text-4xl md:text-5xl lg:text-6xl'} font-bold text-white leading-tight mb-6`}
         >
-          Soluções contábeis inteligentes para empresas de todos os portes
+          Soluções inteligentes que transformam seu negócio
         </h1>
         
         <p 
           className="text-lg text-yellow-300 mb-10 max-w-3xl mx-auto"
         >
-          Entre em contato conosco e solicite um orçamento para começar a usar hoje mesmo nossa contabilidade digital e eficiente.
+          Entre em contato conosco e solicite um orçamento para começar a usar hoje mesmo nossos serviços personalizados.
         </p>
         
         <div 
@@ -52,7 +52,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
         >
           <Button 
             size="lg" 
-            className="rounded-md bg-yellow-400 hover:bg-yellow-500 text-black px-8 py-6 flex items-center gap-2 font-medium"
+            className="rounded-md bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 flex items-center gap-2 font-medium"
+            onClick={scrollToTemplates}
           >
             <Phone className="h-5 w-5" />
             Solicitar Orçamento
@@ -61,7 +62,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           <Button 
             variant="outline" 
             size="lg" 
-            className="rounded-md text-white border-white hover:bg-white/20 hover:text-white"
+            className="rounded-md border-secondary text-secondary-foreground hover:bg-secondary/20 hover:text-secondary-foreground"
+            onClick={scrollToTemplates}
           >
             Nossos serviços
           </Button>
