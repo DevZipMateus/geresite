@@ -113,6 +113,16 @@
   }
 }
 
+@layer components {
+  .container-custom {
+    @apply container mx-auto px-4 md:px-8 max-w-7xl;
+  }
+  
+  .section {
+    @apply py-16 md:py-24;
+  }
+}
+
 /* Rest of your existing CSS styles */
 .glass {
   background: rgba(255, 255, 255, 0.8);
