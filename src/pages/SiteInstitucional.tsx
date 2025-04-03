@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Cliente } from "@/types/database.types";
@@ -28,10 +27,30 @@ const SiteInstitucional = () => {
   const [activeColorPalette, setActiveColorPalette] = useState("default");
   const isMobile = useIsMobile();
   const headerRef = useRef<HTMLElement | null>(null);
+  const sectionRefs = useRef<Record<string, HTMLElement | null>>({
+    servicos: null,
+    about: null,
+    depoimentos: null,
+    localizacao: null,
+    contato: null
+  });
 
   useEffect(() => {
     // Capture the header element for offset calculations
     headerRef.current = document.querySelector('header');
+    
+    // Get all section references once the DOM is loaded
+    sectionRefs.current = {
+      servicos: document.getElementById('servicos'),
+      about: document.getElementById('about'),
+      depoimentos: document.getElementById('depoimentos'),
+      localizacao: document.getElementById('localizacao'),
+      contato: document.getElementById('contato')
+    };
+    
+    console.log("Section refs initialized:", Object.keys(sectionRefs.current).map(key => 
+      `${key}: ${sectionRefs.current[key] ? 'found' : 'not found'}`
+    ));
   }, []);
 
   useEffect(() => {
@@ -128,16 +147,24 @@ const SiteInstitucional = () => {
   const scrollToSection = useCallback((sectionId: string) => {
     console.log("Scrolling to section:", sectionId);
     
-    // Log all section IDs for debugging
-    const allSections = Array.from(document.querySelectorAll('[id]'));
-    console.log("Available sections:", allSections.map(el => el.id));
-    
-    // Try to find the section with a 500ms delay to ensure DOM is ready
+    // Wait for DOM to be fully loaded and sections to be rendered
     setTimeout(() => {
-      const section = document.getElementById(sectionId);
+      // First try to get section from our refs
+      let section = sectionRefs.current[sectionId];
+      
+      // If not found in refs, try to find it directly
+      if (!section) {
+        section = document.getElementById(sectionId);
+        // Update ref if found
+        if (section && sectionRefs.current.hasOwnProperty(sectionId)) {
+          sectionRefs.current[sectionId] = section;
+        }
+      }
       
       if (!section) {
-        console.error(`Section with ID "${sectionId}" not found after delay`);
+        console.error(`Section with ID "${sectionId}" not found. Available sections:`, 
+          Array.from(document.querySelectorAll('[id]')).map(el => el.id)
+        );
         return;
       }
       
@@ -165,7 +192,6 @@ const SiteInstitucional = () => {
     }, 500);
   }, []);
 
-  // Handle section navigation with scroll
   const handleSectionClick = useCallback((e: React.MouseEvent, sectionId: string) => {
     e.preventDefault();
     console.log("Navigation click to section:", sectionId);
@@ -206,7 +232,7 @@ const SiteInstitucional = () => {
 
       <ServicesSection />
 
-      <section id="about" className="py-16">
+      <section id="about" className="py-16 bg-gray-50">
         <AboutUs />
       </section>
 

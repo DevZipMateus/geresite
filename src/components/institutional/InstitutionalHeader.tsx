@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { ArrowLeft, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -44,7 +43,6 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
       return <div className={`${sizingClass} rounded-lg bg-primary/20 animate-pulse`}></div>;
     }
     if (logoUrl) {
-      // For mobile menu, don't apply size constraints to maintain original dimensions
       const containerClass = forMobileMenu ? "flex items-center" : `${sizingClass} flex items-center`;
       return (
         <div className={containerClass}>
@@ -57,7 +55,6 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
       );
     }
     
-    // When no logo is available, display the styled company name instead of an avatar
     return (
       <div className={forMobileMenu ? "" : sizingClass}>
         <h1 className="text-2xl md:text-3xl font-bold text-primary">
@@ -87,10 +84,18 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
           {!isMobile && <ColorPaletteSelector value={activeColorPalette} onChange={handleColorPaletteChange} size={isScrolled ? 'default' : 'sm'} />}
           
           <div className="hidden md:flex items-center gap-6 text-gray-700">
-            <button onClick={(e) => handleNavClick(e, 'servicos')} className="hover:text-primary/80 transition-colors">Serviços</button>
-            <button onClick={(e) => handleNavClick(e, 'about')} className="hover:text-primary/80 transition-colors">Sobre</button>
-            <button onClick={(e) => handleNavClick(e, 'depoimentos')} className="hover:text-primary/80 transition-colors">Depoimentos</button>
-            <button onClick={(e) => handleNavClick(e, 'localizacao')} className="hover:text-primary/80 transition-colors">Localização</button>
+            <button onClick={(e) => handleNavClick(e, 'servicos')} className="hover:text-primary/80 transition-colors">
+              Serviços
+            </button>
+            <button onClick={(e) => handleNavClick(e, 'about')} className="hover:text-primary/80 transition-colors">
+              Sobre
+            </button>
+            <button onClick={(e) => handleNavClick(e, 'depoimentos')} className="hover:text-primary/80 transition-colors">
+              Depoimentos
+            </button>
+            <button onClick={(e) => handleNavClick(e, 'localizacao')} className="hover:text-primary/80 transition-colors">
+              Localização
+            </button>
           </div>
           
           {isMobile && <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
