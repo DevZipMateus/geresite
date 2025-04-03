@@ -5,7 +5,7 @@ RewriteBase /
 
 # Permitir acesso direto a arquivos estáticos (não redirecionar)
 RewriteRule ^assets/ - [L]
-RewriteRule ^(.*)\.(js|css|ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|map|json)$ - [L]
+RewriteRule \.(js|css|ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|map|json)$ - [L]
 
 # Se o arquivo ou diretório solicitado existe, servir diretamente
 RewriteCond %{REQUEST_FILENAME} -f [OR]
@@ -24,14 +24,14 @@ RewriteRule ^ index.html [L]
     AddType application/font-woff2 .woff2
 </IfModule>
 
-# Permitir CORS para fontes (opcional, mas útil)
+# Permitir CORS para fontes
 <IfModule mod_headers.c>
     <FilesMatch "\.(ttf|ttc|otf|eot|woff|woff2|font.css|css|js)$">
         Header set Access-Control-Allow-Origin "*"
     </FilesMatch>
 </IfModule>
 
-# Otimizar cache para melhor desempenho (opcional)
+# Otimizar cache para melhor desempenho
 <IfModule mod_expires.c>
     ExpiresActive On
     ExpiresByType image/jpg "access plus 1 year"
