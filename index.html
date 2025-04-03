@@ -20,7 +20,7 @@
     
     <!-- Script para lidar corretamente com rotas SPA -->
     <script type="text/javascript">
-      // Função para redirecionar corretamente quando acessado por URL direta
+      // Função para lidar com rotas SPA em carga direta
       (function() {
         // Detecta se é uma rota de site institucional
         if (window.location.pathname.indexOf('/site-institucional/') !== -1) {
@@ -29,6 +29,7 @@
           if (pathSegments.length >= 3) {
             // Preservar a URL original para o roteamento no lado do cliente
             window.siteId = pathSegments[2];
+            console.log('Site ID detected:', window.siteId);
           }
         }
       })();
@@ -39,6 +40,6 @@
     <div id="root"></div>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="./src/main.tsx"></script>
   </body>
 </html>

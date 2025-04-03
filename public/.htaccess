@@ -3,16 +3,20 @@
 RewriteEngine On
 RewriteBase /
 
-# Especificar explicitamente quais arquivos e diretórios devem ser acessados diretamente
-RewriteRule \.(css|js|png|jpe?g|gif|svg|ico|woff2?|ttf|eot)$ - [L]
+# Certifique-se de que o diretório de origem do script seja acessível
+Options -MultiViews
+Options +FollowSymLinks
 
-# Se o arquivo ou diretório solicitado existe, use-o diretamente
+# Ignorar as regras de reescrita para arquivos estáticos existentes
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Caso contrário, redirecione para o index.html
-RewriteRule ^ index.html [QSA,L]
+# Para ativos específicos, permita o acesso direto
+RewriteRule \.(css|js|png|jpe?g|gif|svg|ico|woff2?|ttf|eot|map)$ - [L]
+
+# Redirecionar todas as outras solicitações para index.html
+RewriteRule ^ index.html [L,QSA]
 
 # Configurar tipos MIME corretos
 <IfModule mod_mime.c>
@@ -23,8 +27,19 @@ RewriteRule ^ index.html [QSA,L]
     AddType application/font-woff2 .woff2
 </IfModule>
 
-# Permitir CORS para fontes
+# Cache-Control para melhorar desempenho
 <IfModule mod_headers.c>
+    <FilesMatch "\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
+    
+    <FilesMatch "\.html$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires 0
+    </FilesMatch>
+    
+    # Permitir CORS para fontes e outros recursos
     <FilesMatch "\.(ttf|ttc|otf|eot|woff|woff2|font\.css|css|js)$">
         Header set Access-Control-Allow-Origin "*"
     </FilesMatch>
