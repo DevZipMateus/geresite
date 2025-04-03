@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Cliente } from "@/types/database.types";
 import { useToast } from "@/hooks/use-toast";
@@ -27,6 +27,12 @@ const SiteInstitucional = () => {
   const [logoLoading, setLogoLoading] = useState(false);
   const [activeColorPalette, setActiveColorPalette] = useState("default");
   const isMobile = useIsMobile();
+  const headerRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    // Capture the header element for offset calculations
+    headerRef.current = document.querySelector('header');
+  }, []);
 
   useEffect(() => {
     const fetchCliente = async () => {
@@ -86,6 +92,15 @@ const SiteInstitucional = () => {
     };
 
     fetchCliente();
+
+    // Check if there's a hash in the URL on initial load
+    if (window.location.hash) {
+      const targetId = window.location.hash.substring(1);
+      // Use a timeout to ensure the DOM is fully loaded
+      setTimeout(() => {
+        scrollToSection(targetId);
+      }, 1000);
+    }
   }, [id, toast]);
 
   const handleVoltar = () => {
@@ -110,37 +125,52 @@ const SiteInstitucional = () => {
     });
   };
 
-  const scrollToSection = (sectionId: string) => {
+  const scrollToSection = useCallback((sectionId: string) => {
     console.log("Scrolling to section:", sectionId);
-    console.log("Available sections:", Array.from(document.querySelectorAll('[id]')).map(el => el.id));
     
-    // Add a delay to ensure DOM is fully rendered
+    // Log all section IDs for debugging
+    const allSections = Array.from(document.querySelectorAll('[id]'));
+    console.log("Available sections:", allSections.map(el => el.id));
+    
+    // Try to find the section with a 500ms delay to ensure DOM is ready
     setTimeout(() => {
       const section = document.getElementById(sectionId);
+      
       if (!section) {
-        console.error(`Section with ID "${sectionId}" not found`);
+        console.error(`Section with ID "${sectionId}" not found after delay`);
         return;
       }
       
       // Get header height to offset scroll position
-      const header = document.querySelector('header');
-      const headerHeight = header ? header.offsetHeight : 0;
-      console.log("Header height:", headerHeight);
+      const headerHeight = headerRef.current ? headerRef.current.offsetHeight : 0;
+      console.log("Header height for offset:", headerHeight);
       
       // Calculate position accounting for header
-      const sectionTop = section.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = sectionTop - headerHeight - 20;
+      const sectionPosition = section.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = sectionPosition - headerHeight - 20;
       
-      console.log("Section position:", sectionTop);
+      console.log("Section position:", sectionPosition);
       console.log("Scrolling to position:", offsetPosition);
       
-      // Perform scroll
+      // Perform scroll with smooth behavior
       window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth'
       });
-    }, 300); // Increased delay for better reliability
-  };
+      
+      // Add a confirmation log after scrolling
+      setTimeout(() => {
+        console.log("Scroll completed to section:", sectionId);
+      }, 1000);
+    }, 500);
+  }, []);
+
+  // Handle section navigation with scroll
+  const handleSectionClick = useCallback((e: React.MouseEvent, sectionId: string) => {
+    e.preventDefault();
+    console.log("Navigation click to section:", sectionId);
+    scrollToSection(sectionId);
+  }, [scrollToSection]);
 
   if (loading) {
     return <LoadingState message="Carregando dados..." submessage="Aguarde enquanto carregamos as informações da empresa" />;
@@ -172,14 +202,13 @@ const SiteInstitucional = () => {
       
       <WhatsAppButton phoneNumber={cliente.telefone} />
 
-      <HeroSection scrollToTemplates={(e, sectionId) => {
-        e.preventDefault();
-        if (sectionId) scrollToSection(sectionId);
-      }} />
+      <HeroSection scrollToTemplates={handleSectionClick} />
 
       <ServicesSection />
 
-      <AboutUs />
+      <section id="about" className="py-16">
+        <AboutUs />
+      </section>
 
       <section id="depoimentos" className="py-16 bg-gray-50">
         <Testimonials />

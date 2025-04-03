@@ -87,10 +87,10 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
           {!isMobile && <ColorPaletteSelector value={activeColorPalette} onChange={handleColorPaletteChange} size={isScrolled ? 'default' : 'sm'} />}
           
           <div className="hidden md:flex items-center gap-6 text-gray-700">
-            <a href="#servicos" className="hover:text-primary/80 transition-colors" onClick={(e) => handleNavClick(e, 'servicos')}>Serviços</a>
-            <a href="#about" className="hover:text-primary/80 transition-colors" onClick={(e) => handleNavClick(e, 'about')}>Sobre</a>
-            <a href="#depoimentos" className="hover:text-primary/80 transition-colors" onClick={(e) => handleNavClick(e, 'depoimentos')}>Depoimentos</a>
-            <a href="#localizacao" className="hover:text-primary/80 transition-colors" onClick={(e) => handleNavClick(e, 'localizacao')}>Localização</a>
+            <button onClick={(e) => handleNavClick(e, 'servicos')} className="hover:text-primary/80 transition-colors">Serviços</button>
+            <button onClick={(e) => handleNavClick(e, 'about')} className="hover:text-primary/80 transition-colors">Sobre</button>
+            <button onClick={(e) => handleNavClick(e, 'depoimentos')} className="hover:text-primary/80 transition-colors">Depoimentos</button>
+            <button onClick={(e) => handleNavClick(e, 'localizacao')} className="hover:text-primary/80 transition-colors">Localização</button>
           </div>
           
           {isMobile && <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>

@@ -5,7 +5,7 @@ import { Phone } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface HeroSectionProps {
-  scrollToTemplates: (e: React.MouseEvent, sectionId?: string) => void;
+  scrollToTemplates: (e: React.MouseEvent, sectionId: string) => void;
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({
