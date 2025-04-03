@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import LogoUpload, { logoSchema } from "./LogoUpload";
 import { createCliente } from "@/services/clienteService";
+import { ArrowUpRight } from "lucide-react";
 
 const formSchema = z.object({
   nome_empresa: z.string().min(2, "Nome da empresa deve ter pelo menos 2 caracteres"),
@@ -21,7 +22,15 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const FormularioContato = () => {
+interface FormularioContatoProps {
+  submitButtonText?: string;
+  showArrowIcon?: boolean;
+}
+
+const FormularioContato = ({ 
+  submitButtonText = "Enviar", 
+  showArrowIcon = false 
+}: FormularioContatoProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -86,7 +95,7 @@ const FormularioContato = () => {
   };
 
   return (
-    <div className="max-w-md w-full mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-md w-full mx-auto p-6 bg-white rounded-lg">
       <h2 className="text-2xl font-bold text-center mb-6">Formulário de Contato</h2>
       
       <Form {...form}>
@@ -154,7 +163,8 @@ const FormularioContato = () => {
             className="w-full"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Enviando..." : "Enviar"}
+            {isSubmitting ? "Enviando..." : submitButtonText}
+            {showArrowIcon && !isSubmitting && <ArrowUpRight className="h-4 w-4 ml-1" />}
           </Button>
         </form>
       </Form>
