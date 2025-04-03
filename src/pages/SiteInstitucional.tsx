@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Cliente } from "@/types/database.types";
@@ -60,15 +61,11 @@ const SiteInstitucional = () => {
               console.log("Logo carregado com sucesso");
               setLogoUrl(fetchedLogoUrl);
               setLogoLoading(false);
-              toast({
-                title: "Logo carregado",
-                description: "O logo da empresa foi carregado com sucesso.",
-              });
+              // Removed toast notification about logo loading
             };
             
             img.onerror = () => {
               console.error("Erro ao carregar a imagem da URL:", fetchedLogoUrl);
-              // No more error message, just set loading to false
               setLogoLoading(false);
             };
             
