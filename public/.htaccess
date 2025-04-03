@@ -3,12 +3,16 @@
 RewriteEngine On
 RewriteBase /
 
-# Verificar se a solicitação não é para um arquivo ou diretório existente
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
+# Especificar explicitamente quais arquivos e diretórios devem ser acessados diretamente
+RewriteRule \.(css|js|png|jpe?g|gif|svg|ico|woff2?|ttf|eot)$ - [L]
 
-# Redirecionar todas as solicitações para index.html
-RewriteRule ^(.*)$ index.html [L,QSA]
+# Se o arquivo ou diretório solicitado existe, use-o diretamente
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Caso contrário, redirecione para o index.html
+RewriteRule ^ index.html [QSA,L]
 
 # Configurar tipos MIME corretos
 <IfModule mod_mime.c>
@@ -21,7 +25,7 @@ RewriteRule ^(.*)$ index.html [L,QSA]
 
 # Permitir CORS para fontes
 <IfModule mod_headers.c>
-    <FilesMatch "\.(ttf|ttc|otf|eot|woff|woff2|font.css|css|js)$">
+    <FilesMatch "\.(ttf|ttc|otf|eot|woff|woff2|font\.css|css|js)$">
         Header set Access-Control-Allow-Origin "*"
     </FilesMatch>
 </IfModule>

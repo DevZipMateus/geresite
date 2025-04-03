@@ -17,6 +17,22 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@lovable_dev" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    
+    <!-- Script para lidar corretamente com rotas SPA -->
+    <script type="text/javascript">
+      // Função para redirecionar corretamente quando acessado por URL direta
+      (function() {
+        // Detecta se é uma rota de site institucional
+        if (window.location.pathname.indexOf('/site-institucional/') !== -1) {
+          // Certifica-se de que o histórico de navegação funcione corretamente
+          var pathSegments = window.location.pathname.split('/');
+          if (pathSegments.length >= 3) {
+            // Preservar a URL original para o roteamento no lado do cliente
+            window.siteId = pathSegments[2];
+          }
+        }
+      })();
+    </script>
   </head>
 
   <body>
