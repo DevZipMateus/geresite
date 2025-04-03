@@ -1,19 +1,15 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Cliente } from "@/types/database.types";
 import { useToast } from "@/hooks/use-toast";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import HeroSection from "@/components/sections/HeroSection";
-import Testimonials from "@/components/sections/Testimonials";
-import AboutUs from "@/components/sections/AboutUs";
-import { useIsMobile } from "@/hooks/use-mobile";
 import InstitutionalHeader from "@/components/institutional/InstitutionalHeader";
-import ServicesSection from "@/components/institutional/ServicesSection";
-import LocationSection from "@/components/institutional/LocationSection";
-import InstitutionalFooter from "@/components/institutional/InstitutionalFooter";
 import ExpiredNotice from "@/components/institutional/ExpiredNotice";
 import LoadingState from "@/components/institutional/LoadingState";
+import MainContent from "@/components/institutional/MainContent";
+import { useScrollToSection } from "@/hooks/use-scroll-to-section";
 import { getClienteById } from "@/services/clienteService";
+import ContactSection from "@/components/institutional/ContactSection";
 
 const SiteInstitucional = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,33 +21,7 @@ const SiteInstitucional = () => {
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [logoLoading, setLogoLoading] = useState(false);
   const [activeColorPalette, setActiveColorPalette] = useState("default");
-  const isMobile = useIsMobile();
-  const headerRef = useRef<HTMLElement | null>(null);
-  const sectionRefs = useRef<Record<string, HTMLElement | null>>({
-    servicos: null,
-    about: null,
-    depoimentos: null,
-    localizacao: null,
-    contato: null
-  });
-
-  useEffect(() => {
-    // Capture the header element for offset calculations
-    headerRef.current = document.querySelector('header');
-    
-    // Get all section references once the DOM is loaded
-    sectionRefs.current = {
-      servicos: document.getElementById('servicos'),
-      about: document.getElementById('about'),
-      depoimentos: document.getElementById('depoimentos'),
-      localizacao: document.getElementById('localizacao'),
-      contato: document.getElementById('contato')
-    };
-    
-    console.log("Section refs initialized:", Object.keys(sectionRefs.current).map(key => 
-      `${key}: ${sectionRefs.current[key] ? 'found' : 'not found'}`
-    ));
-  }, []);
+  const { scrollToSection, handleSectionClick } = useScrollToSection();
 
   useEffect(() => {
     const fetchCliente = async () => {
@@ -120,7 +90,7 @@ const SiteInstitucional = () => {
         scrollToSection(targetId);
       }, 1000);
     }
-  }, [id, toast]);
+  }, [id, toast, scrollToSection]);
 
   const handleVoltar = () => {
     navigate("/");
@@ -143,60 +113,6 @@ const SiteInstitucional = () => {
       description: `O tema foi alterado para ${palette}.`,
     });
   };
-
-  const scrollToSection = useCallback((sectionId: string) => {
-    console.log("Scrolling to section:", sectionId);
-    
-    // Wait for DOM to be fully loaded and sections to be rendered
-    setTimeout(() => {
-      // First try to get section from our refs
-      let section = sectionRefs.current[sectionId];
-      
-      // If not found in refs, try to find it directly
-      if (!section) {
-        section = document.getElementById(sectionId);
-        // Update ref if found
-        if (section && sectionRefs.current.hasOwnProperty(sectionId)) {
-          sectionRefs.current[sectionId] = section;
-        }
-      }
-      
-      if (!section) {
-        console.error(`Section with ID "${sectionId}" not found. Available sections:`, 
-          Array.from(document.querySelectorAll('[id]')).map(el => el.id)
-        );
-        return;
-      }
-      
-      // Get header height to offset scroll position
-      const headerHeight = headerRef.current ? headerRef.current.offsetHeight : 0;
-      console.log("Header height for offset:", headerHeight);
-      
-      // Calculate position accounting for header
-      const sectionPosition = section.getBoundingClientRect().top + window.scrollY;
-      const offsetPosition = sectionPosition - headerHeight - 20;
-      
-      console.log("Section position:", sectionPosition);
-      console.log("Scrolling to position:", offsetPosition);
-      
-      // Perform scroll with smooth behavior
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-      
-      // Add a confirmation log after scrolling
-      setTimeout(() => {
-        console.log("Scroll completed to section:", sectionId);
-      }, 1000);
-    }, 500);
-  }, []);
-
-  const handleSectionClick = useCallback((e: React.MouseEvent, sectionId: string) => {
-    e.preventDefault();
-    console.log("Navigation click to section:", sectionId);
-    scrollToSection(sectionId);
-  }, [scrollToSection]);
 
   if (loading) {
     return <LoadingState message="Carregando dados..." submessage="Aguarde enquanto carregamos as informações da empresa" />;
@@ -226,23 +142,13 @@ const SiteInstitucional = () => {
         scrollToSection={scrollToSection}
       />
       
-      <WhatsAppButton phoneNumber={cliente.telefone} />
-
-      <HeroSection scrollToTemplates={handleSectionClick} />
-
-      <ServicesSection />
-
-      <section id="about" className="py-16 bg-gray-50">
-        <AboutUs />
-      </section>
-
-      <section id="depoimentos" className="py-16 bg-gray-50">
-        <Testimonials />
-      </section>
-
-      <LocationSection />
-
-      <InstitutionalFooter cliente={cliente} logoUrl={logoUrl} />
+      <MainContent 
+        cliente={cliente}
+        logoUrl={logoUrl}
+        handleSectionClick={handleSectionClick}
+      />
+      
+      <ContactSection cliente={cliente} />
     </div>
   );
 };
