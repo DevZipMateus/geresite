@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Cliente } from "@/types/database.types";
 import { useToast } from "@/hooks/use-toast";
@@ -114,10 +114,27 @@ const SiteInstitucional = () => {
   };
 
   const scrollToSection = (sectionId: string) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
-    }
+    console.log("Scrolling to section in SiteInstitucional:", sectionId); // Debug log
+    
+    // Small delay to ensure DOM is ready
+    setTimeout(() => {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        console.log("Found section element, scrolling to:", sectionId);
+        
+        // Get the header height to offset the scroll position
+        const header = document.querySelector('header');
+        const headerHeight = header ? header.offsetHeight : 0;
+        
+        const sectionPosition = section.getBoundingClientRect().top + window.pageYOffset;
+        window.scrollTo({
+          top: sectionPosition - headerHeight - 20, // Additional 20px padding
+          behavior: 'smooth'
+        });
+      } else {
+        console.error("Section not found:", sectionId);
+      }
+    }, 100);
   };
 
   if (loading) {

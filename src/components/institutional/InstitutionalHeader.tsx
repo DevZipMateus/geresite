@@ -69,6 +69,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
 
   const scrollToTemplates = (e: React.MouseEvent, sectionId?: string) => {
     e.preventDefault();
+    console.log("Scrolling to section:", sectionId); // Debug logging
     if (sectionId) {
       scrollToSection(sectionId);
       if (isMobileMenuOpen) {

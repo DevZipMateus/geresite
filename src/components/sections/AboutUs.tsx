@@ -7,7 +7,7 @@ const AboutUs = () => {
   const isMobile = useIsMobile();
   
   return (
-    <section id="about" className="section bg-gray-50 overflow-x-hidden">
+    <section id="about" className="section bg-gray-50 overflow-x-hidden py-16">
       <div className="container-custom">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
           {/* Left Column - Image */}
