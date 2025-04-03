@@ -4,16 +4,12 @@ RewriteEngine On
 RewriteBase /
 
 # Permitir acesso direto a arquivos estáticos (não redirecionar)
-RewriteRule ^assets/ - [L]
-RewriteRule \.(js|css|ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|map|json)$ - [L]
-
-# Se o arquivo ou diretório solicitado existe, servir diretamente
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Caso contrário, redirecionar todas as requisições para index.html (para SPA)
-RewriteRule ^ index.html [L]
+# Redirecionar todas as requisições não-arquivos para index.html
+RewriteRule ^ index.html [QSA,L]
 
 # Configurar tipos MIME corretos
 <IfModule mod_mime.c>
