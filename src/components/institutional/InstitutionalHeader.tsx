@@ -67,18 +67,17 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
     );
   };
 
-  const scrollToTemplates = (e: React.MouseEvent, sectionId?: string) => {
+  const handleNavClick = (e: React.MouseEvent, sectionId: string) => {
     e.preventDefault();
-    console.log("Scrolling to section:", sectionId); // Debug logging
-    if (sectionId) {
-      scrollToSection(sectionId);
-      if (isMobileMenuOpen) {
-        setIsMobileMenuOpen(false);
-      }
+    console.log("Header navigation click to:", sectionId);
+    scrollToSection(sectionId);
+    if (isMobileMenuOpen) {
+      setIsMobileMenuOpen(false);
     }
   };
 
-  return <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white shadow-sm ${isScrolled ? 'py-2' : 'py-3'}`}>
+  return (
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white shadow-sm ${isScrolled ? 'py-2' : 'py-3'}`}>
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
           {renderLogo(isScrolled ? "w-[220px] h-[60px]" : "w-[250px] h-[70px]")}
@@ -88,10 +87,10 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
           {!isMobile && <ColorPaletteSelector value={activeColorPalette} onChange={handleColorPaletteChange} size={isScrolled ? 'default' : 'sm'} />}
           
           <div className="hidden md:flex items-center gap-6 text-gray-700">
-            <a href="#servicos" className="hover:text-primary/80 transition-colors" onClick={e => scrollToTemplates(e, 'servicos')}>Serviços</a>
-            <a href="#about" className="hover:text-primary/80 transition-colors" onClick={e => scrollToTemplates(e, 'about')}>Sobre</a>
-            <a href="#depoimentos" className="hover:text-primary/80 transition-colors" onClick={e => scrollToTemplates(e, 'depoimentos')}>Depoimentos</a>
-            <a href="#localizacao" className="hover:text-primary/80 transition-colors" onClick={e => scrollToTemplates(e, 'localizacao')}>Localização</a>
+            <a href="#servicos" className="hover:text-primary/80 transition-colors" onClick={(e) => handleNavClick(e, 'servicos')}>Serviços</a>
+            <a href="#about" className="hover:text-primary/80 transition-colors" onClick={(e) => handleNavClick(e, 'about')}>Sobre</a>
+            <a href="#depoimentos" className="hover:text-primary/80 transition-colors" onClick={(e) => handleNavClick(e, 'depoimentos')}>Depoimentos</a>
+            <a href="#localizacao" className="hover:text-primary/80 transition-colors" onClick={(e) => handleNavClick(e, 'localizacao')}>Localização</a>
           </div>
           
           {isMobile && <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -110,28 +109,16 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
                   <div className="flex flex-col gap-4">
                     <h3 className="text-sm font-medium text-muted-foreground">Navegação</h3>
                     <div className="flex flex-col space-y-4">
-                      <button onClick={() => {
-                        scrollToSection('servicos');
-                        setIsMobileMenuOpen(false);
-                      }} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
+                      <button onClick={(e) => handleNavClick(e as any, 'servicos')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
                         <span>Serviços</span>
                       </button>
-                      <button onClick={() => {
-                        scrollToSection('about');
-                        setIsMobileMenuOpen(false);
-                      }} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
+                      <button onClick={(e) => handleNavClick(e as any, 'about')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
                         <span>Sobre</span>
                       </button>
-                      <button onClick={() => {
-                        scrollToSection('depoimentos');
-                        setIsMobileMenuOpen(false);
-                      }} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
+                      <button onClick={(e) => handleNavClick(e as any, 'depoimentos')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
                         <span>Depoimentos</span>
                       </button>
-                      <button onClick={() => {
-                        scrollToSection('localizacao');
-                        setIsMobileMenuOpen(false);
-                      }} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
+                      <button onClick={(e) => handleNavClick(e as any, 'localizacao')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
                         <span>Localização</span>
                       </button>
                     </div>
@@ -162,7 +149,8 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
           </Button>
         </div>
       </div>
-    </header>;
+    </header>
+  );
 };
 
 export default InstitutionalHeader;
