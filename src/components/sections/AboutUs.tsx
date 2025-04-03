@@ -85,8 +85,6 @@ const AboutUs = () => {
                 </div>
               </div>
             </div>
-            
-            {/* Removed the "Conheça Nossos Diferenciais" button */}
           </div>
         </div>
       </div>

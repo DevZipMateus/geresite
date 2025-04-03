@@ -63,9 +63,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             variant="outline" 
             size="lg" 
             className="rounded-md border-secondary text-secondary-foreground hover:bg-secondary/20 hover:text-secondary-foreground"
-            onClick={(e) => scrollToTemplates(e, 'servicos')}
+            onClick={(e) => scrollToTemplates(e, 'about')}
           >
-            Nossos serviços
+            Sobre nós
           </Button>
         </div>
       </div>

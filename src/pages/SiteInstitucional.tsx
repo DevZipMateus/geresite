@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Cliente } from "@/types/database.types";
@@ -110,32 +111,35 @@ const SiteInstitucional = () => {
   };
 
   const scrollToSection = (sectionId: string) => {
-    console.log("Scrolling to section in SiteInstitucional:", sectionId);
+    console.log("Scrolling to section:", sectionId);
+    console.log("Available sections:", Array.from(document.querySelectorAll('[id]')).map(el => el.id));
     
-    const sectionElement = document.getElementById(sectionId);
-    if (!sectionElement) {
-      console.error(`Section with ID "${sectionId}" not found`);
-      
-      const allSections = document.querySelectorAll('section[id]');
-      console.log("Available sections:", Array.from(allSections).map(s => s.id));
-      return;
-    }
-    
+    // Add a delay to ensure DOM is fully rendered
     setTimeout(() => {
+      const section = document.getElementById(sectionId);
+      if (!section) {
+        console.error(`Section with ID "${sectionId}" not found`);
+        return;
+      }
+      
+      // Get header height to offset scroll position
       const header = document.querySelector('header');
       const headerHeight = header ? header.offsetHeight : 0;
       console.log("Header height:", headerHeight);
       
-      const sectionPosition = sectionElement.getBoundingClientRect().top + window.pageYOffset;
-      console.log("Section position:", sectionPosition);
+      // Calculate position accounting for header
+      const sectionTop = section.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = sectionTop - headerHeight - 20;
       
+      console.log("Section position:", sectionTop);
+      console.log("Scrolling to position:", offsetPosition);
+      
+      // Perform scroll
       window.scrollTo({
-        top: sectionPosition - headerHeight - 20,
+        top: offsetPosition,
         behavior: 'smooth'
       });
-      
-      console.log("Scrolled to:", sectionPosition - headerHeight - 20);
-    }, 200);
+    }, 300); // Increased delay for better reliability
   };
 
   if (loading) {

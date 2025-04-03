@@ -109,16 +109,16 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
                   <div className="flex flex-col gap-4">
                     <h3 className="text-sm font-medium text-muted-foreground">Navegação</h3>
                     <div className="flex flex-col space-y-4">
-                      <button onClick={(e) => handleNavClick(e as any, 'servicos')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
+                      <button onClick={(e) => handleNavClick(e, 'servicos')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
                         <span>Serviços</span>
                       </button>
-                      <button onClick={(e) => handleNavClick(e as any, 'about')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
+                      <button onClick={(e) => handleNavClick(e, 'about')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
                         <span>Sobre</span>
                       </button>
-                      <button onClick={(e) => handleNavClick(e as any, 'depoimentos')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
+                      <button onClick={(e) => handleNavClick(e, 'depoimentos')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
                         <span>Depoimentos</span>
                       </button>
-                      <button onClick={(e) => handleNavClick(e as any, 'localizacao')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
+                      <button onClick={(e) => handleNavClick(e, 'localizacao')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
                         <span>Localização</span>
                       </button>
                     </div>
