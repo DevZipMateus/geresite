@@ -3,13 +3,12 @@
 RewriteEngine On
 RewriteBase /
 
-# Permitir acesso direto a arquivos estáticos (não redirecionar)
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^ - [L]
+# Verificar se a solicitação não é para um arquivo ou diretório existente
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 
-# Redirecionar todas as requisições não-arquivos para index.html
-RewriteRule ^ index.html [QSA,L]
+# Redirecionar todas as solicitações para index.html
+RewriteRule ^(.*)$ index.html [L,QSA]
 
 # Configurar tipos MIME corretos
 <IfModule mod_mime.c>
