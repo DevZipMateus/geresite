@@ -71,6 +71,9 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
     e.preventDefault();
     if (sectionId) {
       scrollToSection(sectionId);
+      if (isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
     }
   };
 
@@ -85,7 +88,7 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
           
           <div className="hidden md:flex items-center gap-6 text-gray-700">
             <a href="#servicos" className="hover:text-primary/80 transition-colors" onClick={e => scrollToTemplates(e, 'servicos')}>Serviços</a>
-            <a href="#sobre" className="hover:text-primary/80 transition-colors" onClick={e => scrollToTemplates(e, 'sobre')}>Sobre</a>
+            <a href="#about" className="hover:text-primary/80 transition-colors" onClick={e => scrollToTemplates(e, 'about')}>Sobre</a>
             <a href="#depoimentos" className="hover:text-primary/80 transition-colors" onClick={e => scrollToTemplates(e, 'depoimentos')}>Depoimentos</a>
             <a href="#localizacao" className="hover:text-primary/80 transition-colors" onClick={e => scrollToTemplates(e, 'localizacao')}>Localização</a>
           </div>
@@ -106,16 +109,28 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
                   <div className="flex flex-col gap-4">
                     <h3 className="text-sm font-medium text-muted-foreground">Navegação</h3>
                     <div className="flex flex-col space-y-4">
-                      <button onClick={() => scrollToSection('servicos')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
+                      <button onClick={() => {
+                        scrollToSection('servicos');
+                        setIsMobileMenuOpen(false);
+                      }} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
                         <span>Serviços</span>
                       </button>
-                      <button onClick={() => scrollToSection('sobre')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
+                      <button onClick={() => {
+                        scrollToSection('about');
+                        setIsMobileMenuOpen(false);
+                      }} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
                         <span>Sobre</span>
                       </button>
-                      <button onClick={() => scrollToSection('depoimentos')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
+                      <button onClick={() => {
+                        scrollToSection('depoimentos');
+                        setIsMobileMenuOpen(false);
+                      }} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
                         <span>Depoimentos</span>
                       </button>
-                      <button onClick={() => scrollToSection('localizacao')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
+                      <button onClick={() => {
+                        scrollToSection('localizacao');
+                        setIsMobileMenuOpen(false);
+                      }} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
                         <span>Localização</span>
                       </button>
                     </div>
