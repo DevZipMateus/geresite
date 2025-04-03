@@ -3,7 +3,7 @@
 RewriteEngine On
 RewriteBase /
 
-# Certifique-se de que o diretório de origem do script seja acessível
+# Certificar-se de que o diretório de origem do script seja acessível
 Options -MultiViews
 Options +FollowSymLinks
 
