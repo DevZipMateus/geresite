@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { ArrowLeft, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@/components/ui/sheet";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Cliente } from "@/types/database.types";
 import ColorPaletteSelector from "@/components/ColorPaletteSelector";
@@ -89,7 +88,6 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
             <a href="#sobre" className="hover:text-primary/80 transition-colors" onClick={e => scrollToTemplates(e, 'sobre')}>Sobre</a>
             <a href="#depoimentos" className="hover:text-primary/80 transition-colors" onClick={e => scrollToTemplates(e, 'depoimentos')}>Depoimentos</a>
             <a href="#localizacao" className="hover:text-primary/80 transition-colors" onClick={e => scrollToTemplates(e, 'localizacao')}>Localização</a>
-            <a href="#contato" className="hover:text-primary/80 transition-colors" onClick={e => scrollToTemplates(e, 'contato')}>Contato</a>
           </div>
           
           {isMobile && <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -119,9 +117,6 @@ const InstitutionalHeader: React.FC<InstitutionalHeaderProps> = ({
                       </button>
                       <button onClick={() => scrollToSection('localizacao')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
                         <span>Localização</span>
-                      </button>
-                      <button onClick={() => scrollToSection('contato')} className="flex items-center gap-2 text-left py-2 hover:text-primary transition-colors">
-                        <span>Contato</span>
                       </button>
                     </div>
                   </div>

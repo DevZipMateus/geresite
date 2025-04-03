@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Cliente } from "@/types/database.types";
@@ -11,7 +10,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import InstitutionalHeader from "@/components/institutional/InstitutionalHeader";
 import ServicesSection from "@/components/institutional/ServicesSection";
 import LocationSection from "@/components/institutional/LocationSection";
-import ContactSection from "@/components/institutional/ContactSection";
 import InstitutionalFooter from "@/components/institutional/InstitutionalFooter";
 import ExpiredNotice from "@/components/institutional/ExpiredNotice";
 import LoadingState from "@/components/institutional/LoadingState";
@@ -169,8 +167,6 @@ const SiteInstitucional = () => {
       </section>
 
       <LocationSection />
-
-      <ContactSection cliente={cliente} />
 
       <InstitutionalFooter cliente={cliente} logoUrl={logoUrl} />
     </div>

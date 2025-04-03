@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Cliente } from '@/types/database.types';
-import { Facebook, Instagram, Mail, Phone, MapPin } from 'lucide-react';
 
 interface InstitutionalFooterProps {
   cliente: Cliente;
@@ -38,7 +37,7 @@ const InstitutionalFooter: React.FC<InstitutionalFooterProps> = ({
   return (
     <footer className="bg-primary text-white py-12">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* Company Info */}
           <div className="flex flex-col items-center md:items-start">
             {renderLogo()}
@@ -58,24 +57,12 @@ const InstitutionalFooter: React.FC<InstitutionalFooterProps> = ({
                 <a href="#servicos" className="text-white/80 hover:text-white transition-colors">Serviços</a>
               </li>
               <li>
-                <a href="#contato" className="text-white/80 hover:text-white transition-colors">Contato</a>
+                <a href="#depoimentos" className="text-white/80 hover:text-white transition-colors">Depoimentos</a>
+              </li>
+              <li>
+                <a href="#localizacao" className="text-white/80 hover:text-white transition-colors">Localização</a>
               </li>
             </ul>
-          </div>
-          
-          {/* Contact Info */}
-          <div className="space-y-4 text-center md:text-left">
-            <h3 className="text-xl font-bold">Contato</h3>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3 justify-center md:justify-start">
-                <Phone size={18} className="text-white/90" />
-                <span className="text-white/80">{cliente.telefone}</span>
-              </div>
-              <div className="flex items-center space-x-3 justify-center md:justify-start">
-                <Mail size={18} className="text-white/90" />
-                <span className="text-white/80">{cliente.email}</span>
-              </div>
-            </div>
           </div>
         </div>
         

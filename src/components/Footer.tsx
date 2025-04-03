@@ -1,14 +1,13 @@
 
 import React from 'react';
-import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Facebook, Instagram, Twitter } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 const Footer = () => {
   return (
     <footer className="bg-background pt-16 pb-8">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* Company Info */}
           <div className="space-y-4">
             <h3 className="text-xl font-bold">MonteSite</h3>
@@ -38,47 +37,7 @@ const Footer = () => {
               <li>
                 <a href="#criar-site" className="text-muted-foreground hover:text-primary transition-colors">Criar Site</a>
               </li>
-              <li>
-                <a href="#contato" className="text-muted-foreground hover:text-primary transition-colors">Contato</a>
-              </li>
             </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">Contato</h3>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <Phone size={18} className="text-primary" />
-                <span className="text-muted-foreground">(99) 9999-9999</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Mail size={18} className="text-primary" />
-                <span className="text-muted-foreground">contato@montesite.com</span>
-              </div>
-              <div className="flex items-start space-x-3">
-                <MapPin size={18} className="text-primary mt-1" />
-                <span className="text-muted-foreground">Av. Principal, 1000 - Centro<br />São Paulo, SP</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Newsletter */}
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">Newsletter</h3>
-            <p className="text-muted-foreground">
-              Inscreva-se para receber atualizações e novidades.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-2">
-              <input 
-                type="email" 
-                placeholder="Seu e-mail" 
-                className="px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/30"
-              />
-              <Button type="submit" className="whitespace-nowrap">
-                Inscrever
-              </Button>
-            </div>
           </div>
         </div>
 
