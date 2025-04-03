@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -5,7 +6,7 @@ import FormularioContato from '@/components/FormularioContato';
 import BuscaSitesPorEmail from '@/components/BuscaSitesPorEmail';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
-import WhatsAppButton from '@/components/WhatsAppButton';
+
 const Index = () => {
   // Scroll to top on page load
   useEffect(() => {
@@ -55,7 +56,6 @@ const Index = () => {
       </main>
       
       <Footer />
-      <WhatsAppButton phoneNumber="5599999999999" />
     </div>;
 };
 export default Index;
