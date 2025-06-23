@@ -29,9 +29,10 @@ export const logoSchema = z
 
 interface LogoUploadProps {
   name: string;
+  disabled?: boolean;
 }
 
-const LogoUpload: React.FC<LogoUploadProps> = ({ name }) => {
+const LogoUpload: React.FC<LogoUploadProps> = ({ name, disabled = false }) => {
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const form = useFormContext();
 
@@ -54,7 +55,7 @@ const LogoUpload: React.FC<LogoUploadProps> = ({ name }) => {
           <FormLabel>Logo da Empresa (opcional)</FormLabel>
           <FormControl>
             <div className="flex flex-col space-y-2">
-              <label className="flex flex-col items-center px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm cursor-pointer hover:bg-gray-50">
+              <label className={`flex flex-col items-center px-4 py-3 bg-white border border-gray-300 rounded-md shadow-sm ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-gray-50'}`}>
                 <div className="flex items-center space-x-2">
                   <Upload className="h-5 w-5 text-gray-500" />
                   <span className="text-sm text-gray-500">
@@ -66,6 +67,7 @@ const LogoUpload: React.FC<LogoUploadProps> = ({ name }) => {
                   accept=".jpg,.jpeg,.png"
                   className="hidden"
                   onChange={handleFileChange}
+                  disabled={disabled}
                 />
               </label>
               {selectedFileName && (
