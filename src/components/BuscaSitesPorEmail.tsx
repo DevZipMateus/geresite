@@ -102,6 +102,20 @@ const BuscaSitesPorEmail = () => {
     }
   };
 
+  const checkForExpiredSites = async (email: string) => {
+    try {
+      // Verificar se existiam sites para este email que foram removidos automaticamente
+      console.log("Checking for previously expired sites for email:", email);
+      
+      // Como os sites expirados são deletados automaticamente, 
+      // não conseguimos verificar diretamente, mas podemos informar ao usuário
+      return false; // Por enquanto, assumimos que não há como verificar
+    } catch (error) {
+      console.error("Error checking for expired sites:", error);
+      return false;
+    }
+  };
+
   const performSearch = async (email: string, retryCount = 0) => {
     const maxRetries = 2;
     
@@ -138,10 +152,12 @@ const BuscaSitesPorEmail = () => {
 
       if (!clientesData || clientesData.length === 0) {
         console.log("No clients found for email:", email);
+        
+        // Verificar se pode ter havido sites expirados
         toast({
           variant: "destructive",
           title: "Nenhum site encontrado",
-          description: "Não encontramos nenhum site associado a este email. Verifique se o email está correto.",
+          description: "Não encontramos nenhum site ativo associado a este email. Lembre-se que os sites são válidos por apenas 24 horas após a criação e são removidos automaticamente após este período.",
         });
         return;
       }
@@ -166,7 +182,7 @@ const BuscaSitesPorEmail = () => {
         toast({
           variant: "destructive",
           title: "Site expirado",
-          description: `O site da empresa ${siteAtual.nome_empresa} expirou. Os sites são válidos por apenas 3 dias após a criação.`,
+          description: `O site da empresa ${siteAtual.nome_empresa} expirou. Os sites são válidos por apenas 24 horas após a criação e serão removidos automaticamente em breve.`,
         });
         return;
       }
@@ -253,6 +269,13 @@ const BuscaSitesPorEmail = () => {
   return (
     <div className="max-w-md w-full mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold text-center mb-6">Buscar Site Existente</h2>
+      
+      <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <p className="text-sm text-blue-700">
+          <strong>Importante:</strong> Os sites são válidos por apenas 24 horas após a criação. 
+          Sites expirados são removidos automaticamente do sistema.
+        </p>
+      </div>
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

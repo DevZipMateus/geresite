@@ -112,7 +112,7 @@ const FormularioContato = ({
         
         toast({
           title: "Sucesso!",
-          description: "Seus dados foram salvos com sucesso! Redirecionando...",
+          description: "Seu site foi criado! Lembre-se: ele será válido por 24 horas. Redirecionando...",
         });
 
         // Small delay to show success message
@@ -144,7 +144,14 @@ const FormularioContato = ({
 
   return (
     <div className="max-w-md w-full mx-auto p-6 bg-white rounded-lg">
-      <h2 className="text-2xl font-bold text-center mb-6">Formulário de Contato</h2>
+      <h2 className="text-2xl font-bold text-center mb-4">Formulário de Contato</h2>
+      
+      <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+        <p className="text-sm text-amber-700">
+          <strong>Atenção:</strong> Seu site será válido por 24 horas após a criação. 
+          Após este período, será removido automaticamente do sistema.
+        </p>
+      </div>
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} onChange={handleFormChange} className="space-y-4">

@@ -41,7 +41,13 @@ const SiteInstitucional = () => {
 
         if (error) {
           console.error("Error fetching cliente:", error);
-          setLoadingError(error.message || "Erro ao carregar dados da empresa");
+          
+          // Verificar se é erro de cliente não encontrado (pode ter sido removido automaticamente)
+          if (error.message.includes("não encontrado")) {
+            setLoadingError("Este site pode ter expirado e sido removido automaticamente. Os sites são válidos por apenas 24 horas.");
+          } else {
+            setLoadingError(error.message || "Erro ao carregar dados da empresa");
+          }
           
           toast({
             variant: "destructive",
@@ -55,7 +61,7 @@ const SiteInstitucional = () => {
         }
 
         if (!cliente) {
-          setLoadingError("Empresa não encontrada");
+          setLoadingError("Este site pode ter expirado e sido removido automaticamente. Os sites são válidos por apenas 24 horas.");
           setLoading(false);
           setLogoLoading(false);
           return;
@@ -64,7 +70,7 @@ const SiteInstitucional = () => {
         console.log("Cliente data loaded:", cliente);
         setCliente(cliente);
         
-        // Check expiration
+        // Check expiration (24 hours from creation)
         const dataExpiracao = new Date(cliente.expiracao);
         const now = new Date();
         
@@ -172,7 +178,7 @@ const SiteInstitucional = () => {
     return (
       <div className="flex items-center justify-center min-h-screen p-6">
         <div className="max-w-md w-full bg-red-50 border border-red-200 rounded-lg p-8 text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">Erro</h1>
+          <h1 className="text-2xl font-bold text-red-600 mb-4">Site Não Encontrado</h1>
           <p className="text-lg text-gray-700 mb-6">{loadingError}</p>
           <button 
             onClick={handleVoltar}
