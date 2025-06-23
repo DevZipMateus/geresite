@@ -13,7 +13,21 @@ export interface ClienteFormData {
 
 export const createCliente = async (data: ClienteFormData): Promise<{ cliente: Cliente | null; error: any }> => {
   try {
-    // Primeiro, inserimos os dados do cliente
+    console.log("Starting cliente creation process...");
+    
+    // Validate required fields
+    if (!data.nome_empresa || !data.nome_responsavel || !data.email || !data.telefone) {
+      return { cliente: null, error: new Error("Todos os campos obrigatórios devem ser preenchidos") };
+    }
+
+    // Test database connection first
+    const { error: connectionError } = await supabase.from("clientes").select("id").limit(1);
+    if (connectionError) {
+      console.error("Database connection failed:", connectionError);
+      return { cliente: null, error: new Error("Erro de conexão com o banco de dados. Tente novamente.") };
+    }
+
+    // Insert cliente data
     const { data: insertData, error } = await supabase
       .from("clientes")
       .insert([{
@@ -26,97 +40,112 @@ export const createCliente = async (data: ClienteFormData): Promise<{ cliente: C
 
     if (error) {
       console.error("Erro ao inserir cliente:", error);
-      return { cliente: null, error };
+      return { cliente: null, error: new Error("Erro ao salvar dados do cliente. Verifique os dados e tente novamente.") };
     }
 
-    console.log("Cliente inserted:", insertData);
+    if (!insertData || insertData.length === 0) {
+      return { cliente: null, error: new Error("Falha ao criar cliente - nenhum dado retornado") };
+    }
 
-    // Se temos um ID de cliente
-    if (insertData && insertData.length > 0) {
-      const clienteId = insertData[0].id;
+    const clienteId = insertData[0].id;
+    console.log("Cliente created with ID:", clienteId);
+    
+    // Handle logo upload with better error handling
+    let logoUrl = null;
+    const baseLogoUrl = `https://svenmlcxebqafsxlayez.supabase.co/storage/v1/object/public/logos/${clienteId}/logo`;
+    
+    if (data.logo && data.logo.length > 0) {
+      const file = data.logo[0];
       
-      // Logo handling - always create a URL whether file is uploaded or not
-      const baseLogoUrl = `https://svenmlcxebqafsxlayez.supabase.co/storage/v1/object/public/logos/${clienteId}/logo`;
-      let logoUrl = null;
-      
-      // Se há um arquivo de logo
-      if (data.logo && data.logo.length > 0) {
-        const file = data.logo[0];
-        const fileExt = file.name.split('.').pop();
-        // Definindo nome do arquivo no formato "id/logo.extensão"
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      if (!allowedTypes.includes(file.type)) {
+        console.warn("Invalid file type for logo:", file.type);
+        // Continue without logo rather than failing completely
+        logoUrl = `${baseLogoUrl}.png`;
+      } else {
+        const fileExt = file.name.split('.').pop() || 'png';
         const fileName = `${clienteId}/logo.${fileExt}`;
-        
-        // Construir a URL pública completa
         logoUrl = `${baseLogoUrl}.${fileExt}`;
         
-        console.log("Uploading logo with path:", fileName);
-        console.log("Logo URL to be saved:", logoUrl);
+        console.log("Attempting logo upload:", fileName);
         
-        // Criar o bucket logos se ele não existir
-        const { data: bucketData, error: bucketError } = await supabase
-          .storage
-          .getBucket('logos');
+        try {
+          // Ensure logos bucket exists
+          const { error: bucketError } = await supabase.storage.getBucket('logos');
           
-        if (bucketError && bucketError.message.includes('not found')) {
-          // Bucket não existe, vamos criar
-          await supabase.storage.createBucket('logos', {
-            public: true
-          });
-          console.log("Created logos bucket");
-        }
+          if (bucketError && bucketError.message.includes('not found')) {
+            console.log("Creating logos bucket...");
+            const { error: createBucketError } = await supabase.storage.createBucket('logos', {
+              public: true
+            });
+            
+            if (createBucketError) {
+              console.error("Failed to create logos bucket:", createBucketError);
+            }
+          }
 
-        // Upload do arquivo para o storage
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('logos')
-          .upload(fileName, file, {
-            cacheControl: '3600',
-            upsert: true
-          });
-        
-        if (uploadError) {
-          console.error("Erro ao fazer upload do logo:", uploadError);
-          // Continue with the process even if logo upload fails
-        } else {
-          console.log("Logo uploaded successfully:", uploadData);
-        }
-      } else {
-        // Mesmo quando não há logo, definimos uma URL padrão com .png como extensão
-        logoUrl = `${baseLogoUrl}.png`;
-        console.log("No logo provided, using default URL pattern:", logoUrl);
-      }
-      
-      // Sempre atualizar o logo_url, mesmo se não houver upload
-      const { data: updateData, error: updateError } = await supabase
-        .from("clientes")
-        .update({ logo_url: logoUrl })
-        .eq('id', clienteId)
-        .select();
-      
-      if (updateError) {
-        console.error("Erro ao atualizar caminho do logo:", updateError);
-        return { cliente: insertData[0], error: updateError };
-      } else {
-        console.log("Cliente updated with logo_url:", updateData);
-        
-        // Retornar o cliente atualizado se a atualização foi bem-sucedida
-        if (updateData && updateData.length > 0) {
-          return { cliente: updateData[0], error: null };
+          // Upload file
+          const { error: uploadError } = await supabase.storage
+            .from('logos')
+            .upload(fileName, file, {
+              cacheControl: '3600',
+              upsert: true
+            });
+          
+          if (uploadError) {
+            console.error("Logo upload failed:", uploadError);
+            // Don't fail the entire operation, just use default logo URL
+            logoUrl = `${baseLogoUrl}.png`;
+          } else {
+            console.log("Logo uploaded successfully");
+          }
+        } catch (uploadError) {
+          console.error("Logo upload exception:", uploadError);
+          logoUrl = `${baseLogoUrl}.png`;
         }
       }
-      
-      // Fallback: Se a atualização não retornar dados, retorna o cliente original
+    } else {
+      logoUrl = `${baseLogoUrl}.png`;
+    }
+    
+    // Update cliente with logo URL
+    const { data: updateData, error: updateError } = await supabase
+      .from("clientes")
+      .update({ logo_url: logoUrl })
+      .eq('id', clienteId)
+      .select();
+    
+    if (updateError) {
+      console.error("Failed to update logo URL:", updateError);
+      // Return the cliente even if logo update failed
       return { cliente: insertData[0], error: null };
     }
     
-    return { cliente: null, error: new Error("Falha ao criar cliente") };
+    const finalCliente = updateData && updateData.length > 0 ? updateData[0] : insertData[0];
+    console.log("Cliente creation completed successfully:", finalCliente.id);
+    
+    return { cliente: finalCliente, error: null };
+    
   } catch (error) {
-    console.error("Erro ao processar cliente:", error);
-    return { cliente: null, error };
+    console.error("Unexpected error in createCliente:", error);
+    return { 
+      cliente: null, 
+      error: new Error("Erro inesperado. Verifique sua conexão e tente novamente.") 
+    };
   }
 };
 
 export const getClienteById = async (id: string): Promise<{ cliente: Cliente | null; error: any; logoUrl: string | null }> => {
   try {
+    // Validate ID format
+    const numericId = parseInt(id);
+    if (isNaN(numericId) || numericId <= 0) {
+      return { cliente: null, error: new Error("ID de cliente inválido"), logoUrl: null };
+    }
+
+    console.log("Fetching cliente with ID:", id);
+    
     const { data, error } = await supabase
       .from("clientes")
       .select("*")
@@ -124,17 +153,34 @@ export const getClienteById = async (id: string): Promise<{ cliente: Cliente | n
       .single();
     
     if (error) {
-      return { cliente: null, error, logoUrl: null };
+      console.error("Error fetching cliente:", error);
+      
+      if (error.code === 'PGRST116') {
+        return { cliente: null, error: new Error("Cliente não encontrado"), logoUrl: null };
+      }
+      
+      return { cliente: null, error: new Error("Erro ao buscar dados do cliente"), logoUrl: null };
     }
     
-    // Se o logo_url não estiver definido, construímos uma URL com base no ID
+    if (!data) {
+      return { cliente: null, error: new Error("Cliente não encontrado"), logoUrl: null };
+    }
+    
+    // Handle logo URL
     let logoUrl = data.logo_url;
     if (!logoUrl) {
       logoUrl = `https://svenmlcxebqafsxlayez.supabase.co/storage/v1/object/public/logos/${data.id}/logo.png`;
     }
     
+    console.log("Cliente fetched successfully:", data.id);
     return { cliente: data, error: null, logoUrl };
+    
   } catch (error) {
-    return { cliente: null, error, logoUrl: null };
+    console.error("Unexpected error in getClienteById:", error);
+    return { 
+      cliente: null, 
+      error: new Error("Erro inesperado ao buscar cliente"), 
+      logoUrl: null 
+    };
   }
 };
