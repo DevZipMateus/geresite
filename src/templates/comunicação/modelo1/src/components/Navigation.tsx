@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
-import { openWhatsApp } from "@/utils/whatsapp";
+import { openWhatsApp } from "../utils/whatsapp";
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

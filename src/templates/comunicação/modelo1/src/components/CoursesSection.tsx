@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, Calendar, Clock, Users, BookOpen } from "lucide-react";
-import { openWhatsApp } from "@/utils/whatsapp";
+import { openWhatsApp } from "../utils/whatsapp";
 
 export default function CoursesSection() {
   const courses = [

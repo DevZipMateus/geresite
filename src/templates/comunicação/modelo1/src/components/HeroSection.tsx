@@ -1,8 +1,7 @@
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, TrendingUp, Target, Users } from "lucide-react";
-import { openWhatsApp } from "@/utils/whatsapp";
+import { openWhatsApp } from "../utils/whatsapp";
 
 export default function HeroSection() {
   const scrollToSection = (sectionId: string) => {

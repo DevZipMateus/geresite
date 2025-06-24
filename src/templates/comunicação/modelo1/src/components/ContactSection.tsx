@@ -1,8 +1,7 @@
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { MapPin, Phone, Mail, Instagram, Facebook, MessageCircle } from "lucide-react";
-import { openWhatsApp } from "@/utils/whatsapp";
+import { openWhatsApp } from "../utils/whatsapp";
 
 export default function ContactSection() {
   const handleContactClick = () => {

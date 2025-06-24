@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { openWhatsApp } from "@/utils/whatsapp";
+import { openWhatsApp } from "../utils/whatsapp";
 
 export default function WhatsAppButton() {
   const handleWhatsAppClick = () => {

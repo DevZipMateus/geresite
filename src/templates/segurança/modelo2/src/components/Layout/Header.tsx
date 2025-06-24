@@ -1,173 +1,91 @@
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Mail, Phone, Menu, X } from 'lucide-react';
-import { useIsMobile } from '../../hooks/use-mobile';
+import { useState, useEffect } from 'react';
+import { Menu, X } from 'lucide-react';
 
 const Header = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const isMobile = useIsMobile();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
 
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth'
-      });
-    }
-    if (isMobileMenuOpen) {
-      setIsMobileMenuOpen(false);
-    }
-  };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <>
-      {/* Top Bar - Now scrolls with the page */}
-      <div className="bg-ds3-dark text-white py-1 sm:py-2">
-        <div className="container-custom flex justify-end items-center gap-2 sm:gap-6">
-          <a href="mailto:vendas@safeguardepis.com.br" className="flex items-center text-xs sm:text-sm hover:text-ds3-gold transition-colors">
-            <Mail size={14} className="mr-1 sm:mr-2" />
-            <span className="hidden sm:inline">vendas@safeguardepis.com.br</span>
-            <span className="sm:hidden">Email</span>
-          </a>
-        </div>
-      </div>
-      
-      {/* Main Header - Making it fully transparent and positioned lower */}
-      <header className="absolute w-full bg-transparent z-10 top-6 sm:top-10">
-        <div className="container-custom py-2 sm:py-4">
-          <div className="flex justify-between items-center">
-            {/* Logo */}
-            <Link to="/" className="text-xl sm:text-2xl font-semibold transition-all duration-300 transform hover:scale-[1.02]">
-              <div className="flex items-center">
-                <div className="bg-ds3-gold text-ds3-dark px-3 py-2 rounded-lg font-bold text-lg sm:text-xl">
-                  SAFEGUARD EPIs
-                </div>
-              </div>
-            </Link>
-            
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-4 xl:space-x-6">
-              <a href="#about" onClick={e => {
-                e.preventDefault();
-                scrollToSection('about');
-              }} className="nav-link text-white hover:text-ds3-gold cursor-pointer text-sm xl:text-base">
-                Sobre Nós
-              </a>
-              <a href="#services" onClick={e => {
-                e.preventDefault();
-                scrollToSection('services');
-              }} className="nav-link text-white hover:text-ds3-gold cursor-pointer text-sm xl:text-base">
-                Produtos
-              </a>
-              <a href="#technology" onClick={e => {
-                e.preventDefault();
-                scrollToSection('technology');
-              }} className="nav-link text-white hover:text-ds3-gold cursor-pointer text-sm xl:text-base">
-                Qualidade
-              </a>
-              <a href="#clients" onClick={e => {
-                e.preventDefault();
-                scrollToSection('clients');
-              }} className="nav-link text-white hover:text-ds3-gold cursor-pointer text-sm xl:text-base">
-                Clientes
-              </a>
-              <a href="#contact" onClick={e => {
-                e.preventDefault();
-                scrollToSection('contact');
-              }} className="nav-link text-white hover:text-ds3-gold cursor-pointer text-sm xl:text-base">
-                Contato
-              </a>
-              
-              <a href="#contact" onClick={e => {
-                e.preventDefault();
-                scrollToSection('contact');
-              }} className="ml-2 xl:ml-4 bg-ds3-gold hover:bg-ds3-gold/90 text-ds3-dark px-4 xl:px-6 py-2 rounded font-medium transition-all text-sm xl:text-base">
-                SOLICITAR ORÇAMENTO
-              </a>
-            </nav>
-            
-            {/* Mobile Menu Button */}
-            <button className="lg:hidden text-white hover:text-ds3-gold focus:outline-none p-2" onClick={toggleMobileMenu}>
-              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      isScrolled ? 'bg-white shadow-lg' : 'bg-transparent'
+    }`}>
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <div className="flex items-center">
+            <div className={`text-xl font-bold ${
+              isScrolled ? 'text-gray-900' : 'text-white'
+            }`}>
+              Segurança Pro
+            </div>
           </div>
-        </div>
-      </header>
-      
-      {/* Mobile Navigation Menu */}
-      <div className={`fixed top-0 left-0 w-full h-full bg-ds3-dark z-50 transform transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-        <div className="container-custom py-4 h-full flex flex-col">
-          <div className="flex justify-between items-center mb-8 pt-4">
-            <Link to="/" className="text-xl font-semibold" onClick={() => setIsMobileMenuOpen(false)}>
-              <div className="bg-ds3-gold text-ds3-dark px-3 py-2 rounded-lg font-bold">
-                SAFEGUARD EPIs
-              </div>
-            </Link>
-            <button className="text-white hover:text-ds3-gold focus:outline-none p-2" onClick={toggleMobileMenu}>
-              <X size={20} />
-            </button>
-          </div>
-          
-          <div className="flex flex-col space-y-6 text-base sm:text-lg">
-            <a href="#about" onClick={e => {
-              e.preventDefault();
-              scrollToSection('about');
-            }} className="text-white hover:text-ds3-gold cursor-pointer py-2">
-              Sobre Nós
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-8">
+            <a href="#home" className={`transition-colors ${
+              isScrolled ? 'text-gray-700 hover:text-blue-600' : 'text-white hover:text-blue-300'
+            }`}>
+              Início
             </a>
-            <a href="#services" onClick={e => {
-              e.preventDefault();
-              scrollToSection('services');
-            }} className="text-white hover:text-ds3-gold cursor-pointer py-2">
-              Produtos
+            <a href="#services" className={`transition-colors ${
+              isScrolled ? 'text-gray-700 hover:text-blue-600' : 'text-white hover:text-blue-300'
+            }`}>
+              Serviços
             </a>
-            <a href="#technology" onClick={e => {
-              e.preventDefault();
-              scrollToSection('technology');
-            }} className="text-white hover:text-ds3-gold cursor-pointer py-2">
-              Qualidade
+            <a href="#about" className={`transition-colors ${
+              isScrolled ? 'text-gray-700 hover:text-blue-600' : 'text-white hover:text-blue-300'
+            }`}>
+              Sobre
             </a>
-            <a href="#clients" onClick={e => {
-              e.preventDefault();
-              scrollToSection('clients');
-            }} className="text-white hover:text-ds3-gold cursor-pointer py-2">
-              Clientes
-            </a>
-            <a href="#contact" onClick={e => {
-              e.preventDefault();
-              scrollToSection('contact');
-            }} className="text-white hover:text-ds3-gold cursor-pointer py-2">
+            <a href="#contact" className={`transition-colors ${
+              isScrolled ? 'text-gray-700 hover:text-blue-600' : 'text-white hover:text-blue-300'
+            }`}>
               Contato
             </a>
-            
-            <a href="#contact" onClick={e => {
-              e.preventDefault();
-              scrollToSection('contact');
-            }} className="bg-ds3-gold hover:bg-ds3-gold/90 text-ds3-dark px-6 py-3 rounded font-medium transition-all text-center mt-4" onClick={() => setIsMobileMenuOpen(false)}>
-              SOLICITAR ORÇAMENTO
-            </a>
-          </div>
-          
-          <div className="mt-auto pb-8">
-            <div className="text-white/70 space-y-4">
-              <a href="tel:+5511987654321" className="flex items-center text-sm hover:text-ds3-gold transition-colors py-2">
-                <Phone size={16} className="mr-2" />
-                (11) 98765-4321
+          </nav>
+
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className={`md:hidden p-2 ${
+              isScrolled ? 'text-gray-900' : 'text-white'
+            }`}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-white border-t shadow-lg">
+            <div className="px-4 py-2 space-y-2">
+              <a href="#home" className="block py-2 text-gray-700 hover:text-blue-600">
+                Início
               </a>
-              <a href="mailto:vendas@safeguardepis.com.br" className="flex items-center text-sm hover:text-ds3-gold transition-colors py-2">
-                <Mail size={16} className="mr-2" />
-                vendas@safeguardepis.com.br
+              <a href="#services" className="block py-2 text-gray-700 hover:text-blue-600">
+                Serviços
+              </a>
+              <a href="#about" className="block py-2 text-gray-700 hover:text-blue-600">
+                Sobre
+              </a>
+              <a href="#contact" className="block py-2 text-gray-700 hover:text-blue-600">
+                Contato
               </a>
             </div>
           </div>
-        </div>
+        )}
       </div>
-    </>
+    </header>
   );
 };
 
