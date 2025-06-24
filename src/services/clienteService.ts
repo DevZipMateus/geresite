@@ -8,6 +8,8 @@ export interface ClienteFormData {
   nome_responsavel: string;
   email: string;
   telefone: string;
+  categoria: string;
+  template_id: string;
   logo?: FileList;
 }
 
@@ -16,7 +18,7 @@ export const createCliente = async (data: ClienteFormData): Promise<{ cliente: C
     console.log("Starting cliente creation process...");
     
     // Validate required fields
-    if (!data.nome_empresa || !data.nome_responsavel || !data.email || !data.telefone) {
+    if (!data.nome_empresa || !data.nome_responsavel || !data.email || !data.telefone || !data.categoria || !data.template_id) {
       return { cliente: null, error: new Error("Todos os campos obrigatórios devem ser preenchidos") };
     }
 
@@ -35,6 +37,8 @@ export const createCliente = async (data: ClienteFormData): Promise<{ cliente: C
         nome_responsavel: data.nome_responsavel,
         email: data.email,
         telefone: data.telefone,
+        categoria: data.categoria,
+        template_id: data.template_id,
       }])
       .select();
 

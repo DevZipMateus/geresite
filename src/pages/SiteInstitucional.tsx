@@ -10,6 +10,7 @@ import MainContent from "@/components/institutional/MainContent";
 import { useScrollToSection } from "@/hooks/use-scroll-to-section";
 import { getClienteById } from "@/services/clienteService";
 import ContactSection from "@/components/institutional/ContactSection";
+import { renderTemplate } from "@/utils/templateMapper";
 
 const SiteInstitucional = () => {
   const { id } = useParams<{ id: string }>();
@@ -205,6 +206,14 @@ const SiteInstitucional = () => {
     );
   }
 
+  // Renderizar template específico baseado na categoria
+  const customTemplate = renderTemplate(cliente, logoUrl, handleSectionClick);
+  
+  if (customTemplate) {
+    return customTemplate;
+  }
+
+  // Template padrão (contabilidade)
   return (
     <div className={`min-h-screen flex flex-col theme-${activeColorPalette} overflow-x-hidden`}>
       <InstitutionalHeader 

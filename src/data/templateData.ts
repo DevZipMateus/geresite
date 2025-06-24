@@ -1,5 +1,5 @@
 
-import { LayoutTemplate, Tag } from 'lucide-react';
+import { LayoutTemplate, Tag, Wheat, Calculator } from 'lucide-react';
 import React from 'react';
 import { TemplateCategory } from '@/components/TemplateCategories';
 
@@ -9,7 +9,7 @@ export interface Template {
   description: string;
   imageUrl: string;
   formUrl: string;
-  previewUrl: string; // Added this new field
+  previewUrl: string;
   category: string;
 }
 
@@ -23,7 +23,12 @@ export const categories: TemplateCategory[] = [
   {
     id: 'contabilidade',
     name: 'Contabilidade',
-    icon: React.createElement(Tag, { className: "h-4 w-4" })
+    icon: React.createElement(Calculator, { className: "h-4 w-4" })
+  },
+  {
+    id: 'agronegocio',
+    name: 'Agronegócio',
+    icon: React.createElement(Wheat, { className: "h-4 w-4" })
   }
 ];
 
@@ -82,5 +87,14 @@ export const allTemplates: Template[] = [
     formUrl: 'https://forms.gle/kx8rWGWVXR4ZGCxY8',
     previewUrl: 'https://contabilidade6.montesite.com.br',
     category: 'contabilidade'
+  },
+  {
+    id: 'agro-1',
+    title: 'AgroTech',
+    description: 'Template moderno para empresas do agronegócio com foco em tecnologia e inovação.',
+    imageUrl: '/placeholder.svg',
+    formUrl: '#',
+    previewUrl: '#',
+    category: 'agronegocio'
   }
 ];

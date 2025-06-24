@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import LogoUpload, { logoSchema } from "./LogoUpload";
+import CategorySelector from "./CategorySelector";
+import TemplateSelector from "./TemplateSelector";
 import { createCliente } from "@/services/clienteService";
 import { ArrowUpRight, Loader2 } from "lucide-react";
 
@@ -17,6 +19,8 @@ const formSchema = z.object({
   nome_responsavel: z.string().min(2, "Nome do responsável deve ter pelo menos 2 caracteres").max(100, "Nome muito longo"),
   email: z.string().email("Email inválido").max(100, "Email muito longo"),
   telefone: z.string().min(8, "Telefone deve ter pelo menos 8 caracteres").max(20, "Telefone muito longo"),
+  categoria: z.string().min(1, "Selecione uma categoria"),
+  template_id: z.string().min(1, "Selecione um template"),
   logo: logoSchema,
 });
 
@@ -35,6 +39,7 @@ const FormularioContato = ({
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitAttempts, setSubmitAttempts] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -43,6 +48,8 @@ const FormularioContato = ({
       nome_responsavel: "",
       email: "",
       telefone: "",
+      categoria: "",
+      template_id: "",
     },
   });
 
@@ -57,6 +64,8 @@ const FormularioContato = ({
         nome_responsavel: data.nome_responsavel,
         email: data.email,
         telefone: data.telefone,
+        categoria: data.categoria,
+        template_id: data.template_id,
         hasLogo: data.logo && data.logo.length > 0
       });
       
@@ -71,6 +80,8 @@ const FormularioContato = ({
         nome_responsavel: data.nome_responsavel.trim(),
         email: data.email.trim().toLowerCase(),
         telefone: data.telefone.trim(),
+        categoria: data.categoria,
+        template_id: data.template_id,
         logo: data.logo
       };
       
@@ -140,6 +151,12 @@ const FormularioContato = ({
     if (submitAttempts > 0 && !isSubmitting) {
       setSubmitAttempts(0);
     }
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    // Reset template selection when category changes
+    form.setValue("template_id", "");
   };
 
   return (
@@ -226,6 +243,19 @@ const FormularioContato = ({
                 <FormMessage />
               </FormItem>
             )}
+          />
+
+          <CategorySelector 
+            control={form.control}
+            name="categoria"
+            selectedCategory={selectedCategory}
+            onCategoryChange={handleCategoryChange}
+          />
+
+          <TemplateSelector 
+            control={form.control}
+            name="template_id"
+            selectedCategory={selectedCategory}
           />
 
           <LogoUpload name="logo" disabled={isSubmitting} />

@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       clientes: {
         Row: {
+          categoria: string
           data_criacao: string
           email: string
           expiracao: string
@@ -19,8 +20,10 @@ export type Database = {
           nome_empresa: string
           nome_responsavel: string
           telefone: string
+          template_id: string
         }
         Insert: {
+          categoria: string
           data_criacao?: string
           email: string
           expiracao?: string
@@ -29,8 +32,10 @@ export type Database = {
           nome_empresa: string
           nome_responsavel: string
           telefone: string
+          template_id: string
         }
         Update: {
+          categoria?: string
           data_criacao?: string
           email?: string
           expiracao?: string
@@ -39,6 +44,7 @@ export type Database = {
           nome_empresa?: string
           nome_responsavel?: string
           telefone?: string
+          template_id?: string
         }
         Relationships: []
       }

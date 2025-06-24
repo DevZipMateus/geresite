@@ -8,6 +8,8 @@ export interface Cliente {
   data_criacao: string;
   expiracao: string;
   logo_url?: string;
+  categoria: string;
+  template_id: string;
 }
 
 export interface Database {
