@@ -11,7 +11,7 @@ interface GenericoTemplate1Props {
 const GenericoTemplate1: React.FC<GenericoTemplate1Props> = ({ cliente, logoUrl }) => {
   return (
     <div className="generico-template-1">
-      <GenericoIndex />
+      <GenericoIndex cliente={cliente} logoUrl={logoUrl} />
     </div>
   );
 };

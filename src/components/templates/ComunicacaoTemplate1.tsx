@@ -11,7 +11,7 @@ interface ComunicacaoTemplate1Props {
 const ComunicacaoTemplate1: React.FC<ComunicacaoTemplate1Props> = ({ cliente, logoUrl }) => {
   return (
     <div className="comunicacao-template-1">
-      <ComunicacaoIndex />
+      <ComunicacaoIndex cliente={cliente} logoUrl={logoUrl} />
     </div>
   );
 };

@@ -2,15 +2,34 @@
 import React from 'react';
 import { Globe, Users, Target, Award, ArrowRight, Mail, Phone } from 'lucide-react';
 
-const Index = () => {
+interface IndexProps {
+  cliente?: {
+    nome_empresa: string;
+    nome_responsavel: string;
+    email: string;
+    telefone: string;
+    categoria: string;
+  };
+  logoUrl?: string | null;
+}
+
+const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
+  const nomeEmpresa = cliente?.nome_empresa || 'EmpresaPro';
+  const telefone = cliente?.telefone || '(11) 9999-8888';
+  const email = cliente?.email || 'contato@empresapro.com';
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <Globe className="h-8 w-8 text-blue-600" />
-            <span className="text-2xl font-bold text-slate-900">EmpresaPro</span>
+            {logoUrl ? (
+              <img src={logoUrl} alt={nomeEmpresa} className="h-8 w-8 object-contain" />
+            ) : (
+              <Globe className="h-8 w-8 text-blue-600" />
+            )}
+            <span className="text-2xl font-bold text-slate-900">{nomeEmpresa}</span>
           </div>
           <nav className="hidden md:flex space-x-6">
             <a href="#" className="text-slate-700 hover:text-blue-600">Início</a>
@@ -28,7 +47,7 @@ const Index = () => {
       <section className="bg-gradient-to-br from-blue-600 to-purple-700 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-5xl font-bold mb-6">
-            Soluções <span className="text-yellow-300">Profissionais</span> para Seu Negócio
+            {nomeEmpresa} - Soluções <span className="text-yellow-300">Profissionais</span> para Seu Negócio
           </h1>
           <p className="text-xl mb-8 max-w-3xl mx-auto">
             Template versátil e adaptável para qualquer segmento de mercado com design moderno e funcionalidades completas
@@ -72,11 +91,11 @@ const Index = () => {
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               <div className="flex items-center justify-center space-x-2 p-4 bg-white rounded-lg">
                 <Phone className="h-5 w-5 text-blue-600" />
-                <span>(11) 9999-8888</span>
+                <span>{telefone}</span>
               </div>
               <div className="flex items-center justify-center space-x-2 p-4 bg-white rounded-lg">
                 <Mail className="h-5 w-5 text-blue-600" />
-                <span>contato@empresapro.com</span>
+                <span>{email}</span>
               </div>
             </div>
             <button className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700">
@@ -90,10 +109,14 @@ const Index = () => {
       <footer className="bg-slate-900 text-white py-12">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <Globe className="h-8 w-8 text-blue-400" />
-            <span className="text-2xl font-bold">EmpresaPro</span>
+            {logoUrl ? (
+              <img src={logoUrl} alt={nomeEmpresa} className="h-8 w-8 object-contain" />
+            ) : (
+              <Globe className="h-8 w-8 text-blue-400" />
+            )}
+            <span className="text-2xl font-bold">{nomeEmpresa}</span>
           </div>
-          <p className="text-slate-400">&copy; 2024 EmpresaPro. Todos os direitos reservados.</p>
+          <p className="text-slate-400">&copy; 2024 {nomeEmpresa}. Todos os direitos reservados.</p>
         </div>
       </footer>
     </div>

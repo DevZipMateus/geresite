@@ -1,123 +1,149 @@
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { MapPin, Phone, Mail, Instagram, Facebook, MessageCircle } from "lucide-react";
-import { openWhatsApp } from "../utils/whatsapp";
 
-export default function ContactSection() {
-  const handleContactClick = () => {
-    openWhatsApp("Olá! Gostaria de entrar em contato com a Impulso Empreendedor para tirar algumas dúvidas.");
+import { useState } from "react";
+import { Mail, Phone, MapPin, Send } from "lucide-react";
+
+interface ContactSectionProps {
+  cliente?: {
+    nome_empresa: string;
+    nome_responsavel: string;
+    email: string;
+    telefone: string;
+    categoria: string;
+  };
+}
+
+const ContactSection: React.FC<ContactSectionProps> = ({ cliente }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+
+  const telefone = cliente?.telefone || '(11) 99999-9999';
+  const email = cliente?.email || 'contato@comunicacao.com';
+  const nomeEmpresa = cliente?.nome_empresa || 'Escola de Comunicação';
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Form submitted:', formData);
   };
 
-  const handleQuestionClick = () => {
-    openWhatsApp("Olá! Tenho algumas dúvidas sobre os workshops da Impulso Empreendedor. Podem me ajudar?");
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
   return (
-    <section id="contact" className="relative z-10 py-20 px-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
+    <section id="contact" className="py-20 px-6">
+      <div className="container mx-auto">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-cyan-300/30 mb-6">
-            <Mail className="w-4 h-4 mr-2 text-cyan-300" />
-            <span className="text-sm font-medium text-white/90">Fale Conosco</span>
-          </div>
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Vamos
-            <span className="block bg-gradient-to-r from-cyan-300 to-green-300 bg-clip-text text-transparent">
-              Conversar?
-            </span>
+            Entre em <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Contato</span>
           </h2>
-          <p className="text-xl text-white/80 max-w-3xl mx-auto">
-            Tire suas dúvidas, conheça nossos cursos ou agende uma visita. Estamos aqui para impulsionar seu negócio!
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            Pronto para começar sua jornada na {nomeEmpresa}? Entre em contato conosco!
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* WhatsApp Contact Card */}
-          <Card className="bg-white/10 backdrop-blur-sm border-cyan-300/20 p-8">
-            <h3 className="text-2xl font-bold text-white mb-6">Fale Conosco no WhatsApp</h3>
-            <div className="space-y-6">
-              <div className="text-center">
-                <MessageCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
-                <p className="text-white/80 mb-6">
-                  A forma mais rápida de tirar suas dúvidas e se inscrever nos nossos workshops!
-                </p>
+        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+          {/* Contact Form */}
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-700">
+            <h3 className="text-2xl font-bold text-white mb-6">Envie sua mensagem</h3>
+            
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label className="block text-gray-300 mb-2">Nome</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-400"
+                  placeholder="Seu nome completo"
+                  required
+                />
               </div>
               
-              <div className="space-y-4">
-                <Button onClick={handleContactClick} className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold">
-                  <MessageCircle className="mr-2 w-4 h-4" />
-                  Entrar em Contato
-                </Button>
-                
-                <Button onClick={handleQuestionClick} className="w-full bg-gradient-to-r from-cyan-500 to-green-500 hover:from-cyan-600 hover:to-green-600 text-black font-semibold">
-                  <MessageCircle className="mr-2 w-4 h-4" />
-                  Tirar Dúvidas
-                </Button>
+              <div>
+                <label className="block text-gray-300 mb-2">E-mail</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-400"
+                  placeholder="seu@email.com"
+                  required
+                />
               </div>
+              
+              <div>
+                <label className="block text-gray-300 mb-2">Mensagem</label>
+                <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  rows={4}
+                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-400"
+                  placeholder="Conte-nos sobre seus objetivos..."
+                  required
+                ></textarea>
+              </div>
+              
+              <button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold transition-colors flex items-center justify-center space-x-2"
+              >
+                <Send className="h-5 w-5" />
+                <span>Enviar Mensagem</span>
+              </button>
+            </form>
+          </div>
 
-              <div className="text-center text-white/70 text-sm">
-                <p>📱 Disponível de segunda a sábado</p>
-                <p>⚡ Resposta rápida garantida</p>
+          {/* Contact Information */}
+          <div className="space-y-8">
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-700">
+              <h3 className="text-2xl font-bold text-white mb-6">Informações de Contato</h3>
+              
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <Phone className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-semibold mb-1">Telefone</h4>
+                    <p className="text-gray-300">{telefone}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
+                    <Mail className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-semibold mb-1">E-mail</h4>
+                    <p className="text-gray-300">{email}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
+                    <MapPin className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-semibold mb-1">Endereço</h4>
+                    <p className="text-gray-300">Rua da Comunicação, 123<br />Centro - São Paulo/SP</p>
+                  </div>
+                </div>
               </div>
             </div>
-          </Card>
-
-          {/* Contact Info */}
-          <div className="space-y-8">
-            <Card className="bg-white/10 backdrop-blur-sm border-cyan-300/20 p-6">
-              <h3 className="text-xl font-bold text-white mb-4">Informações de Contato</h3>
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <MapPin className="w-5 h-5 text-cyan-300" />
-                  <div>
-                    <div className="text-white font-medium">Endereço</div>
-                    <div className="text-white/70">Centro de Santa Maria, RS</div>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Phone className="w-5 h-5 text-cyan-300" />
-                  <div>
-                    <div className="text-white font-medium">Telefone</div>
-                    <div className="text-white/70">(55) 9999-9999</div>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Mail className="w-5 h-5 text-cyan-300" />
-                  <div>
-                    <div className="text-white font-medium">E-mail</div>
-                    <div className="text-white/70">contato@impulsoempreendedor.com.br</div>
-                  </div>
-                </div>
-              </div>
-            </Card>
-
-            <Card className="bg-white/10 backdrop-blur-sm border-cyan-300/20 p-6">
-              <h3 className="text-xl font-bold text-white mb-4">Redes Sociais</h3>
-              <div className="flex space-x-4">
-                <Button variant="outline" size="icon" className="border-cyan-300/30 text-cyan-300 hover:bg-cyan-300/10">
-                  <Instagram className="w-5 h-5" />
-                </Button>
-                <Button variant="outline" size="icon" className="border-cyan-300/30 text-cyan-300 hover:bg-cyan-300/10">
-                  <Facebook className="w-5 h-5" />
-                </Button>
-              </div>
-              <p className="text-white/70 mt-4">
-                Siga-nos nas redes sociais para dicas diárias de empreendedorismo e novidades sobre nossos workshops!
-              </p>
-            </Card>
-
-            <Card className="bg-white/10 backdrop-blur-sm border-cyan-300/20 p-6">
-              <h3 className="text-xl font-bold text-white mb-4">Horário de Atendimento</h3>
-              <div className="space-y-2 text-white/70">
-                <div>Segunda a Sexta: 8h às 18h</div>
-                <div>Sábado: 8h às 12h</div>
-                <div>Domingo: Fechado</div>
-              </div>
-            </Card>
           </div>
         </div>
       </div>
     </section>
   );
-}
+};
+
+export default ContactSection;

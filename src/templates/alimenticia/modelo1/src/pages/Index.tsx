@@ -2,15 +2,34 @@
 import React from 'react';
 import { UtensilsCrossed, Clock, Star, MapPin, Phone, ChefHat } from 'lucide-react';
 
-const Index = () => {
+interface IndexProps {
+  cliente?: {
+    nome_empresa: string;
+    nome_responsavel: string;
+    email: string;
+    telefone: string;
+    categoria: string;
+  };
+  logoUrl?: string | null;
+}
+
+const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
+  const nomeEmpresa = cliente?.nome_empresa || 'SaborTotal';
+  const telefone = cliente?.telefone || '(11) 3333-4444';
+  const email = cliente?.email || 'contato@sabortotal.com';
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-orange-600 text-white">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <ChefHat className="h-8 w-8" />
-            <span className="text-2xl font-bold">SaborTotal</span>
+            {logoUrl ? (
+              <img src={logoUrl} alt={nomeEmpresa} className="h-8 w-8 object-contain" />
+            ) : (
+              <ChefHat className="h-8 w-8" />
+            )}
+            <span className="text-2xl font-bold">{nomeEmpresa}</span>
           </div>
           <nav className="hidden md:flex space-x-6">
             <a href="#" className="hover:text-orange-200">Cardápio</a>
@@ -28,7 +47,7 @@ const Index = () => {
       <section className="bg-gradient-to-r from-orange-500 to-red-600 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-5xl font-bold mb-6">
-            Sabores que <span className="text-yellow-300">Conquistam</span>
+            {nomeEmpresa} - Sabores que <span className="text-yellow-300">Conquistam</span>
           </h1>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
             Pratos preparados com amor, ingredientes frescos e receitas tradicionais que despertam seus sentidos
@@ -102,8 +121,12 @@ const Index = () => {
           <div className="grid md:grid-cols-3 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <ChefHat className="h-8 w-8 text-orange-400" />
-                <span className="text-2xl font-bold">SaborTotal</span>
+                {logoUrl ? (
+                  <img src={logoUrl} alt={nomeEmpresa} className="h-8 w-8 object-contain" />
+                ) : (
+                  <ChefHat className="h-8 w-8 text-orange-400" />
+                )}
+                <span className="text-2xl font-bold">{nomeEmpresa}</span>
               </div>
               <p className="text-slate-400">Restaurante tradicional com sabores únicos</p>
             </div>
@@ -112,11 +135,11 @@ const Index = () => {
               <div className="space-y-2 text-slate-400">
                 <div className="flex items-center">
                   <Phone className="h-4 w-4 mr-2" />
-                  <span>(11) 3333-4444</span>
+                  <span>{telefone}</span>
                 </div>
                 <div className="flex items-center">
-                  <MapPin className="h-4 w-4 mr-2" />
-                  <span>Rua dos Sabores, 123</span>
+                  <span>✉️</span>
+                  <span className="ml-2">{email}</span>
                 </div>
               </div>
             </div>

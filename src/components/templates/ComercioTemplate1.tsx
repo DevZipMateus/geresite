@@ -11,7 +11,7 @@ interface ComercioTemplate1Props {
 const ComercioTemplate1: React.FC<ComercioTemplate1Props> = ({ cliente, logoUrl }) => {
   return (
     <div className="comercio-template-1">
-      <ComercioIndex />
+      <ComercioIndex cliente={cliente} logoUrl={logoUrl} />
     </div>
   );
 };

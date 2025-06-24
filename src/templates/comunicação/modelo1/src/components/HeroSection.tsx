@@ -1,62 +1,67 @@
 
-import React from 'react';
-import { Mic, Video, Users, Zap } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { ChevronRight, MessageCircle, Users, Award } from "lucide-react";
 
-const HeroSection = () => {
+interface HeroSectionProps {
+  cliente?: {
+    nome_empresa: string;
+    nome_responsavel: string;
+    email: string;
+    telefone: string;
+    categoria: string;
+  };
+}
+
+const HeroSection: React.FC<HeroSectionProps> = ({ cliente }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const nomeEmpresa = cliente?.nome_empresa || 'Escola de Comunicação';
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(120,119,198,0.3),transparent_50%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.1),transparent_50%)]"></div>
-      </div>
-
-      <div className="container mx-auto px-4 text-center relative z-10">
-        <div className="max-w-4xl mx-auto">
-          {/* Badge */}
-          <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full border border-purple-400/30 bg-purple-400/10 mb-8">
-            <Mic className="h-4 w-4 text-purple-400" />
-            <span className="text-purple-400 text-sm font-medium">Comunicação & Mídia Digital</span>
-          </div>
-
-          {/* Main Heading */}
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-            Amplifique Sua <span className="text-purple-400">Voz</span>
-            <br />
-            Digital
+    <section id="home" className="relative min-h-screen flex items-center justify-center px-6 py-20">
+      <div className="container mx-auto text-center">
+        <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+            Transforme sua
+            <span className="block bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              Comunicação
+            </span>
           </h1>
-
-          {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Estratégias de comunicação que conectam, engajam e transformam sua presença digital em resultados reais
+          
+          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+            Na <strong>{nomeEmpresa}</strong>, oferecemos cursos práticos e modernos para você dominar a arte da comunicação eficaz
           </p>
 
-          {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <button className="bg-purple-500 hover:bg-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl">
-              <Video className="h-5 w-5" />
-              <span>Iniciar Projeto</span>
+            <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2">
+              <span>Começar Agora</span>
+              <ChevronRight className="h-5 w-5" />
             </button>
-            
-            <button className="border border-white text-white hover:bg-white hover:text-purple-900 px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300">
-              Ver Portfolio
+            <button className="border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300">
+              Saiba Mais
             </button>
           </div>
 
-          {/* Features Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            {[
-              { icon: Mic, title: 'Podcast', desc: 'Produção completa' },
-              { icon: Video, title: 'Vídeo', desc: 'Conteúdo visual' },
-              { icon: Users, title: 'Social', desc: 'Gestão de redes' },
-              { icon: Zap, title: 'Digital', desc: 'Marketing online' }
-            ].map((item, index) => (
-              <div key={index} className="text-center p-4 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10">
-                <item.icon className="h-8 w-8 text-purple-400 mx-auto mb-2" />
-                <h3 className="text-white font-semibold">{item.title}</h3>
-                <p className="text-slate-400 text-sm">{item.desc}</p>
-              </div>
-            ))}
+          {/* Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 border border-slate-700">
+              <MessageCircle className="h-8 w-8 text-blue-400 mx-auto mb-3" />
+              <div className="text-3xl font-bold text-white mb-2">500+</div>
+              <div className="text-gray-300">Alunos Formados</div>
+            </div>
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 border border-slate-700">
+              <Users className="h-8 w-8 text-purple-400 mx-auto mb-3" />
+              <div className="text-3xl font-bold text-white mb-2">15+</div>
+              <div className="text-gray-300">Cursos Disponíveis</div>
+            </div>
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 border border-slate-700">
+              <Award className="h-8 w-8 text-green-400 mx-auto mb-3" />
+              <div className="text-3xl font-bold text-white mb-2">98%</div>
+              <div className="text-gray-300">Satisfação</div>
+            </div>
           </div>
         </div>
       </div>

@@ -2,15 +2,34 @@
 import React from 'react';
 import { Truck, MapPin, Clock, Shield, Phone, Mail, Users, Star } from 'lucide-react';
 
-const Index = () => {
+interface IndexProps {
+  cliente?: {
+    nome_empresa: string;
+    nome_responsavel: string;
+    email: string;
+    telefone: string;
+    categoria: string;
+  };
+  logoUrl?: string | null;
+}
+
+const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
+  const nomeEmpresa = cliente?.nome_empresa || 'TransExpress';
+  const telefone = cliente?.telefone || '(11) 4444-5555';
+  const email = cliente?.email || 'contato@transexpress.com';
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-green-700 text-white">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <Truck className="h-8 w-8" />
-            <span className="text-2xl font-bold">TransExpress</span>
+            {logoUrl ? (
+              <img src={logoUrl} alt={nomeEmpresa} className="h-8 w-8 object-contain" />
+            ) : (
+              <Truck className="h-8 w-8" />
+            )}
+            <span className="text-2xl font-bold">{nomeEmpresa}</span>
           </div>
           <nav className="hidden md:flex space-x-6">
             <a href="#" className="hover:text-green-200">Serviços</a>
@@ -28,7 +47,7 @@ const Index = () => {
       <section className="bg-gradient-to-r from-green-700 to-blue-800 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-5xl font-bold mb-6">
-            Transporte <span className="text-yellow-300">Seguro</span> e Eficiente
+            {nomeEmpresa} - Transporte <span className="text-yellow-300">Seguro</span> e Eficiente
           </h1>
           <p className="text-xl mb-8 max-w-3xl mx-auto">
             Conectamos destinos com confiança, oferecendo soluções completas em logística e transporte para pessoas e cargas
@@ -95,11 +114,11 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto mb-8">
             <div className="flex items-center justify-center space-x-2 p-4 bg-slate-800 rounded-lg">
               <Phone className="h-5 w-5 text-green-400" />
-              <span>(11) 4444-5555</span>
+              <span>{telefone}</span>
             </div>
             <div className="flex items-center justify-center space-x-2 p-4 bg-slate-800 rounded-lg">
               <Mail className="h-5 w-5 text-green-400" />
-              <span>contato@transexpress.com</span>
+              <span>{email}</span>
             </div>
           </div>
           <button className="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700">
@@ -112,10 +131,14 @@ const Index = () => {
       <footer className="bg-black text-white py-12">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <Truck className="h-8 w-8 text-green-400" />
-            <span className="text-2xl font-bold">TransExpress</span>
+            {logoUrl ? (
+              <img src={logoUrl} alt={nomeEmpresa} className="h-8 w-8 object-contain" />
+            ) : (
+              <Truck className="h-8 w-8 text-green-400" />
+            )}
+            <span className="text-2xl font-bold">{nomeEmpresa}</span>
           </div>
-          <p className="text-slate-400">&copy; 2024 TransExpress. Todos os direitos reservados.</p>
+          <p className="text-slate-400">&copy; 2024 {nomeEmpresa}. Todos os direitos reservados.</p>
         </div>
       </footer>
     </div>

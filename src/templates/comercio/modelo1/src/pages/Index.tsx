@@ -2,15 +2,34 @@
 import React from 'react';
 import { ShoppingBag, CreditCard, Truck, Users, Star, ArrowRight } from 'lucide-react';
 
-const Index = () => {
+interface IndexProps {
+  cliente?: {
+    nome_empresa: string;
+    nome_responsavel: string;
+    email: string;
+    telefone: string;
+    categoria: string;
+  };
+  logoUrl?: string | null;
+}
+
+const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
+  const nomeEmpresa = cliente?.nome_empresa || 'ComércioMax';
+  const telefone = cliente?.telefone || '(11) 4444-5555';
+  const email = cliente?.email || 'contato@comerciomax.com';
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <ShoppingBag className="h-8 w-8 text-blue-600" />
-            <span className="text-2xl font-bold text-slate-900">ComércioMax</span>
+            {logoUrl ? (
+              <img src={logoUrl} alt={nomeEmpresa} className="h-8 w-8 object-contain" />
+            ) : (
+              <ShoppingBag className="h-8 w-8 text-blue-600" />
+            )}
+            <span className="text-2xl font-bold text-slate-900">{nomeEmpresa}</span>
           </div>
           <nav className="hidden md:flex space-x-6">
             <a href="#" className="text-slate-700 hover:text-blue-600">Produtos</a>
@@ -28,7 +47,7 @@ const Index = () => {
       <section className="bg-gradient-to-r from-blue-600 to-purple-700 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-5xl font-bold mb-6">
-            Sua Loja Online <span className="text-yellow-300">Completa</span>
+            {nomeEmpresa} - Sua Loja Online <span className="text-yellow-300">Completa</span>
           </h1>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
             Soluções completas para e-commerce com pagamento seguro, entrega rápida e atendimento especializado
@@ -48,7 +67,7 @@ const Index = () => {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center text-slate-900 mb-12">
-            Por que escolher <span className="text-blue-600">nosso comércio?</span>
+            Por que escolher a <span className="text-blue-600">{nomeEmpresa}?</span>
           </h2>
           <div className="grid md:grid-cols-4 gap-8">
             {[
@@ -95,15 +114,36 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Contact */}
+      <section className="py-20 bg-slate-900 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold mb-8">
+            Entre em <span className="text-blue-400">Contato</span>
+          </h2>
+          <div className="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto mb-8">
+            <div className="flex items-center justify-center space-x-2 p-4 bg-slate-800 rounded-lg">
+              <span>📞 {telefone}</span>
+            </div>
+            <div className="flex items-center justify-center space-x-2 p-4 bg-slate-800 rounded-lg">
+              <span>✉️ {email}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="bg-slate-900 text-white py-12">
+      <footer className="bg-black text-white py-12">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <ShoppingBag className="h-8 w-8 text-blue-400" />
-            <span className="text-2xl font-bold">ComércioMax</span>
+            {logoUrl ? (
+              <img src={logoUrl} alt={nomeEmpresa} className="h-8 w-8 object-contain" />
+            ) : (
+              <ShoppingBag className="h-8 w-8 text-blue-400" />
+            )}
+            <span className="text-2xl font-bold">{nomeEmpresa}</span>
           </div>
           <p className="text-slate-400 mb-6">Sua loja online de confiança</p>
-          <p className="text-slate-500">&copy; 2024 ComércioMax. Todos os direitos reservados.</p>
+          <p className="text-slate-500">&copy; 2024 {nomeEmpresa}. Todos os direitos reservados.</p>
         </div>
       </footer>
     </div>

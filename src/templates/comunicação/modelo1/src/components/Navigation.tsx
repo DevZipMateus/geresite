@@ -1,117 +1,91 @@
-import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
-import { useState, useEffect } from "react";
-import { openWhatsApp } from "../utils/whatsapp";
 
-export default function Navigation() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+import { useState } from "react";
+import { Menu, X, MessageCircle } from "lucide-react";
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      // Show header at the top of the page
-      if (currentScrollY < 10) {
-        setIsVisible(true);
-      }
-      // Hide header when scrolling down, show when scrolling up
-      else if (currentScrollY > lastScrollY) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
-      }
-      setLastScrollY(currentScrollY);
-    };
-    window.addEventListener('scroll', handleScroll, {
-      passive: true
-    });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth'
-      });
-    }
-    setIsMenuOpen(false);
+interface NavigationProps {
+  cliente?: {
+    nome_empresa: string;
+    nome_responsavel: string;
+    email: string;
+    telefone: string;
+    categoria: string;
   };
+  logoUrl?: string | null;
+}
 
-  const handleEnrollClick = () => {
-    openWhatsApp("Olá! Gostaria de me inscrever nos workshops da Impulso Empreendedor.");
-    setIsMenuOpen(false);
-  };
+const Navigation: React.FC<NavigationProps> = ({ cliente, logoUrl }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const nomeEmpresa = cliente?.nome_empresa || 'Escola de Comunicação';
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 p-6 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between my-0 py-0">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800">
+      <div className="container mx-auto px-6">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="text-2xl font-bold text-white">
-            Impulso<span className="text-cyan-300">Empreendedor</span>
+          <div className="flex items-center space-x-3">
+            {logoUrl ? (
+              <img src={logoUrl} alt={nomeEmpresa} className="h-8 w-8 object-contain" />
+            ) : (
+              <MessageCircle className="h-8 w-8 text-blue-400" />
+            )}
+            <span className="text-xl font-bold text-white">{nomeEmpresa}</span>
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            <button onClick={() => scrollToSection('home')} className="text-white/80 hover:text-cyan-300 transition-colors">
+            <a href="#home" className="text-gray-300 hover:text-white transition-colors">
               Início
-            </button>
-            <button onClick={() => scrollToSection('courses')} className="text-white/80 hover:text-cyan-300 transition-colors">
+            </a>
+            <a href="#courses" className="text-gray-300 hover:text-white transition-colors">
               Cursos
-            </button>
-            <button onClick={() => scrollToSection('impact')} className="text-white/80 hover:text-cyan-300 transition-colors">
-              Nossos Impactos
-            </button>
-            <button onClick={() => scrollToSection('about')} className="text-white/80 hover:text-cyan-300 transition-colors">
-              Sobre Nós
-            </button>
-            <button onClick={() => scrollToSection('contact')} className="text-white/80 hover:text-cyan-300 transition-colors">
+            </a>
+            <a href="#about" className="text-gray-300 hover:text-white transition-colors">
+              Sobre
+            </a>
+            <a href="#contact" className="text-gray-300 hover:text-white transition-colors">
               Contato
+            </a>
+            <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+              Inscreva-se
             </button>
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden md:block">
-            <Button onClick={handleEnrollClick} className="bg-gradient-to-r from-cyan-500 to-green-500 hover:from-cyan-600 hover:to-green-600 text-black font-semibold border-0">
-              Inscreva-se Agora
-            </Button>
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-gray-300 hover:text-white"
+            >
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
           </div>
-
-          {/* Mobile Menu Button */}
-          <Button variant="ghost" size="icon" className="md:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </Button>
         </div>
 
         {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden mt-4 bg-black/20 backdrop-blur-md rounded-lg border border-white/20 p-4">
-            <div className="flex flex-col space-y-4">
-              <button onClick={() => scrollToSection('home')} className="text-white/80 hover:text-cyan-300 transition-colors text-left">
+        {isOpen && (
+          <div className="md:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-slate-800 rounded-lg mt-2">
+              <a href="#home" className="block px-3 py-2 text-gray-300 hover:text-white">
                 Início
-              </button>
-              <button onClick={() => scrollToSection('courses')} className="text-white/80 hover:text-cyan-300 transition-colors text-left">
+              </a>
+              <a href="#courses" className="block px-3 py-2 text-gray-300 hover:text-white">
                 Cursos
-              </button>
-              <button onClick={() => scrollToSection('impact')} className="text-white/80 hover:text-cyan-300 transition-colors text-left">
-                Nossos Impactos
-              </button>
-              <button onClick={() => scrollToSection('about')} className="text-white/80 hover:text-cyan-300 transition-colors text-left">
-                Sobre Nós
-              </button>
-              <button onClick={() => scrollToSection('contact')} className="text-white/80 hover:text-cyan-300 transition-colors text-left">
+              </a>
+              <a href="#about" className="block px-3 py-2 text-gray-300 hover:text-white">
+                Sobre
+              </a>
+              <a href="#contact" className="block px-3 py-2 text-gray-300 hover:text-white">
                 Contato
+              </a>
+              <button className="w-full text-left bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded transition-colors">
+                Inscreva-se
               </button>
-              <Button onClick={handleEnrollClick} className="bg-gradient-to-r from-cyan-500 to-green-500 hover:from-cyan-600 hover:to-green-600 text-black font-semibold border-0 mt-4">
-                Inscreva-se Agora
-              </Button>
             </div>
           </div>
         )}
       </div>
     </nav>
   );
-}
+};
+
+export default Navigation;

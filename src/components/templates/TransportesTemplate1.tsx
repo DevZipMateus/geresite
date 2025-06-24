@@ -11,7 +11,7 @@ interface TransportesTemplate1Props {
 const TransportesTemplate1: React.FC<TransportesTemplate1Props> = ({ cliente, logoUrl }) => {
   return (
     <div className="transportes-template-1">
-      <TransportesIndex />
+      <TransportesIndex cliente={cliente} logoUrl={logoUrl} />
     </div>
   );
 };

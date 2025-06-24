@@ -11,7 +11,7 @@ interface AlimenticiaTemplate1Props {
 const AlimenticiaTemplate1: React.FC<AlimenticiaTemplate1Props> = ({ cliente, logoUrl }) => {
   return (
     <div className="alimenticia-template-1">
-      <AlimenticiaIndex />
+      <AlimenticiaIndex cliente={cliente} logoUrl={logoUrl} />
     </div>
   );
 };
