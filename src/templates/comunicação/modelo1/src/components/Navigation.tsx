@@ -17,6 +17,14 @@ const Navigation: React.FC<NavigationProps> = ({ cliente, logoUrl }) => {
   const [isOpen, setIsOpen] = useState(false);
   const nomeEmpresa = cliente?.nome_empresa || 'Escola de Comunicação';
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setIsOpen(false);
+    }
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800">
       <div className="container mx-auto px-6">
@@ -33,19 +41,34 @@ const Navigation: React.FC<NavigationProps> = ({ cliente, logoUrl }) => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#home" className="text-gray-300 hover:text-white transition-colors">
+            <button 
+              onClick={() => scrollToSection('home')}
+              className="text-gray-300 hover:text-white transition-colors"
+            >
               Início
-            </a>
-            <a href="#courses" className="text-gray-300 hover:text-white transition-colors">
+            </button>
+            <button 
+              onClick={() => scrollToSection('courses')}
+              className="text-gray-300 hover:text-white transition-colors"
+            >
               Cursos
-            </a>
-            <a href="#about" className="text-gray-300 hover:text-white transition-colors">
+            </button>
+            <button 
+              onClick={() => scrollToSection('about')}
+              className="text-gray-300 hover:text-white transition-colors"
+            >
               Sobre
-            </a>
-            <a href="#contact" className="text-gray-300 hover:text-white transition-colors">
+            </button>
+            <button 
+              onClick={() => scrollToSection('contact')}
+              className="text-gray-300 hover:text-white transition-colors"
+            >
               Contato
-            </a>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+            </button>
+            <button 
+              onClick={() => scrollToSection('contact')}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors"
+            >
               Inscreva-se
             </button>
           </div>
@@ -65,19 +88,34 @@ const Navigation: React.FC<NavigationProps> = ({ cliente, logoUrl }) => {
         {isOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-slate-800 rounded-lg mt-2">
-              <a href="#home" className="block px-3 py-2 text-gray-300 hover:text-white">
+              <button 
+                onClick={() => scrollToSection('home')}
+                className="block px-3 py-2 text-gray-300 hover:text-white w-full text-left"
+              >
                 Início
-              </a>
-              <a href="#courses" className="block px-3 py-2 text-gray-300 hover:text-white">
+              </button>
+              <button 
+                onClick={() => scrollToSection('courses')}
+                className="block px-3 py-2 text-gray-300 hover:text-white w-full text-left"
+              >
                 Cursos
-              </a>
-              <a href="#about" className="block px-3 py-2 text-gray-300 hover:text-white">
+              </button>
+              <button 
+                onClick={() => scrollToSection('about')}
+                className="block px-3 py-2 text-gray-300 hover:text-white w-full text-left"
+              >
                 Sobre
-              </a>
-              <a href="#contact" className="block px-3 py-2 text-gray-300 hover:text-white">
+              </button>
+              <button 
+                onClick={() => scrollToSection('contact')}
+                className="block px-3 py-2 text-gray-300 hover:text-white w-full text-left"
+              >
                 Contato
-              </a>
-              <button className="w-full text-left bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded transition-colors">
+              </button>
+              <button 
+                onClick={() => scrollToSection('contact')}
+                className="w-full text-left bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded transition-colors"
+              >
                 Inscreva-se
               </button>
             </div>

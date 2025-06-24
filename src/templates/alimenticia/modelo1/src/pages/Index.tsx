@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { UtensilsCrossed, Clock, Star, MapPin, Phone, ChefHat } from 'lucide-react';
 
 interface IndexProps {
   cliente?: {
@@ -14,118 +13,79 @@ interface IndexProps {
 }
 
 const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
-  const nomeEmpresa = cliente?.nome_empresa || 'SaborTotal';
-  const telefone = cliente?.telefone || '(11) 3333-4444';
-  const email = cliente?.email || 'contato@sabortotal.com';
+  const nomeEmpresa = cliente?.nome_empresa || 'Restaurante';
+  const telefone = cliente?.telefone || '5511999999999';
 
-  // Função para redirecionar para WhatsApp
-  const handleWhatsAppOrder = (dishName: string, price: string) => {
+  const handleWhatsAppClick = (message: string) => {
     const cleanPhone = telefone.replace(/\D/g, '');
     const whatsappPhone = cleanPhone.startsWith('55') ? cleanPhone : `55${cleanPhone}`;
-    const message = `Olá! Gostaria de pedir: ${dishName} (${price}). Pode me informar sobre disponibilidade e entrega?`;
-    const url = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
-  };
-
-  const handleGeneralWhatsApp = (action: string) => {
-    const cleanPhone = telefone.replace(/\D/g, '');
-    const whatsappPhone = cleanPhone.startsWith('55') ? cleanPhone : `55${cleanPhone}`;
-    let message = '';
-    
-    if (action === 'menu') {
-      message = `Olá! Gostaria de ver o cardápio completo do ${nomeEmpresa}.`;
-    } else if (action === 'reservation') {
-      message = `Olá! Gostaria de reservar uma mesa no ${nomeEmpresa}.`;
-    } else {
-      message = `Olá! Gostaria de fazer um pedido no ${nomeEmpresa}.`;
-    }
-    
     const url = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-amber-50">
       {/* Header */}
-      <header className="bg-orange-600 text-white">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            {logoUrl ? (
-              <img src={logoUrl} alt={nomeEmpresa} className="h-8 w-8 object-contain" />
-            ) : (
-              <ChefHat className="h-8 w-8" />
-            )}
-            <span className="text-2xl font-bold">{nomeEmpresa}</span>
+      <header className="bg-white shadow-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-3">
+              {logoUrl ? (
+                <img src={logoUrl} alt={nomeEmpresa} className="h-10 w-10 object-contain" />
+              ) : (
+                <div className="w-10 h-10 bg-amber-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">{nomeEmpresa.charAt(0)}</span>
+                </div>
+              )}
+              <h1 className="text-2xl font-bold text-gray-900">{nomeEmpresa}</h1>
+            </div>
+            <nav className="hidden md:flex space-x-8">
+              <a href="#inicio" className="text-gray-700 hover:text-amber-600 transition-colors">Início</a>
+              <a href="#cardapio" className="text-gray-700 hover:text-amber-600 transition-colors">Cardápio</a>
+              <a href="#sobre" className="text-gray-700 hover:text-amber-600 transition-colors">Sobre</a>
+              <a href="#contato" className="text-gray-700 hover:text-amber-600 transition-colors">Contato</a>
+            </nav>
           </div>
-          <nav className="hidden md:flex space-x-6">
-            <a href="#" className="hover:text-orange-200">Cardápio</a>
-            <a href="#" className="hover:text-orange-200">Sobre</a>
-            <a href="#" className="hover:text-orange-200">Delivery</a>
-            <a href="#" className="hover:text-orange-200">Contato</a>
-          </nav>
-          <button 
-            onClick={() => handleGeneralWhatsApp('order')}
-            className="bg-yellow-400 text-orange-900 px-6 py-2 rounded-lg font-bold hover:bg-yellow-300"
-          >
-            Fazer Pedido
-          </button>
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="bg-gradient-to-r from-orange-500 to-red-600 text-white py-20">
+      {/* Seção Início */}
+      <section id="inicio" className="py-20 bg-gradient-to-r from-amber-600 to-orange-600 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-6">
-            {nomeEmpresa} - Sabores que <span className="text-yellow-300">Conquistam</span>
-          </h1>
+          <h2 className="text-5xl font-bold mb-6">Bem-vindo ao {nomeEmpresa}</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Pratos preparados com amor, ingredientes frescos e atendimento personalizado via WhatsApp
+            Sabores únicos e experiências gastronômicas inesquecíveis esperam por você.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button 
-              onClick={() => handleGeneralWhatsApp('menu')}
-              className="bg-yellow-400 text-orange-900 px-8 py-4 rounded-lg font-bold hover:bg-yellow-300"
-            >
-              Ver Cardápio
-            </button>
-            <button 
-              onClick={() => handleGeneralWhatsApp('reservation')}
-              className="border border-white text-white px-8 py-4 rounded-lg hover:bg-white hover:text-orange-600"
-            >
-              Reservar Mesa
-            </button>
-          </div>
+          <button 
+            onClick={() => handleWhatsAppClick(`Olá! Gostaria de fazer um pedido no ${nomeEmpresa}.`)}
+            className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+          >
+            Fazer Pedido via WhatsApp
+          </button>
         </div>
       </section>
 
-      {/* Menu Highlights */}
-      <section className="py-20">
+      {/* Seção Cardápio */}
+      <section id="cardapio" className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-slate-900 mb-12">
-            Nossos <span className="text-orange-600">Destaques</span>
-          </h2>
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Nosso Cardápio</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { name: 'Feijoada Completa', price: 'R$ 45,90', emoji: '🍲' },
-              { name: 'Picanha na Brasa', price: 'R$ 65,90', emoji: '🥩' },
-              { name: 'Moqueca de Peixe', price: 'R$ 55,90', emoji: '🐟' }
-            ].map((dish, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                <div className="h-48 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
-                  <span className="text-6xl">{dish.emoji}</span>
-                </div>
+              { nome: "Prato Especial", preco: "R$ 29,90", imagem: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400" },
+              { nome: "Delícia da Casa", preco: "R$ 24,90", imagem: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400" },
+              { nome: "Sabor Tradicional", preco: "R$ 19,90", imagem: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400" }
+            ].map((prato, index) => (
+              <div key={index} className="bg-amber-50 rounded-lg overflow-hidden shadow-md">
+                <img src={prato.imagem} alt={prato.nome} className="w-full h-48 object-cover" />
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-2">{dish.name}</h3>
-                  <p className="text-slate-600 mb-4">Prato tradicional preparado com ingredientes selecionados</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-2xl font-bold text-orange-600">{dish.price}</span>
-                    <button 
-                      onClick={() => handleWhatsAppOrder(dish.name, dish.price)}
-                      className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700"
-                    >
-                      Pedir via WhatsApp
-                    </button>
-                  </div>
+                  <h3 className="text-xl font-semibold mb-2">{prato.nome}</h3>
+                  <p className="text-2xl font-bold text-amber-600 mb-4">{prato.preco}</p>
+                  <button 
+                    onClick={() => handleWhatsAppClick(`Olá! Gostaria de pedir o ${prato.nome} (${prato.preco}). Qual o endereço para entrega?`)}
+                    className="w-full bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-lg transition-colors"
+                  >
+                    Pedir via WhatsApp
+                  </button>
                 </div>
               </div>
             ))}
@@ -133,64 +93,48 @@ const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
         </div>
       </section>
 
-      {/* Features */}
-      <section className="py-20 bg-orange-50">
+      {/* Seção Sobre */}
+      <section id="sobre" className="py-16 bg-amber-50">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            {[
-              { icon: Clock, title: 'Delivery Rápido', desc: 'Entrega em até 45 minutos' },
-              { icon: UtensilsCrossed, title: 'Pratos Caseiros', desc: 'Feito como em casa' },
-              { icon: Star, title: 'Qualidade Premium', desc: 'Ingredientes selecionados' },
-              { icon: Phone, title: 'Atendimento', desc: 'Pedidos via WhatsApp' }
-            ].map((feature, index) => (
-              <div key={index} className="text-center p-6">
-                <feature.icon className="h-12 w-12 text-orange-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-slate-600">{feature.desc}</p>
-              </div>
-            ))}
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-8 text-gray-900">Sobre o {nomeEmpresa}</h2>
+            <p className="text-lg text-gray-700 mb-6">
+              Somos apaixonados por culinária e dedicados a proporcionar experiências 
+              gastronômicas excepcionais aos nossos clientes.
+            </p>
+            <p className="text-lg text-gray-700">
+              Com ingredientes frescos e receitas tradicionais, criamos pratos que 
+              tocam o coração e despertam os sentidos.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-slate-900 text-white py-12">
+      {/* Seção Contato */}
+      <section id="contato" className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                {logoUrl ? (
-                  <img src={logoUrl} alt={nomeEmpresa} className="h-8 w-8 object-contain" />
-                ) : (
-                  <ChefHat className="h-8 w-8 text-orange-400" />
-                )}
-                <span className="text-2xl font-bold">{nomeEmpresa}</span>
-              </div>
-              <p className="text-slate-400">Restaurante tradicional com sabores únicos</p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Contato</h4>
-              <div className="space-y-2 text-slate-400">
-                <div className="flex items-center">
-                  <Phone className="h-4 w-4 mr-2" />
-                  <span>{telefone}</span>
-                </div>
-                <div className="flex items-center">
-                  <span>✉️</span>
-                  <span className="ml-2">{email}</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Horários</h4>
-              <div className="text-slate-400">
-                <p>Segunda à Domingo</p>
-                <p>11h às 23h</p>
-              </div>
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Entre em Contato</h2>
+          <div className="max-w-2xl mx-auto text-center">
+            <p className="text-lg text-gray-700 mb-8">
+              Faça seu pedido ou tire suas dúvidas conosco!
+            </p>
+            <div className="space-y-4">
+              <p className="text-lg">
+                <strong>Telefone:</strong> {telefone}
+              </p>
+              <p className="text-lg">
+                <strong>Email:</strong> {cliente?.email || 'contato@restaurante.com'}
+              </p>
+              <button 
+                onClick={() => handleWhatsAppClick(`Olá! Gostaria de entrar em contato com o ${nomeEmpresa}.`)}
+                className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+              >
+                Conversar no WhatsApp
+              </button>
             </div>
           </div>
         </div>
-      </footer>
+      </section>
     </div>
   );
 };

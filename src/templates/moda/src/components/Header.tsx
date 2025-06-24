@@ -26,6 +26,14 @@ const Header: React.FC<HeaderProps> = ({ cliente, logoUrl }) => {
     window.open(url, '_blank');
   };
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setIsMenuOpen(false);
+    }
+  };
+
   return (
     <header className="relative z-50 bg-urban-black/95 backdrop-blur-sm border-b border-urban-neon/20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -44,15 +52,24 @@ const Header: React.FC<HeaderProps> = ({ cliente, logoUrl }) => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6 lg:space-x-8">
-            <a href="#collection" className="text-white hover:text-urban-neon transition-colors font-medium">
+            <button 
+              onClick={() => scrollToSection('collection')}
+              className="text-white hover:text-urban-neon transition-colors font-medium"
+            >
               COLEÇÃO
-            </a>
-            <a href="#lookbook" className="text-white hover:text-urban-neon transition-colors font-medium">
+            </button>
+            <button 
+              onClick={() => scrollToSection('lookbook')}
+              className="text-white hover:text-urban-neon transition-colors font-medium"
+            >
               LOOKBOOK
-            </a>
-            <a href="#about" className="text-white hover:text-urban-neon transition-colors font-medium">
+            </button>
+            <button 
+              onClick={() => scrollToSection('about')}
+              className="text-white hover:text-urban-neon transition-colors font-medium"
+            >
               SOBRE
-            </a>
+            </button>
             <button 
               onClick={handleWhatsAppContact}
               className="bg-urban-neon text-urban-black px-4 lg:px-6 py-2 font-bold hover:bg-urban-flame transition-colors"
@@ -74,27 +91,24 @@ const Header: React.FC<HeaderProps> = ({ cliente, logoUrl }) => {
         {isMenuOpen && (
           <div className="md:hidden bg-urban-black/95 backdrop-blur-sm border-t border-urban-neon/20">
             <nav className="flex flex-col space-y-4 px-4 py-6">
-              <a 
-                href="#collection" 
-                className="text-white hover:text-urban-neon transition-colors font-medium"
-                onClick={() => setIsMenuOpen(false)}
+              <button 
+                onClick={() => scrollToSection('collection')}
+                className="text-white hover:text-urban-neon transition-colors font-medium text-left"
               >
                 COLEÇÃO
-              </a>
-              <a 
-                href="#lookbook" 
-                className="text-white hover:text-urban-neon transition-colors font-medium"
-                onClick={() => setIsMenuOpen(false)}
+              </button>
+              <button 
+                onClick={() => scrollToSection('lookbook')}
+                className="text-white hover:text-urban-neon transition-colors font-medium text-left"
               >
                 LOOKBOOK
-              </a>
-              <a 
-                href="#about" 
-                className="text-white hover:text-urban-neon transition-colors font-medium"
-                onClick={() => setIsMenuOpen(false)}
+              </button>
+              <button 
+                onClick={() => scrollToSection('about')}
+                className="text-white hover:text-urban-neon transition-colors font-medium text-left"
               >
                 SOBRE
-              </a>
+              </button>
               <button 
                 onClick={() => {
                   handleWhatsAppContact();
