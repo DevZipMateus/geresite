@@ -207,7 +207,7 @@ const SiteInstitucional = () => {
   }
 
   // Renderizar template específico baseado na categoria
-  const customTemplate = renderTemplate(cliente, logoUrl, handleSectionClick);
+  const customTemplate = renderTemplate(cliente, logoUrl);
   
   if (customTemplate) {
     return customTemplate;

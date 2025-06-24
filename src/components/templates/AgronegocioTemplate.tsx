@@ -2,6 +2,7 @@
 import React from "react";
 import { Cliente } from "@/types/database.types";
 import { Phone, Mail, MapPin, Clock, CheckCircle, Star, Users, Award } from "lucide-react";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 interface AgronegocioTemplateProps {
   cliente: Cliente;
@@ -253,6 +254,9 @@ const AgronegocioTemplate = ({ cliente, logoUrl }: AgronegocioTemplateProps) => 
           </p>
         </div>
       </footer>
+
+      {/* WhatsApp Button */}
+      <WhatsAppButton phoneNumber={cliente.telefone} />
     </div>
   );
 };

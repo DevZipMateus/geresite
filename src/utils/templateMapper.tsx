@@ -6,7 +6,6 @@ import AgronegocioTemplate from "@/components/templates/AgronegocioTemplate";
 interface TemplateProps {
   cliente: Cliente;
   logoUrl?: string | null;
-  handleSectionClick: (sectionId: string) => void;
 }
 
 // Mapeamento de categorias para seus respectivos componentes
@@ -24,8 +23,7 @@ export const getTemplateComponent = (categoria: string, templateId: string) => {
 // Função para renderizar o template correto
 export const renderTemplate = (
   cliente: Cliente, 
-  logoUrl?: string | null, 
-  handleSectionClick?: (sectionId: string) => void
+  logoUrl?: string | null
 ) => {
   const TemplateComponent = getTemplateComponent(cliente.categoria, cliente.template_id);
   
