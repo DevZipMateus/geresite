@@ -1,11 +1,34 @@
 
 import React from 'react';
 
-const FinalCTA = () => {
+interface FinalCTAProps {
+  cliente?: {
+    nome_empresa: string;
+    nome_responsavel: string;
+    email: string;
+    telefone: string;
+    categoria: string;
+  };
+}
+
+const FinalCTA: React.FC<FinalCTAProps> = ({ cliente }) => {
+  const nomeEmpresa = cliente?.nome_empresa || 'URBNSZN';
+  const telefone = cliente?.telefone || '5511999999999';
+
   const handleWhatsAppQuote = () => {
-    const message = encodeURIComponent("Olá! Gostaria de solicitar um orçamento para produtos da URBNSZN.");
-    const whatsappNumber = "5511999999999"; // Número fictício
-    window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+    const cleanPhone = telefone.replace(/\D/g, '');
+    const whatsappPhone = cleanPhone.startsWith('55') ? cleanPhone : `55${cleanPhone}`;
+    const message = `Olá! Gostaria de conhecer mais sobre os produtos da ${nomeEmpresa} e solicitar informações sobre disponibilidade.`;
+    const url = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  };
+
+  const handleWhatsAppCatalog = () => {
+    const cleanPhone = telefone.replace(/\D/g, '');
+    const whatsappPhone = cleanPhone.startsWith('55') ? cleanPhone : `55${cleanPhone}`;
+    const message = `Olá! Gostaria de ver o catálogo completo da ${nomeEmpresa}.`;
+    const url = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
   };
 
   return (
@@ -46,11 +69,14 @@ const FinalCTA = () => {
             onClick={handleWhatsAppQuote}
             className="group relative overflow-hidden bg-urban-flame text-white px-8 sm:px-12 py-4 sm:py-6 font-bold text-base sm:text-lg lg:text-xl tracking-wide transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-urban-flame/50 w-full sm:w-auto"
           >
-            <span className="relative z-10">SOLICITAR ORÇAMENTO</span>
+            <span className="relative z-10">FALAR NO WHATSAPP</span>
             <div className="absolute inset-0 bg-urban-neon transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
           </button>
 
-          <button className="group border-2 border-urban-neon text-urban-neon px-8 sm:px-12 py-4 sm:py-6 font-bold text-base sm:text-lg lg:text-xl tracking-wide transition-all duration-300 hover:bg-urban-neon hover:text-urban-black hover:scale-105 w-full sm:w-auto">
+          <button 
+            onClick={handleWhatsAppCatalog}
+            className="group border-2 border-urban-neon text-urban-neon px-8 sm:px-12 py-4 sm:py-6 font-bold text-base sm:text-lg lg:text-xl tracking-wide transition-all duration-300 hover:bg-urban-neon hover:text-urban-black hover:scale-105 w-full sm:w-auto"
+          >
             VER CATÁLOGO
           </button>
         </div>
@@ -58,15 +84,15 @@ const FinalCTA = () => {
         <div className="mt-12 sm:mt-16 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 lg:gap-8 text-gray-400 text-sm sm:text-base">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 sm:w-3 sm:h-3 bg-urban-neon rounded-full"></span>
-            <span>Frete grátis acima de R$ 199</span>
+            <span>Atendimento personalizado</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 sm:w-3 sm:h-3 bg-urban-flame rounded-full"></span>
-            <span>Troca grátis em 30 dias</span>
+            <span>Entrega em todo Brasil</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 sm:w-3 sm:h-3 bg-urban-electric rounded-full"></span>
-            <span>Parcelamento em até 12x</span>
+            <span>Condições especiais</span>
           </div>
         </div>
       </div>

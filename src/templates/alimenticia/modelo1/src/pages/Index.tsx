@@ -18,6 +18,32 @@ const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
   const telefone = cliente?.telefone || '(11) 3333-4444';
   const email = cliente?.email || 'contato@sabortotal.com';
 
+  // Função para redirecionar para WhatsApp
+  const handleWhatsAppOrder = (dishName: string, price: string) => {
+    const cleanPhone = telefone.replace(/\D/g, '');
+    const whatsappPhone = cleanPhone.startsWith('55') ? cleanPhone : `55${cleanPhone}`;
+    const message = `Olá! Gostaria de pedir: ${dishName} (${price}). Pode me informar sobre disponibilidade e entrega?`;
+    const url = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  };
+
+  const handleGeneralWhatsApp = (action: string) => {
+    const cleanPhone = telefone.replace(/\D/g, '');
+    const whatsappPhone = cleanPhone.startsWith('55') ? cleanPhone : `55${cleanPhone}`;
+    let message = '';
+    
+    if (action === 'menu') {
+      message = `Olá! Gostaria de ver o cardápio completo do ${nomeEmpresa}.`;
+    } else if (action === 'reservation') {
+      message = `Olá! Gostaria de reservar uma mesa no ${nomeEmpresa}.`;
+    } else {
+      message = `Olá! Gostaria de fazer um pedido no ${nomeEmpresa}.`;
+    }
+    
+    const url = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -37,7 +63,10 @@ const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
             <a href="#" className="hover:text-orange-200">Delivery</a>
             <a href="#" className="hover:text-orange-200">Contato</a>
           </nav>
-          <button className="bg-yellow-400 text-orange-900 px-6 py-2 rounded-lg font-bold hover:bg-yellow-300">
+          <button 
+            onClick={() => handleGeneralWhatsApp('order')}
+            className="bg-yellow-400 text-orange-900 px-6 py-2 rounded-lg font-bold hover:bg-yellow-300"
+          >
             Fazer Pedido
           </button>
         </div>
@@ -50,13 +79,19 @@ const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
             {nomeEmpresa} - Sabores que <span className="text-yellow-300">Conquistam</span>
           </h1>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Pratos preparados com amor, ingredientes frescos e receitas tradicionais que despertam seus sentidos
+            Pratos preparados com amor, ingredientes frescos e atendimento personalizado via WhatsApp
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-yellow-400 text-orange-900 px-8 py-4 rounded-lg font-bold hover:bg-yellow-300">
+            <button 
+              onClick={() => handleGeneralWhatsApp('menu')}
+              className="bg-yellow-400 text-orange-900 px-8 py-4 rounded-lg font-bold hover:bg-yellow-300"
+            >
               Ver Cardápio
             </button>
-            <button className="border border-white text-white px-8 py-4 rounded-lg hover:bg-white hover:text-orange-600">
+            <button 
+              onClick={() => handleGeneralWhatsApp('reservation')}
+              className="border border-white text-white px-8 py-4 rounded-lg hover:bg-white hover:text-orange-600"
+            >
               Reservar Mesa
             </button>
           </div>
@@ -84,8 +119,11 @@ const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
                   <p className="text-slate-600 mb-4">Prato tradicional preparado com ingredientes selecionados</p>
                   <div className="flex justify-between items-center">
                     <span className="text-2xl font-bold text-orange-600">{dish.price}</span>
-                    <button className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700">
-                      Pedir
+                    <button 
+                      onClick={() => handleWhatsAppOrder(dish.name, dish.price)}
+                      className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700"
+                    >
+                      Pedir via WhatsApp
                     </button>
                   </div>
                 </div>
@@ -103,7 +141,7 @@ const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
               { icon: Clock, title: 'Delivery Rápido', desc: 'Entrega em até 45 minutos' },
               { icon: UtensilsCrossed, title: 'Pratos Caseiros', desc: 'Feito como em casa' },
               { icon: Star, title: 'Qualidade Premium', desc: 'Ingredientes selecionados' },
-              { icon: Phone, title: 'Atendimento', desc: 'Pedidos 24/7' }
+              { icon: Phone, title: 'Atendimento', desc: 'Pedidos via WhatsApp' }
             ].map((feature, index) => (
               <div key={index} className="text-center p-6">
                 <feature.icon className="h-12 w-12 text-orange-600 mx-auto mb-4" />

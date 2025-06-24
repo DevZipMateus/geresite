@@ -1,64 +1,97 @@
 
 import React from 'react';
+import { Instagram, Facebook, Twitter, Youtube } from 'lucide-react';
 
-const Footer = () => {
+interface FooterProps {
+  cliente?: {
+    nome_empresa: string;
+    nome_responsavel: string;
+    email: string;
+    telefone: string;
+    categoria: string;
+  };
+  logoUrl?: string | null;
+}
+
+const Footer: React.FC<FooterProps> = ({ cliente, logoUrl }) => {
+  const nomeEmpresa = cliente?.nome_empresa || 'URBNSZN';
+  const telefone = cliente?.telefone || '5511999999999';
+  const email = cliente?.email || 'contato@urbnszn.com';
+
+  const handleWhatsAppContact = () => {
+    const cleanPhone = telefone.replace(/\D/g, '');
+    const whatsappPhone = cleanPhone.startsWith('55') ? cleanPhone : `55${cleanPhone}`;
+    const message = `Olá! Gostaria de entrar em contato com a ${nomeEmpresa}.`;
+    const url = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  };
+
   return (
-    <footer id="contact" className="bg-urban-black border-t border-urban-concrete-light">
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand */}
-          <div className="md:col-span-2">
-            <div className="text-3xl font-orbitron font-black text-urban-neon mb-4">
-              URBNSZN
+    <footer className="bg-urban-black border-t border-urban-neon/20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-8 sm:mb-12">
+          {/* Brand Section */}
+          <div className="lg:col-span-2">
+            <div className="flex items-center space-x-3 mb-4 sm:mb-6">
+              {logoUrl ? (
+                <img src={logoUrl} alt={nomeEmpresa} className="h-8 w-8 sm:h-10 sm:w-10 object-contain" />
+              ) : (
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-urban-neon"></div>
+              )}
+              <span className="text-white font-orbitron font-black text-xl sm:text-2xl tracking-wider">
+                {nomeEmpresa}
+              </span>
             </div>
-            <p className="text-gray-400 mb-6 max-w-md">
-              Mais que roupas, somos um movimento. Representando a cultura urbana 
-              autêntica desde 2020.
+            <p className="text-gray-400 text-sm sm:text-base mb-6 max-w-md">
+              Streetwear autêntico que nasce das ruas e fala a linguagem da cidade. 
+              Vista sua atitude, expresse sua individualidade.
             </p>
             <div className="flex space-x-4">
-              <div className="w-10 h-10 bg-urban-concrete rounded-full flex items-center justify-center hover:bg-urban-neon hover:text-urban-black transition-colors duration-300 cursor-pointer">
-                <span className="font-bold">IG</span>
-              </div>
-              <div className="w-10 h-10 bg-urban-concrete rounded-full flex items-center justify-center hover:bg-urban-neon hover:text-urban-black transition-colors duration-300 cursor-pointer">
-                <span className="font-bold">TT</span>
-              </div>
-              <div className="w-10 h-10 bg-urban-concrete rounded-full flex items-center justify-center hover:bg-urban-neon hover:text-urban-black transition-colors duration-300 cursor-pointer">
-                <span className="font-bold">YT</span>
-              </div>
+              <Instagram className="h-5 w-5 sm:h-6 sm:w-6 text-urban-neon hover:text-urban-flame transition-colors cursor-pointer" />
+              <Facebook className="h-5 w-5 sm:h-6 sm:w-6 text-urban-neon hover:text-urban-flame transition-colors cursor-pointer" />
+              <Twitter className="h-5 w-5 sm:h-6 sm:w-6 text-urban-neon hover:text-urban-flame transition-colors cursor-pointer" />
+              <Youtube className="h-5 w-5 sm:h-6 sm:w-6 text-urban-neon hover:text-urban-flame transition-colors cursor-pointer" />
             </div>
           </div>
 
-          {/* Links */}
+          {/* Quick Links */}
           <div>
-            <h4 className="text-white font-bold text-lg mb-4">SHOP</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li><a href="#" className="hover:text-urban-neon transition-colors duration-300">Coleções</a></li>
-              <li><a href="#" className="hover:text-urban-neon transition-colors duration-300">Lançamentos</a></li>
-              <li><a href="#" className="hover:text-urban-neon transition-colors duration-300">Sale</a></li>
-              <li><a href="#" className="hover:text-urban-neon transition-colors duration-300">Gift Cards</a></li>
+            <h3 className="text-white font-bold text-sm sm:text-base mb-4 sm:mb-6">NAVEGAÇÃO</h3>
+            <ul className="space-y-2 sm:space-y-3 text-gray-400 text-sm sm:text-base">
+              <li><a href="#collection" className="hover:text-urban-neon transition-colors">Coleção</a></li>
+              <li><a href="#lookbook" className="hover:text-urban-neon transition-colors">Lookbook</a></li>
+              <li><a href="#about" className="hover:text-urban-neon transition-colors">Sobre</a></li>
+              <li><button onClick={handleWhatsAppContact} className="hover:text-urban-neon transition-colors">Contato</button></li>
             </ul>
           </div>
 
-          {/* Support */}
+          {/* Contact Info */}
           <div>
-            <h4 className="text-white font-bold text-lg mb-4">SUPORTE</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li><a href="#" className="hover:text-urban-neon transition-colors duration-300">Contato</a></li>
-              <li><a href="#" className="hover:text-urban-neon transition-colors duration-300">Trocas & Devoluções</a></li>
-              <li><a href="#" className="hover:text-urban-neon transition-colors duration-300">Guia de Tamanhos</a></li>
-              <li><a href="#" className="hover:text-urban-neon transition-colors duration-300">FAQ</a></li>
+            <h3 className="text-white font-bold text-sm sm:text-base mb-4 sm:mb-6">CONTATO</h3>
+            <ul className="space-y-2 sm:space-y-3 text-gray-400 text-sm sm:text-base">
+              <li>
+                <button onClick={handleWhatsAppContact} className="hover:text-urban-neon transition-colors">
+                  {telefone}
+                </button>
+              </li>
+              <li>
+                <a href={`mailto:${email}`} className="hover:text-urban-neon transition-colors">
+                  {email}
+                </a>
+              </li>
+              <li className="text-gray-500">
+                Atendimento via WhatsApp
+              </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-urban-concrete-light mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-500 text-sm">
-            © 2024 URBNSZN. Todos os direitos reservados.
-          </p>
-          <div className="flex space-x-6 mt-4 md:mt-0 text-sm text-gray-500">
-            <a href="#" className="hover:text-urban-neon transition-colors duration-300">Privacidade</a>
-            <a href="#" className="hover:text-urban-neon transition-colors duration-300">Termos</a>
-            <a href="#" className="hover:text-urban-neon transition-colors duration-300">Cookies</a>
+        {/* Bottom Bar */}
+        <div className="border-t border-urban-neon/20 pt-6 sm:pt-8 flex flex-col sm:flex-row justify-between items-center text-gray-500 text-xs sm:text-sm">
+          <p>&copy; 2024 {nomeEmpresa}. Todos os direitos reservados.</p>
+          <div className="flex space-x-4 sm:space-x-6 mt-4 sm:mt-0">
+            <a href="#" className="hover:text-urban-neon transition-colors">Política de Privacidade</a>
+            <a href="#" className="hover:text-urban-neon transition-colors">Termos de Uso</a>
           </div>
         </div>
       </div>

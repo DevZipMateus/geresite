@@ -18,6 +18,23 @@ const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
   const telefone = cliente?.telefone || '(11) 4444-5555';
   const email = cliente?.email || 'contato@comerciomax.com';
 
+  // Função para redirecionar para WhatsApp
+  const handleWhatsAppRedirect = (productName: string, price: string) => {
+    const cleanPhone = telefone.replace(/\D/g, '');
+    const whatsappPhone = cleanPhone.startsWith('55') ? cleanPhone : `55${cleanPhone}`;
+    const message = `Olá! Tenho interesse no produto: ${productName} (${price}). Gostaria de mais informações sobre disponibilidade e formas de pagamento.`;
+    const url = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  };
+
+  const handleGeneralWhatsApp = () => {
+    const cleanPhone = telefone.replace(/\D/g, '');
+    const whatsappPhone = cleanPhone.startsWith('55') ? cleanPhone : `55${cleanPhone}`;
+    const message = `Olá! Gostaria de conhecer mais sobre os produtos da ${nomeEmpresa}.`;
+    const url = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -37,8 +54,11 @@ const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
             <a href="#" className="text-slate-700 hover:text-blue-600">Sobre</a>
             <a href="#" className="text-slate-700 hover:text-blue-600">Contato</a>
           </nav>
-          <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
-            Criar Conta
+          <button 
+            onClick={handleGeneralWhatsApp}
+            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+          >
+            Fale Conosco
           </button>
         </div>
       </header>
@@ -50,13 +70,19 @@ const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
             {nomeEmpresa} - Sua Loja Online <span className="text-yellow-300">Completa</span>
           </h1>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Soluções completas para e-commerce com pagamento seguro, entrega rápida e atendimento especializado
+            Soluções completas para e-commerce com atendimento especializado via WhatsApp
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-yellow-400 text-blue-900 px-8 py-4 rounded-lg font-bold hover:bg-yellow-300">
+            <button 
+              onClick={handleGeneralWhatsApp}
+              className="bg-yellow-400 text-blue-900 px-8 py-4 rounded-lg font-bold hover:bg-yellow-300"
+            >
               Começar Agora
             </button>
-            <button className="border border-white text-white px-8 py-4 rounded-lg hover:bg-white hover:text-blue-600">
+            <button 
+              onClick={handleGeneralWhatsApp}
+              className="border border-white text-white px-8 py-4 rounded-lg hover:bg-white hover:text-blue-600"
+            >
               Ver Catálogo
             </button>
           </div>
@@ -71,8 +97,8 @@ const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
           </h2>
           <div className="grid md:grid-cols-4 gap-8">
             {[
-              { icon: CreditCard, title: 'Pagamento Seguro', desc: 'Múltiplas formas de pagamento' },
-              { icon: Truck, title: 'Entrega Rápida', desc: 'Frete grátis acima de R$ 99' },
+              { icon: CreditCard, title: 'Atendimento Personalizado', desc: 'Vendas diretas via WhatsApp' },
+              { icon: Truck, title: 'Entrega Rápida', desc: 'Consulte condições de frete' },
               { icon: Users, title: 'Atendimento 24/7', desc: 'Suporte especializado' },
               { icon: Star, title: 'Qualidade Garantida', desc: '100% satisfação do cliente' }
             ].map((feature, index) => (
@@ -93,18 +119,25 @@ const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
             Produtos em <span className="text-blue-600">Destaque</span>
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((product) => (
-              <div key={product} className="bg-white rounded-lg shadow-lg overflow-hidden">
+            {[
+              { id: 1, name: 'Produto Premium', price: 'R$ 299,90' },
+              { id: 2, name: 'Produto Especial', price: 'R$ 199,90' },
+              { id: 3, name: 'Produto Exclusivo', price: 'R$ 399,90' }
+            ].map((product) => (
+              <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="h-48 bg-slate-200 flex items-center justify-center">
                   <span className="text-4xl">📦</span>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-2">Produto {product}</h3>
+                  <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
                   <p className="text-slate-600 mb-4">Descrição detalhada do produto com características principais</p>
                   <div className="flex justify-between items-center">
-                    <span className="text-2xl font-bold text-blue-600">R$ 299,90</span>
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                      Comprar
+                    <span className="text-2xl font-bold text-blue-600">{product.price}</span>
+                    <button 
+                      onClick={() => handleWhatsAppRedirect(product.name, product.price)}
+                      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    >
+                      Comprar via WhatsApp
                     </button>
                   </div>
                 </div>

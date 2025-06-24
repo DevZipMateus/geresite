@@ -11,7 +11,7 @@ interface ModaTemplate1Props {
 const ModaTemplate1: React.FC<ModaTemplate1Props> = ({ cliente, logoUrl }) => {
   return (
     <div className="moda-template-1">
-      <ModaIndex />
+      <ModaIndex cliente={cliente} logoUrl={logoUrl} />
     </div>
   );
 };

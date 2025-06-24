@@ -9,17 +9,28 @@ import Testimonials from '../components/Testimonials';
 import FinalCTA from '../components/FinalCTA';
 import Footer from '../components/Footer';
 
-const Index = () => {
+interface IndexProps {
+  cliente?: {
+    nome_empresa: string;
+    nome_responsavel: string;
+    email: string;
+    telefone: string;
+    categoria: string;
+  };
+  logoUrl?: string | null;
+}
+
+const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
   return (
     <div className="min-h-screen bg-urban-black">
-      <Header />
-      <HeroSection />
-      <FeaturedCollection />
+      <Header cliente={cliente} logoUrl={logoUrl} />
+      <HeroSection cliente={cliente} />
+      <FeaturedCollection cliente={cliente} />
       <Lookbook />
-      <AboutBrand />
+      <AboutBrand cliente={cliente} />
       <Testimonials />
-      <FinalCTA />
-      <Footer />
+      <FinalCTA cliente={cliente} />
+      <Footer cliente={cliente} logoUrl={logoUrl} />
     </div>
   );
 };

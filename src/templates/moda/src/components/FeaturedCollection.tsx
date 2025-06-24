@@ -1,7 +1,19 @@
 
 import React from 'react';
 
-const FeaturedCollection = () => {
+interface FeaturedCollectionProps {
+  cliente?: {
+    nome_empresa: string;
+    nome_responsavel: string;
+    email: string;
+    telefone: string;
+    categoria: string;
+  };
+}
+
+const FeaturedCollection: React.FC<FeaturedCollectionProps> = ({ cliente }) => {
+  const telefone = cliente?.telefone || '5511999999999';
+
   const products = [
     {
       id: 1,
@@ -47,10 +59,12 @@ const FeaturedCollection = () => {
     }
   ];
 
-  const handleWhatsAppClick = (productName: string) => {
-    const message = encodeURIComponent(`Olá! Gostaria de solicitar um orçamento para o produto: ${productName}`);
-    const whatsappNumber = "5511999999999"; // Número fictício
-    window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+  const handleWhatsAppClick = (productName: string, price: string) => {
+    const cleanPhone = telefone.replace(/\D/g, '');
+    const whatsappPhone = cleanPhone.startsWith('55') ? cleanPhone : `55${cleanPhone}`;
+    const message = `Olá! Tenho interesse no produto: ${productName} (${price}). Gostaria de mais informações sobre disponibilidade e formas de pagamento.`;
+    const url = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
   };
 
   return (
@@ -87,10 +101,10 @@ const FeaturedCollection = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-lg sm:text-xl lg:text-2xl font-bold text-urban-electric">{product.price}</span>
                   <button 
-                    onClick={() => handleWhatsAppClick(product.name)}
+                    onClick={() => handleWhatsAppClick(product.name, product.price)}
                     className="bg-urban-neon text-urban-black px-3 py-2 sm:px-4 font-bold text-xs sm:text-sm transition-all duration-300 hover:bg-urban-flame"
                   >
-                    SOLICITAR ORÇAMENTO
+                    COMPRAR VIA WHATSAPP
                   </button>
                 </div>
               </div>
