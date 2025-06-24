@@ -1,126 +1,119 @@
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { ArrowRight, Calendar, Clock, Users, BookOpen } from "lucide-react";
-import { openWhatsApp } from "../utils/whatsapp";
 
-export default function CoursesSection() {
+import React from 'react';
+import { Play, Clock, Users, Star } from 'lucide-react';
+
+const CoursesSection = () => {
   const courses = [
     {
-      title: "Marketing Digital para MEI",
-      description: "Aprenda a divulgar seu negócio nas redes sociais e atrair mais clientes",
-      duration: "8 horas",
-      format: "Presencial",
-      price: "R$ 150",
-      topics: ["Instagram Business", "Facebook Ads", "WhatsApp Business", "Google Meu Negócio"]
+      title: 'Comunicação Digital Avançada',
+      description: 'Domine as técnicas mais eficazes de comunicação digital',
+      duration: '8 semanas',
+      students: '150+',
+      rating: 4.9,
+      price: 'R$ 497',
+      image: '🎯',
+      features: ['Marketing Digital', 'Copywriting', 'Redes Sociais', 'Analytics']
     },
     {
-      title: "Gestão Financeira Essencial",
-      description: "Organize as finanças do seu negócio e tome decisões mais assertivas",
-      duration: "6 horas",
-      format: "Online",
-      price: "R$ 120",
-      topics: ["Fluxo de Caixa", "Controle de Estoque", "Precificação", "Planejamento Financeiro"]
+      title: 'Produção de Podcast Profissional',
+      description: 'Aprenda a criar, produzir e monetizar seu podcast',
+      duration: '6 semanas',
+      students: '89+',
+      rating: 4.8,
+      price: 'R$ 397',
+      image: '🎙️',
+      features: ['Equipamentos', 'Edição', 'Distribuição', 'Monetização']
     },
     {
-      title: "Vendas que Convertem",
-      description: "Técnicas de vendas comprovadas para aumentar seu faturamento",
-      duration: "4 horas",
-      format: "Híbrido",
-      price: "R$ 100",
-      topics: ["Atendimento ao Cliente", "Técnicas de Persuasão", "Pós-venda", "Fidelização"]
-    },
-    {
-      title: "Formalização e Legalização",
-      description: "Tudo sobre MEI, impostos e obrigações legais do seu negócio",
-      duration: "3 horas",
-      format: "Presencial",
-      price: "R$ 80",
-      topics: ["Abertura de MEI", "Declaração Anual", "Emissão de Notas", "Direitos e Deveres"]
+      title: 'Criação de Conteúdo Viral',
+      description: 'Estratégias para criar conteúdo que engaja e viraliza',
+      duration: '4 semanas',
+      students: '200+',
+      rating: 4.9,
+      price: 'R$ 297',
+      image: '🚀',
+      features: ['Storytelling', 'Trends', 'Algoritmos', 'Engajamento']
     }
   ];
 
-  const handleEnrollClick = (courseTitle: string) => {
-    openWhatsApp(`Olá! Gostaria de me inscrever no curso "${courseTitle}" da Impulso Empreendedor. Poderia me dar mais informações?`);
-  };
-
-  const handleCalendarClick = () => {
-    openWhatsApp("Olá! Gostaria de ver o calendário completo de workshops da Impulso Empreendedor.");
-  };
-
   return (
-    <section id="courses" className="relative z-10 py-20 px-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
+    <section className="py-20 bg-white">
+      <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-cyan-300/30 mb-6">
-            <BookOpen className="w-4 h-4 mr-2 text-cyan-300" />
-            <span className="text-sm font-medium text-white/90">Nossos Workshops</span>
-          </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Capacitação que
-            <span className="block bg-gradient-to-r from-cyan-300 to-green-300 bg-clip-text text-transparent">
-              Transforma Negócios
-            </span>
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+            Nossos <span className="text-purple-600">Cursos</span>
           </h2>
-          <p className="text-xl text-white/80 max-w-3xl mx-auto">
-            Workshops práticos e focados no resultado, desenvolvidos especialmente para microempreendedores de Santa Maria
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+            Desenvolvemos profissionais de comunicação com cursos práticos e atualizados
           </p>
         </div>
 
-        {/* Courses Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        <div className="grid md:grid-cols-3 gap-8">
           {courses.map((course, index) => (
-            <Card key={index} className="bg-white/10 backdrop-blur-sm border-cyan-300/20 p-6 hover:bg-white/15 transition-all duration-300 hover:scale-105">
-              <div className="space-y-4">
-                <h3 className="text-xl font-bold text-white">{course.title}</h3>
-                <p className="text-white/70">{course.description}</p>
+            <div
+              key={index}
+              className="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+            >
+              {/* Course Image */}
+              <div className="h-48 bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center">
+                <div className="text-6xl">{course.image}</div>
+              </div>
+              
+              {/* Course Content */}
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className={`h-4 w-4 ${i < Math.floor(course.rating) ? 'text-yellow-400 fill-current' : 'text-slate-300'}`} />
+                    ))}
+                    <span className="text-slate-600 text-sm ml-1">({course.rating})</span>
+                  </div>
+                  <span className="text-purple-600 font-bold text-lg">{course.price}</span>
+                </div>
                 
-                <div className="flex flex-wrap gap-4 text-sm text-cyan-300">
+                <h3 className="text-xl font-bold text-slate-900 mb-3">{course.title}</h3>
+                <p className="text-slate-600 mb-4">{course.description}</p>
+                
+                <div className="flex items-center justify-between text-sm text-slate-500 mb-4">
                   <div className="flex items-center">
-                    <Clock className="w-4 h-4 mr-1" />
+                    <Clock className="h-4 w-4 mr-1" />
                     {course.duration}
                   </div>
                   <div className="flex items-center">
-                    <Users className="w-4 h-4 mr-1" />
-                    {course.format}
-                  </div>
-                  <div className="font-semibold text-green-300">
-                    {course.price}
+                    <Users className="h-4 w-4 mr-1" />
+                    {course.students} alunos
                   </div>
                 </div>
-
-                <div className="space-y-2">
-                  <h4 className="text-sm font-semibold text-white">O que você vai aprender:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {course.topics.map((topic, topicIndex) => (
-                      <span key={topicIndex} className="text-xs bg-cyan-300/20 text-cyan-300 px-2 py-1 rounded">
-                        {topic}
-                      </span>
+                
+                <div className="space-y-2 mb-6">
+                  <h4 className="font-semibold text-slate-900">O que você vai aprender:</h4>
+                  <div className="grid grid-cols-2 gap-1">
+                    {course.features.map((feature, i) => (
+                      <div key={i} className="text-slate-600 text-sm flex items-center">
+                        <div className="w-2 h-2 bg-purple-600 rounded-full mr-2"></div>
+                        {feature}
+                      </div>
                     ))}
                   </div>
                 </div>
-
-                <Button onClick={() => handleEnrollClick(course.title)} className="w-full bg-gradient-to-r from-cyan-500 to-green-500 hover:from-cyan-600 hover:to-green-600 text-black font-semibold">
-                  Inscrever-se
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
+                
+                <button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition-colors flex items-center justify-center space-x-2">
+                  <Play className="h-4 w-4" />
+                  <span>Começar Agora</span>
+                </button>
               </div>
-            </Card>
+            </div>
           ))}
         </div>
-
-        {/* Calendar Section */}
-        <Card className="bg-white/10 backdrop-blur-sm border-cyan-300/20 p-8 text-center">
-          <Calendar className="w-12 h-12 text-cyan-300 mx-auto mb-4" />
-          <h3 className="text-2xl font-bold text-white mb-4">Próximas Turmas</h3>
-          <p className="text-white/80 mb-6">
-            Confira o calendário completo de workshops e garante sua vaga!
-          </p>
-          <Button onClick={handleCalendarClick} className="bg-gradient-to-r from-cyan-500 to-green-500 hover:from-cyan-600 hover:to-green-600 text-black font-semibold">
-            Ver Calendário Completo
-          </Button>
-        </Card>
+        
+        <div className="text-center mt-12">
+          <button className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 rounded-lg font-semibold transition-colors">
+            Ver Todos os Cursos
+          </button>
+        </div>
       </div>
     </section>
   );
-}
+};
+
+export default CoursesSection;

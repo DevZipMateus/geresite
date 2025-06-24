@@ -1,36 +1,40 @@
 
-import React, { useEffect } from 'react';
-import Header from '../components/Layout/Header';
-import Footer from '../components/Layout/Footer';
-import Hero from '../components/Hero';
-import Services from '../components/Services';
-import AboutUs from '../components/AboutUs';
-import Team from '../components/Team';
-import Testimonials from '../components/Testimonials';
-import Contact from '../components/Contact';
-import FloatingButton from '../components/FloatingButton';
+import React from 'react';
 
 const Index = () => {
-  // Scroll to top on page load
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
-    <div className="min-h-screen flex flex-col relative">
-      <Header />
-      
-      <main className="flex-grow">
-        <Hero />
-        <Services />
-        <AboutUs />
-        <Team />
-        <Testimonials />
-        <Contact />
-      </main>
-      
-      <Footer />
-      <FloatingButton />
+    <div className="min-h-screen bg-gradient-to-br from-red-900 via-slate-800 to-black">
+      <div className="container mx-auto px-4 py-16">
+        <div className="text-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+            Segurança <span className="text-red-400">Modelo 2</span>
+          </h1>
+          <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
+            Proteção avançada com design militar e soluções táticas para máxima segurança.
+          </p>
+          <div className="bg-white/10 backdrop-blur-md rounded-lg border border-white/20 p-8 max-w-2xl mx-auto">
+            <h2 className="text-2xl font-bold text-white mb-4">🛡️ Em Desenvolvimento</h2>
+            <p className="text-gray-200">
+              Este template está sendo desenvolvido com foco em segurança de alto nível,
+              empresas militares e corporações que necessitam de proteção máxima.
+            </p>
+            <div className="mt-6 space-y-2 text-left">
+              <div className="flex items-center text-red-400">
+                <span className="w-2 h-2 bg-red-400 rounded-full mr-3"></span>
+                Design tático e profissional
+              </div>
+              <div className="flex items-center text-red-400">
+                <span className="w-2 h-2 bg-red-400 rounded-full mr-3"></span>
+                Soluções de segurança avançada
+              </div>
+              <div className="flex items-center text-red-400">
+                <span className="w-2 h-2 bg-red-400 rounded-full mr-3"></span>
+                Interface militar e robusta
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
