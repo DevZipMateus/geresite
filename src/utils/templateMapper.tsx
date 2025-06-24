@@ -10,6 +10,10 @@ import ComunicacaoTemplate1 from "@/components/templates/ComunicacaoTemplate1";
 import ModaTemplate1 from "@/components/templates/ModaTemplate1";
 import SegurancaTemplate1 from "@/components/templates/SegurancaTemplate1";
 import SegurancaTemplate2 from "@/components/templates/SegurancaTemplate2";
+import ComercioTemplate1 from "@/components/templates/ComercioTemplate1";
+import AlimenticiaTemplate1 from "@/components/templates/AlimenticiaTemplate1";
+import GenericoTemplate1 from "@/components/templates/GenericoTemplate1";
+import TransportesTemplate1 from "@/components/templates/TransportesTemplate1";
 
 interface TemplateProps {
   cliente: Cliente;
@@ -66,6 +70,38 @@ export const getTemplateComponent = (categoria: string, templateId: string) => {
           return SegurancaTemplate2;
         default:
           return SegurancaTemplate1; // fallback para modelo 1
+      }
+    
+    case 'comercio':
+      switch (templateId) {
+        case 'com-1':
+          return ComercioTemplate1;
+        default:
+          return ComercioTemplate1;
+      }
+    
+    case 'alimenticia':
+      switch (templateId) {
+        case 'ali-1':
+          return AlimenticiaTemplate1;
+        default:
+          return AlimenticiaTemplate1;
+      }
+    
+    case 'generico':
+      switch (templateId) {
+        case 'gen-1':
+          return GenericoTemplate1;
+        default:
+          return GenericoTemplate1;
+      }
+    
+    case 'transportes':
+      switch (templateId) {
+        case 'tra-1':
+          return TransportesTemplate1;
+        default:
+          return TransportesTemplate1;
       }
     
     default:

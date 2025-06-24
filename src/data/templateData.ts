@@ -1,5 +1,5 @@
 
-import { LayoutTemplate, Tag, Wheat, Calculator, Monitor, MessageCircle, Shirt, Shield } from 'lucide-react';
+import { LayoutTemplate, Tag, Wheat, Calculator, Monitor, MessageCircle, Shirt, Shield, ShoppingCart, UtensilsCrossed, Globe, Truck } from 'lucide-react';
 import React from 'react';
 import { TemplateCategory } from '@/components/TemplateCategories';
 
@@ -49,6 +49,26 @@ export const categories: TemplateCategory[] = [
     id: 'seguranca',
     name: 'Segurança',
     icon: React.createElement(Shield, { className: "h-4 w-4" })
+  },
+  {
+    id: 'comercio',
+    name: 'Comércio',
+    icon: React.createElement(ShoppingCart, { className: "h-4 w-4" })
+  },
+  {
+    id: 'alimenticia',
+    name: 'Alimentícia',
+    icon: React.createElement(UtensilsCrossed, { className: "h-4 w-4" })
+  },
+  {
+    id: 'generico',
+    name: 'Genérico',
+    icon: React.createElement(Globe, { className: "h-4 w-4" })
+  },
+  {
+    id: 'transportes',
+    name: 'Transportes',
+    icon: React.createElement(Truck, { className: "h-4 w-4" })
   }
 ];
 
@@ -145,5 +165,50 @@ export const allTemplates: Template[] = [
     formUrl: '#',
     previewUrl: '#',
     category: 'seguranca'
+  },
+
+  // Novas categorias
+  // Comércio Templates
+  {
+    id: 'com-1',
+    title: 'Comércio Modelo 1',
+    description: 'Template moderno para lojas e comércios com design atrativo e funcional.',
+    imageUrl: '/placeholder.svg',
+    formUrl: '#',
+    previewUrl: '#',
+    category: 'comercio'
+  },
+  
+  // Alimentícia Templates
+  {
+    id: 'ali-1',
+    title: 'Alimentícia Modelo 1',
+    description: 'Template especializado para restaurantes, lanchonetes e empresas do setor alimentício.',
+    imageUrl: '/placeholder.svg',
+    formUrl: '#',
+    previewUrl: '#',
+    category: 'alimenticia'
+  },
+  
+  // Genérico Templates
+  {
+    id: 'gen-1',
+    title: 'Genérico Modelo 1',
+    description: 'Template versátil para qualquer tipo de negócio com design clean e adaptável.',
+    imageUrl: '/placeholder.svg',
+    formUrl: '#',
+    previewUrl: '#',
+    category: 'generico'
+  },
+  
+  // Transportes Templates
+  {
+    id: 'tra-1',
+    title: 'Transportes Modelo 1',
+    description: 'Template profissional para empresas de transporte e logística.',
+    imageUrl: '/placeholder.svg',
+    formUrl: '#',
+    previewUrl: '#',
+    category: 'transportes'
   }
 ];
