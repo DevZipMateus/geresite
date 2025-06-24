@@ -1,18 +1,17 @@
-
 import { lazy, Suspense } from 'react';
-import SmartHeader from '@/components/layout/SmartHeader';
-import SmartFooter from '@/components/layout/SmartFooter';
-import HomeHero from '@/components/sections/HomeHero';
-import WhatsAppFloat from '@/components/ui/WhatsAppFloat';
-import LazySection from '@/components/ui/LazySection';
+import SmartHeader from '../components/layout/SmartHeader';
+import SmartFooter from '../components/layout/SmartFooter';
+import HomeHero from '../components/sections/HomeHero';
+import WhatsAppFloat from '../components/ui/WhatsAppFloat';
+import LazySection from '../components/ui/LazySection';
 
 // Lazy load das seções não críticas com melhor otimização
-const ProblemSolution = lazy(() => import('@/components/sections/ProblemSolution'));
-const HomeServices = lazy(() => import('@/components/sections/HomeServices'));
-const HowItWorks = lazy(() => import('@/components/sections/HowItWorks'));
-const WhyChooseUs = lazy(() => import('@/components/sections/WhyChooseUs'));
-const Gallery = lazy(() => import('@/components/sections/Gallery'));
-const FinalContact = lazy(() => import('@/components/sections/FinalContact'));
+const ProblemSolution = lazy(() => import('../components/sections/ProblemSolution'));
+const HomeServices = lazy(() => import('../components/sections/HomeServices'));
+const HowItWorks = lazy(() => import('../components/sections/HowItWorks'));
+const WhyChooseUs = lazy(() => import('../components/sections/WhyChooseUs'));
+const Gallery = lazy(() => import('../components/sections/Gallery'));
+const FinalContact = lazy(() => import('../components/sections/FinalContact'));
 
 const LoadingFallback = () => (
   <div className="h-20 flex items-center justify-center">

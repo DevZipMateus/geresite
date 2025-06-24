@@ -1,48 +1,37 @@
 
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 interface LazySectionProps {
   children: React.ReactNode;
-  fallback?: React.ReactNode;
+  fallback: React.ReactNode;
   threshold?: number;
 }
 
-const LazySection = ({ children, fallback, threshold = 0.1 }: LazySectionProps) => {
+const LazySection: React.FC<LazySectionProps> = ({ children, fallback, threshold = 0.1 }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [hasLoaded, setHasLoaded] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !hasLoaded) {
+        if (entry.isIntersecting) {
           setIsVisible(true);
-          setHasLoaded(true);
           observer.disconnect();
         }
       },
-      { 
-        threshold,
-        rootMargin: '100px'
-      }
+      { threshold }
     );
 
-    const currentRef = ref.current;
-    if (currentRef) {
-      observer.observe(currentRef);
+    if (ref.current) {
+      observer.observe(ref.current);
     }
 
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-      observer.disconnect();
-    };
-  }, [threshold, hasLoaded]);
+    return () => observer.disconnect();
+  }, [threshold]);
 
   return (
-    <div ref={ref} style={{ minHeight: isVisible ? 'auto' : '200px' }}>
-      {isVisible ? children : (fallback || <div className="h-32 animate-pulse bg-slate-200 rounded" />)}
+    <div ref={ref}>
+      {isVisible ? children : fallback}
     </div>
   );
 };

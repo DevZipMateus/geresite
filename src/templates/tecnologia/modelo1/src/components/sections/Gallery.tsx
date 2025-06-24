@@ -1,128 +1,77 @@
 
-import { motion } from 'framer-motion';
-import { Camera, Play } from 'lucide-react';
+import { useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Gallery = () => {
-  const projects = [
-    {
-      title: 'Casa Moderna - Barra da Tijuca',
-      category: 'Automação Completa',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&h=300&fit=crop',
-      features: ['Iluminação Inteligente', 'Climatização', 'Segurança 24/7']
-    },
-    {
-      title: 'Apartamento de Luxo - Ipanema',
-      category: 'Segurança Avançada',
-      image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=500&h=300&fit=crop',
-      features: ['Câmeras 4K', 'Controle de Acesso', 'Alarmes Inteligentes']
-    },
-    {
-      title: 'Cobertura - Leblon',
-      category: 'Smart Home Premium',
-      image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=500&h=300&fit=crop',
-      features: ['Automação Total', 'Som Ambiente', 'Segurança Integrada']
-    },
-    {
-      title: 'Casa de Família - Tijuca',
-      category: 'Proteção Residencial',
-      image: 'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=500&h=300&fit=crop',
-      features: ['Monitoramento', 'Controle Parental', 'Backup de Energia']
-    },
-    {
-      title: 'Mansão - São Conrado',
-      category: 'Projeto Completo',
-      image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=500&h=300&fit=crop',
-      features: ['Automação Luxury', 'Segurança Perimetral', 'Home Theater']
-    },
-    {
-      title: 'Loft Moderno - Centro',
-      category: 'Automação Urbana',
-      image: 'https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=500&h=300&fit=crop',
-      features: ['Controle por App', 'Economia de Energia', 'Segurança Inteligente']
-    }
+  const [currentImage, setCurrentImage] = useState(0);
+
+  const images = [
+    { id: 1, title: 'Sala Automatizada', description: 'Controle total de iluminação e entretenimento' },
+    { id: 2, title: 'Cozinha Inteligente', description: 'Automação completa para sua cozinha' },
+    { id: 3, title: 'Sistema de Segurança', description: 'Monitoramento 24/7 com câmeras HD' },
+    { id: 4, title: 'Quarto Smart', description: 'Conforto e tecnologia para seu descanso' }
   ];
 
+  const nextImage = () => {
+    setCurrentImage((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
+  };
+
   return (
-    <section className="relative py-20 bg-slate-900/50 backdrop-blur-sm">
-      <div className="section-container">
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
+    <section className="relative py-20 bg-black/50 backdrop-blur-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Projetos <span className="text-green-400">Realizados</span>
+            Nossos <span className="text-green-400">Projetos</span>
           </h2>
           <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-            Veja alguns dos nossos cases de sucesso em automação e segurança residencial
+            Conheça alguns dos projetos que transformamos
           </p>
-        </motion.div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <motion.div
-              key={index}
-              className="group cursor-pointer"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
-                <div className="relative h-64 overflow-hidden">
-                  <img 
-                    src={project.image} 
-                    alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <div className="text-center">
-                      <Camera className="h-8 w-8 text-white mx-auto mb-2" />
-                      <span className="text-white font-semibold">Ver Projeto</span>
-                    </div>
-                  </div>
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 bg-green-500 text-white text-sm font-semibold rounded-full">
-                      {project.category}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-white mb-2">{project.title}</h3>
-                  <div className="space-y-1">
-                    {project.features.map((feature, i) => (
-                      <div key={i} className="flex items-center text-slate-400 text-sm">
-                        <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
-                        {feature}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
         </div>
 
-        <motion.div
-          className="text-center mt-12"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <p className="text-slate-300 mb-4">
-            Quer ver seu projeto aqui também?
-          </p>
+        <div className="relative max-w-4xl mx-auto">
+          <div className="bg-slate-800 rounded-2xl p-8 text-center">
+            <div className="h-64 bg-slate-700 rounded-lg mb-6 flex items-center justify-center">
+              <p className="text-slate-400">Imagem do Projeto {images[currentImage].id}</p>
+            </div>
+            
+            <h3 className="text-2xl font-bold text-white mb-3">
+              {images[currentImage].title}
+            </h3>
+            <p className="text-slate-300 mb-6">
+              {images[currentImage].description}
+            </p>
+            
+            <div className="flex justify-center space-x-2">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImage(index)}
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    index === currentImage ? 'bg-green-400' : 'bg-slate-600'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+          
           <button
-            onClick={() => window.open('https://wa.me/5521999999999?text=Olá!%20Gostaria%20de%20ver%20mais%20projetos%20e%20solicitar%20um%20orçamento.', '_blank')}
-            className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:scale-105"
+            onClick={prevImage}
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-green-500 hover:bg-green-600 text-white p-3 rounded-full transition-colors"
           >
-            Solicite Seu Projeto Personalizado
+            <ChevronLeft className="h-6 w-6" />
           </button>
-        </motion.div>
+          
+          <button
+            onClick={nextImage}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-green-500 hover:bg-green-600 text-white p-3 rounded-full transition-colors"
+          >
+            <ChevronRight className="h-6 w-6" />
+          </button>
+        </div>
       </div>
     </section>
   );

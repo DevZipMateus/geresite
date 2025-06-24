@@ -1,9 +1,8 @@
-
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import FloatingButton from "@/components/FloatingButton";
-import ServicesSection from "@/components/ServicesSection";
-import PlansSection from "@/components/PlansSection";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import FloatingButton from "../components/FloatingButton";
+import ServicesSection from "../components/ServicesSection";
+import PlansSection from "../components/PlansSection";
 import { 
   CheckCircle, 
   ArrowRight, 

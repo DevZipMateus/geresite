@@ -1,11 +1,10 @@
-
 import { useState, useEffect } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import FloatingButton from "@/components/FloatingButton";
-import AboutSection from "@/components/AboutSection";
-import TeamSection from "@/components/TeamSection";
-import TestimonialsSection from "@/components/TestimonialsSection";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import FloatingButton from "../components/FloatingButton";
+import AboutSection from "../components/AboutSection";
+import TeamSection from "../components/TeamSection";
+import TestimonialsSection from "../components/TestimonialsSection";
 import { CheckCircle, Clock, Award, Users, TrendingUp, Building, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";

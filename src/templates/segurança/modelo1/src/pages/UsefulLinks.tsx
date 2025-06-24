@@ -1,7 +1,6 @@
-
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import FloatingButton from "@/components/FloatingButton";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import FloatingButton from "../components/FloatingButton";
 import { CalendarDays, FileText, FileSpreadsheet, Download, ExternalLink, Calculator, Link2, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 

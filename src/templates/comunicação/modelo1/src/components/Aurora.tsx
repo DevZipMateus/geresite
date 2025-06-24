@@ -18,7 +18,7 @@ const Aurora: React.FC<AuroraProps> = ({ colorStops, amplitude, blend, speed }) 
           animation: `aurora ${10 / speed}s ease-in-out infinite alternate`,
         }}
       />
-      <style jsx>{`
+      <style>{`
         @keyframes aurora {
           0% {
             transform: scale(1) rotate(0deg);

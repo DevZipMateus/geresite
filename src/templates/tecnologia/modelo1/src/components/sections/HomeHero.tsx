@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 import { Shield, Home, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { usePerformance } from '@/hooks/usePerformance';
+import { usePerformance } from '../../hooks/usePerformance';
 import { useEffect, useRef } from 'react';
 
 const HomeHero = () => {

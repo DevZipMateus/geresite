@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import FloatingButton from "@/components/FloatingButton";
-import NewsSection from "@/components/NewsSection";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import FloatingButton from "../components/FloatingButton";
+import NewsSection from "../components/NewsSection";
 
 const News = () => {
   const [isVisible, setIsVisible] = useState(false);
