@@ -1,6 +1,4 @@
-
 import React from 'react';
-
 interface IndexProps {
   cliente?: {
     nome_empresa: string;
@@ -11,41 +9,58 @@ interface IndexProps {
   };
   logoUrl?: string | null;
 }
-
-const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
+const Index: React.FC<IndexProps> = ({
+  cliente,
+  logoUrl
+}) => {
   const nomeEmpresa = cliente?.nome_empresa || 'Sua Empresa';
   const telefone = cliente?.telefone || '5511999999999';
-
   const handleWhatsAppClick = (message: string) => {
     const cleanPhone = telefone.replace(/\D/g, '');
     const whatsappPhone = cleanPhone.startsWith('55') ? cleanPhone : `55${cleanPhone}`;
     const url = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
   };
-
-  const produtos = [
-    { nome: "Produto Premium", preco: "R$ 299", descricao: "Nosso produto mais refinado com qualidade superior", imagem: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400" },
-    { nome: "Produto Especial", preco: "R$ 199", descricao: "Perfeito equilíbrio entre qualidade e preço", imagem: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400" },
-    { nome: "Produto Popular", preco: "R$ 99", descricao: "O favorito dos nossos clientes", imagem: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" },
-    { nome: "Produto Exclusivo", preco: "R$ 399", descricao: "Edição limitada com design único", imagem: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400" },
-    { nome: "Produto Clássico", preco: "R$ 149", descricao: "Tradicional e confiável", imagem: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400" },
-    { nome: "Produto Inovador", preco: "R$ 249", descricao: "Tecnologia de ponta em suas mãos", imagem: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" }
-  ];
-
-  return (
-    <div className="min-h-screen bg-gray-50">
+  const produtos = [{
+    nome: "Produto Premium",
+    preco: "R$ 299",
+    descricao: "Nosso produto mais refinado com qualidade superior",
+    imagem: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400"
+  }, {
+    nome: "Produto Especial",
+    preco: "R$ 199",
+    descricao: "Perfeito equilíbrio entre qualidade e preço",
+    imagem: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400"
+  }, {
+    nome: "Produto Popular",
+    preco: "R$ 99",
+    descricao: "O favorito dos nossos clientes",
+    imagem: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"
+  }, {
+    nome: "Produto Exclusivo",
+    preco: "R$ 399",
+    descricao: "Edição limitada com design único",
+    imagem: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400"
+  }, {
+    nome: "Produto Clássico",
+    preco: "R$ 149",
+    descricao: "Tradicional e confiável",
+    imagem: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400"
+  }, {
+    nome: "Produto Inovador",
+    preco: "R$ 249",
+    descricao: "Tecnologia de ponta em suas mãos",
+    imagem: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"
+  }];
+  return <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
-              {logoUrl ? (
-                <img src={logoUrl} alt={nomeEmpresa} className="h-16 w-16 object-contain" />
-              ) : (
-                <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center">
+              {logoUrl ? <img src={logoUrl} alt={nomeEmpresa} className="w-16 object-contain" /> : <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-2xl">{nomeEmpresa.charAt(0)}</span>
-                </div>
-              )}
+                </div>}
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">{nomeEmpresa}</h1>
                 <p className="text-sm text-gray-600">Qualidade e tradição desde sempre</p>
@@ -70,16 +85,12 @@ const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
             Nossa paixão é proporcionar experiências únicas aos nossos clientes, sempre com preços justos e produtos selecionados.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button 
-              onClick={() => handleWhatsAppClick(`Olá! Gostaria de conhecer os produtos da ${nomeEmpresa}.`)}
-              className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
-            >
+            <button onClick={() => handleWhatsAppClick(`Olá! Gostaria de conhecer os produtos da ${nomeEmpresa}.`)} className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
               Fale Conosco no WhatsApp
             </button>
-            <button 
-              onClick={() => document.getElementById('produtos')?.scrollIntoView({ behavior: 'smooth' })}
-              className="bg-white hover:bg-gray-100 text-blue-600 px-8 py-3 rounded-lg font-semibold transition-colors"
-            >
+            <button onClick={() => document.getElementById('produtos')?.scrollIntoView({
+            behavior: 'smooth'
+          })} className="bg-white hover:bg-gray-100 text-blue-600 px-8 py-3 rounded-lg font-semibold transition-colors">
               Ver Produtos
             </button>
           </div>
@@ -97,22 +108,17 @@ const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {produtos.map((produto, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+            {produtos.map((produto, index) => <div key={index} className="bg-gray-50 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
                 <img src={produto.imagem} alt={produto.nome} className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-semibold mb-2">{produto.nome}</h3>
                   <p className="text-gray-600 mb-3">{produto.descricao}</p>
                   <p className="text-2xl font-bold text-blue-600 mb-4">{produto.preco}</p>
-                  <button 
-                    onClick={() => handleWhatsAppClick(`Olá! Tenho interesse no ${produto.nome} (${produto.preco}). Gostaria de mais informações.`)}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-colors font-medium"
-                  >
+                  <button onClick={() => handleWhatsAppClick(`Olá! Tenho interesse no ${produto.nome} (${produto.preco}). Gostaria de mais informações.`)} className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-colors font-medium">
                     Comprar via WhatsApp
                   </button>
                 </div>
-              </div>
-            ))}
+              </div>)}
           </div>
         </div>
       </section>
@@ -170,11 +176,7 @@ const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
                 </p>
               </div>
               <div className="relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=500" 
-                  alt="Nossa equipe" 
-                  className="rounded-lg shadow-lg"
-                />
+                <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=500" alt="Nossa equipe" className="rounded-lg shadow-lg" />
                 <div className="absolute inset-0 bg-blue-600 bg-opacity-20 rounded-lg"></div>
               </div>
             </div>
@@ -228,17 +230,11 @@ const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
               <div className="bg-white p-8 rounded-lg shadow-md">
                 <h3 className="text-2xl font-semibold mb-6">Envie uma Mensagem</h3>
                 <div className="space-y-4">
-                  <button 
-                    onClick={() => handleWhatsAppClick(`Olá! Gostaria de entrar em contato com a ${nomeEmpresa} para saber mais sobre os produtos.`)}
-                    className="w-full bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center"
-                  >
+                  <button onClick={() => handleWhatsAppClick(`Olá! Gostaria de entrar em contato com a ${nomeEmpresa} para saber mais sobre os produtos.`)} className="w-full bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
                     <span className="mr-2">📱</span>
                     Conversar no WhatsApp
                   </button>
-                  <button 
-                    onClick={() => handleWhatsAppClick(`Olá! Gostaria de solicitar um orçamento para os produtos da ${nomeEmpresa}.`)}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors"
-                  >
+                  <button onClick={() => handleWhatsAppClick(`Olá! Gostaria de solicitar um orçamento para os produtos da ${nomeEmpresa}.`)} className="w-full bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors">
                     Solicitar Orçamento
                   </button>
                   <p className="text-sm text-gray-600 text-center">
@@ -257,13 +253,9 @@ const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
           <div className="grid md:grid-cols-3 gap-8">
             <div>
               <div className="flex items-center space-x-3 mb-4">
-                {logoUrl ? (
-                  <img src={logoUrl} alt={nomeEmpresa} className="h-10 w-10 object-contain" />
-                ) : (
-                  <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                {logoUrl ? <img src={logoUrl} alt={nomeEmpresa} className="h-10 w-10 object-contain" /> : <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
                     <span className="text-white font-bold">{nomeEmpresa.charAt(0)}</span>
-                  </div>
-                )}
+                  </div>}
                 <h3 className="text-xl font-bold">{nomeEmpresa}</h3>
               </div>
               <p className="text-gray-400">
@@ -295,8 +287,6 @@ const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
           </div>
         </div>
       </footer>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
