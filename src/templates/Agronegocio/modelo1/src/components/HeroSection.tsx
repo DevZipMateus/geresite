@@ -1,13 +1,29 @@
+
 import { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronDown, ArrowRight } from 'lucide-react';
-const HeroSection = () => {
+
+interface HeroSectionProps {
+  cliente?: {
+    nome_empresa: string;
+    nome_responsavel: string;
+    email: string;
+    telefone: string;
+    categoria: string;
+  };
+  logoUrl?: string | null;
+}
+
+const HeroSection: React.FC<HeroSectionProps> = ({ cliente, logoUrl }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const nomeEmpresa = cliente?.nome_empresa || 'AgroTech Solutions';
+
   useEffect(() => {
     if (sectionRef.current) {
       sectionRef.current.classList.add('animate-fade-in');
     }
   }, []);
+
   const scrollToNextSection = () => {
     const categoriesSection = document.getElementById('categories');
     if (categoriesSection) {
@@ -16,16 +32,21 @@ const HeroSection = () => {
       });
     }
   };
-  return <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center justify-center pt-20">
+
+  return (
+    <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center justify-center pt-20">
       {/* Background image with overlay */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80')`
-      }}></div>
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+          style={{
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80')`
+          }}
+        ></div>
       </div>
 
       <div className="container mx-auto px-4 md:px-8 relative z-10">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-left">
               <span className="inline-block px-4 py-2 bg-primary/20 backdrop-blur-md rounded-full text-primary-foreground font-medium mb-6 animate-slide-up [animation-delay:300ms]">
@@ -59,9 +80,37 @@ const HeroSection = () => {
               </div>
             </div>
 
-            <div className="hidden lg:block animate-slide-up [animation-delay:800ms]">
+            {/* Logo Section */}
+            <div className="flex justify-center lg:justify-end animate-slide-up [animation-delay:800ms]">
               <div className="relative">
-                <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-2xl"></div>
+                {logoUrl ? (
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-2xl"></div>
+                    <div className="relative bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
+                      <img 
+                        src={logoUrl} 
+                        alt={nomeEmpresa}
+                        className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 object-contain"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-2xl"></div>
+                    <div className="relative bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
+                      <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 bg-primary/30 rounded-xl flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-4">
+                            {nomeEmpresa.charAt(0)}
+                          </div>
+                          <div className="text-white/80 text-lg md:text-xl font-medium">
+                            {nomeEmpresa}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 
                 <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg p-4">
                   <h3 className="font-bold text-foreground mb-1">Tecnologia de Ponta</h3>
@@ -77,6 +126,8 @@ const HeroSection = () => {
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white cursor-pointer animate-bounce" onClick={scrollToNextSection}>
         <ChevronDown size={32} />
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default HeroSection;

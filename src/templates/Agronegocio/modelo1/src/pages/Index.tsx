@@ -11,7 +11,18 @@ import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
 import WhatsAppButton from '../components/WhatsAppButton';
 
-const Index = () => {
+interface IndexProps {
+  cliente?: {
+    nome_empresa: string;
+    nome_responsavel: string;
+    email: string;
+    telefone: string;
+    categoria: string;
+  };
+  logoUrl?: string | null;
+}
+
+const Index: React.FC<IndexProps> = ({ cliente, logoUrl }) => {
   useEffect(() => {
     const handleScroll = () => {
       const animatedElements = document.querySelectorAll('.animate-on-scroll');
@@ -33,8 +44,8 @@ const Index = () => {
 
   return (
     <div className="overflow-x-hidden">
-      <Header />
-      <HeroSection />
+      <Header cliente={cliente} logoUrl={logoUrl} />
+      <HeroSection cliente={cliente} logoUrl={logoUrl} />
       <CategoriesSection />
       <FeaturedProducts />
       <BrandsSection />
