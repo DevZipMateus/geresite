@@ -90,7 +90,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ cliente, logoUrl }) => {
                       <img 
                         src={logoUrl} 
                         alt={nomeEmpresa}
-                        className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 object-contain"
+                        className="w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 object-contain"
                       />
                     </div>
                   </div>
@@ -98,12 +98,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ cliente, logoUrl }) => {
                   <div className="relative">
                     <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-2xl"></div>
                     <div className="relative bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
-                      <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 bg-primary/30 rounded-xl flex items-center justify-center">
+                      <div className="w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 bg-primary/30 rounded-xl flex items-center justify-center">
                         <div className="text-center">
-                          <div className="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-4">
+                          <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2">
                             {nomeEmpresa.charAt(0)}
                           </div>
-                          <div className="text-white/80 text-lg md:text-xl font-medium">
+                          <div className="text-white/80 text-xs md:text-sm font-medium">
                             {nomeEmpresa}
                           </div>
                         </div>
