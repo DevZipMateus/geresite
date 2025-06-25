@@ -10,7 +10,18 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 
-const Header = () => {
+interface HeaderProps {
+  cliente?: {
+    nome_empresa: string;
+    nome_responsavel: string;
+    email: string;
+    telefone: string;
+    categoria: string;
+  };
+  logoUrl?: string | null;
+}
+
+const Header: React.FC<HeaderProps> = ({ cliente, logoUrl }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const isMobile = useIsMobile();
 
@@ -30,7 +41,19 @@ const Header = () => {
   }, []);
 
   const handleWhatsAppClick = () => {
-    window.open('https://wa.me/5567987654321?text=Olá!%20Gostaria%20de%20solicitar%20um%20orçamento%20para%20implementos%20agrícolas.', '_blank');
+    const telefone = cliente?.telefone || '5567987654321';
+    const nomeEmpresa = cliente?.nome_empresa || 'AgroTech Implementos';
+    window.open(`https://wa.me/${telefone}?text=Olá!%20Gostaria%20de%20solicitar%20um%20orçamento%20para%20implementos%20agrícolas%20da%20${encodeURIComponent(nomeEmpresa)}.`, '_blank');
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
   };
 
   return (
@@ -43,15 +66,18 @@ const Header = () => {
     >
       <div className="container mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between">
-          <a href="#" className="relative z-20">
+          <button 
+            onClick={() => scrollToSection('hero')}
+            className="relative z-20 cursor-pointer"
+          >
             <h1 className="text-xl md:text-2xl font-display font-bold text-foreground">
-              <span className="text-primary">AgroTech</span> Implementos
+              <span className="text-primary">{cliente?.nome_empresa?.split(' ')[0] || 'AgroTech'}</span> {cliente?.nome_empresa?.split(' ').slice(1).join(' ') || 'Implementos'}
             </h1>
-          </a>
+          </button>
 
           {/* Desktop Menu */}
           <nav className="hidden lg:flex items-center space-x-1">
-            <NavLinks />
+            <NavLinks scrollToSection={scrollToSection} />
           </nav>
 
           {/* Desktop Actions */}
@@ -75,7 +101,7 @@ const Header = () => {
               </SheetTrigger>
               <SheetContent side="top" className="pt-16 pb-8 px-6">
                 <nav className="flex flex-col items-center space-y-4 text-lg">
-                  <NavLinks mobile />
+                  <NavLinks mobile scrollToSection={scrollToSection} />
                   <SheetClose asChild>
                     <Button 
                       onClick={handleWhatsAppClick}
@@ -96,33 +122,33 @@ const Header = () => {
 
 interface NavLinksProps {
   mobile?: boolean;
-  onClick?: () => void;
+  scrollToSection: (sectionId: string) => void;
 }
 
-const NavLinks = ({ mobile, onClick }: NavLinksProps) => {
+const NavLinks = ({ mobile, scrollToSection }: NavLinksProps) => {
   const links = [
-    { name: 'Início', href: '#hero' },
-    { name: 'Produtos', href: '#products' },
-    { name: 'Marcas', href: '#brands' },
-    { name: 'Sobre Nós', href: '#about' },
-    { name: 'Contato', href: '#contact' },
+    { name: 'Início', sectionId: 'hero' },
+    { name: 'Categorias', sectionId: 'categories' },
+    { name: 'Produtos', sectionId: 'products' },
+    { name: 'Marcas', sectionId: 'brands' },
+    { name: 'Sobre Nós', sectionId: 'about' },
+    { name: 'Contato', sectionId: 'contact' },
   ];
 
   return (
     <>
       {links.map((link) => (
-        <a
+        <button
           key={link.name}
-          href={link.href}
+          onClick={() => scrollToSection(link.sectionId)}
           className={`font-medium transition-all duration-300 px-3 py-2 rounded-md
             ${mobile 
               ? 'text-xl text-foreground hover:text-primary mb-2 w-full text-center py-3' 
               : 'text-foreground/80 hover:text-primary hover:bg-secondary/50'
             }`}
-          onClick={onClick}
         >
           {link.name}
-        </a>
+        </button>
       ))}
     </>
   );
