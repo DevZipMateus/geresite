@@ -58,7 +58,7 @@ const Index: React.FC<IndexProps> = ({
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
-              {logoUrl ? <img src={logoUrl} alt={nomeEmpresa} className="w-16 object-contain" /> : <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center">
+              {logoUrl ? <img src={logoUrl} alt={nomeEmpresa} className="w-24 h-24 object-contain" /> : <div className="w-24 h-24 bg-blue-600 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-2xl">{nomeEmpresa.charAt(0)}</span>
                 </div>}
               <div>
@@ -253,7 +253,7 @@ const Index: React.FC<IndexProps> = ({
           <div className="grid md:grid-cols-3 gap-8">
             <div>
               <div className="flex items-center space-x-3 mb-4">
-                {logoUrl ? <img src={logoUrl} alt={nomeEmpresa} className="h-10 w-10 object-contain" /> : <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                {logoUrl ? <img src={logoUrl} alt={nomeEmpresa} className="h-12 w-12 object-contain" /> : <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
                     <span className="text-white font-bold">{nomeEmpresa.charAt(0)}</span>
                   </div>}
                 <h3 className="text-xl font-bold">{nomeEmpresa}</h3>
